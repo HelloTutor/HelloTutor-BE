@@ -13,7 +13,7 @@ router.post("/auth/signup/tutee",
         }
 });
 
-router.post("/auth/singnup/tutor",
+router.post("/auth/signup/tutor",
     validatedEmail, overlappedEmail, validatedPassword,
     async (req, res) => {
         const tutor = req.body;
