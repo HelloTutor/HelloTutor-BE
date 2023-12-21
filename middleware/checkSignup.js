@@ -13,9 +13,8 @@ async function validatedEmail(req, res, next) {
 
 async function overlappedEmail(req, res, next) {
     const user = req.body;
-    console.log("user를 찾아보자", user);
     const overlappedEmail = await userRepository.findUser_email(user.email);
-    console.log("중복된 이메일 찾아보자", overlappedEmail);
+
     if (overlappedEmail) {
         return res.status(400).json({ result: false, message: "중복된 이메일 입니다." });
     }

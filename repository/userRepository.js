@@ -10,7 +10,7 @@ async function insertUser (user) {
     const bcryptPw = bcrypt.hashSync(user.pw, 11);
 
     try {
-        const conn = connection();
+        const conn = await connection();
         const row = await conn.execute(query.insertUser, [user.email, bcryptPw, user.name]);
         return row;
     } catch (error) {
@@ -18,12 +18,11 @@ async function insertUser (user) {
     }
 }
 
-async function findUser_email (user) {
-
+async function findUser_email (user_email) {
     try {
-        const conn = connection();
-        const row = await conn.execute(query.findUser_email, [user.email]);
-        console.log('row를 알아보자', row);
+        const conn = await connection();
+        const [[row]] = await conn.execute(query.findUser_email, [user_email]);
+
         return row;
     } catch (error) {
         console.log(error);
