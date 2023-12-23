@@ -14,7 +14,7 @@ async function insertUser (user) {
     try {
         const conn = await connection();
         const [row] = await conn.execute(query.insertUser, [user.email, bcryptPw, user.name, user.role]);
-        // console.log("row좀 볼까?", row);
+
         if (user.role === 0) {
             conn.execute(query.insertUser_tutee, [row.insertId]);
         }
