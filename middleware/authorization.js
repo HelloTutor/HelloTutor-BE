@@ -32,7 +32,7 @@ function generateAccessToken(rowInfo) {
         ACCESS_PRIVATE_KEY,
         {
             algorithm: ALGORITHM,
-            exp: "1h"
+            expiresIn: "1h"
         });
 }
 
@@ -41,47 +41,57 @@ function generateRefreshToken(rowInfo) {
         REFRESH_PRIVATE_KEY,
         {
             algorithm: ALGORITHM,
-            exp: "14d"
+            expiresIn: "14d"
         });
 }
 
 async function reIssueToken(req, res) {
-    const accessToken = req.headers["Authorization"];
-    const refreshToken = req.headers["refreshToken"];
+    const accessToken = checkExpiredToken(req.headers["Authorization"]);
+    const refreshToken = checkExpiredToken(req.headers["RefreshToken"]);
 
     //accessToken, refreshToken 둘다 expired 일때
-    if (!(accessToken && refreshToken)) {
+    if (accessToken === "TokenExpiredError" && refreshToken === "TokenExpiredError") {
         return res.redirect("/auth/login");
     }
 
     //accessToken만 expired일때
-    if (checkExpiredToken(accessToken, refreshToken) === 1) {
+    if (accessToken === "TokenExpiredError" && refreshToken === false) {
         const parseRefreshToken = verifyToken(refreshToken, REFRESH_PRIVATE_KEY);
-        accessToken = generateAccessToken(parseRefreshToken.id, parseRefreshToken.email, parseRefreshToken.status);
+        const newAccessToken = generateAccessToken(parseRefreshToken.id, parseRefreshToken.email, parseRefreshToken.status);
 
-        return res.send( { accessToken: accessToken });
+        return res.send( { accessToken: newAccessToken });
     }
 
     //refreshToken만 expired일때
-    if (checkExpiredToken(accessToken, refreshToken) === 2) {
+    if (accessToken === false && refreshToken === "TokenExpriedError") {
         const parseAccessToken = verifyToken(accessToken, ACCESS_PRIVATE_KEY);
-        refreshToken = generateRefreshToken(parseAccessToken.id, parseAccessToken.email, parseAccessToken.status);
+        const newRefreshToken = generateRefreshToken(parseAccessToken.id, parseAccessToken.email, parseAccessToken.status);
 
-        return res.send( { refreshToken: refreshToken });
+        return res.send( { refreshToken: newRefreshToken });
     }
 }
 
 function verifyToken(token, secret_key) {
-    return jwt.verify(token, secret_key);
+    try {
+        let decodedToken = jwt.verify(token, secret_key);
+
+        if (decodedToken) {
+            return false;
+        }
+    } catch (err) {
+        console.log(err);
+    }
 }
 
-function checkExpiredToken(accessToken, refreshToken) {
-    if (!accessToken) {
-        return 1
-    }
+function checkExpiredToken(token) {
+    try {
+        let decodedToken = verifyToken(token);
 
-    if (!refreshToken) {
-        return 2;
+        if (decodedToken) {
+            return false;
+        }
+    } catch (err) {
+        return err.name;
     }
 }
 
