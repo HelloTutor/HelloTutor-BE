@@ -50,18 +50,27 @@ async function reIssueToken(req, res, next) {
     const refreshToken = verifyToken(req.headers["refresh"], REFRESH_PRIVATE_KEY);
 
     if (accessToken === "TokenExpiredError" && refreshToken === "TokenExpiredError") {
+
         return res.redirect("/auth/login");
     }
 
     if (accessToken === "TokenExpiredError" && refreshToken) {
-        const newAccessToken = generateAccessToken({ id: refreshToken.id, email: refreshToken.email, status: refreshToken.status });
-        console.log("새로운 accessToken을 알아보자", newAccessToken);
+        const newAccessToken = generateAccessToken({
+            id: refreshToken.id,
+            email: refreshToken.email,
+            status: refreshToken.status
+        });
+
         return res.send( { accessToken: newAccessToken });
     }
 
     if (accessToken && refreshToken === "TokenExpiredError") {
-        const newRefreshToken = generateRefreshToken({ id: accessToken.id, email: accessToken.email, status: accessToken.status });
-        console.log("새로운 refreshToken을 알아보자", newRefreshToken);
+        const newRefreshToken = generateRefreshToken({
+            id: accessToken.id,
+            email: accessToken.email,
+            status: accessToken.status
+        });
+
         return res.send( { refreshToken: newRefreshToken });
     }
 
