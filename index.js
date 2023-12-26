@@ -6,6 +6,7 @@ const port = 3000;
 
 const signup = require("./router/signup");
 const login = require("./router/login");
+const { reIssueToken } = require("./middleware/authorization");
 
 app.use(cookieParser());
 app.use(express.json());
