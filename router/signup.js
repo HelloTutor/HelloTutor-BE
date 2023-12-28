@@ -2,7 +2,7 @@ const router = require("express").Router();
 const userRepository = require("../repository/userRepository");
 const { validatedEmail, overlappedEmail, validatedPassword } = require("../middleware/checkSignup");
 
-router.post("/auth/user/tutee", //signup --> user로 바꾸기  api는 동사를 피하는게 좋다.
+router.post("/auth/user/tutee",
     validatedEmail, overlappedEmail, validatedPassword,
     async (req, res) => {
         const tutee = req.body;
