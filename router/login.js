@@ -4,13 +4,11 @@ const { issueToken } = require("../middleware/authorization");
 
 router.post("/", issueToken);
 
-router.get("/google", passport.authenticate("google", { scope: ["profile, email"] }));
+router.get("/google", passport.authenticate("google"));
 
-router.get("/google/callback",
-    passport.authenticate("google", { failureRedirect: "auth/login" }),
-    (req, res) => {
-    // Successful authentication, redirect home.
-    res.redirect('/');
-});
+router.get('/google/callback', passport.authenticate('google', {
+    successReturnToOrRedirect: '/',
+    failureRedirect: '/login'
+}));
 
 module.exports = router;
