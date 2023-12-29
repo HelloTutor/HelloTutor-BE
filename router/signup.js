@@ -2,7 +2,7 @@ const router = require("express").Router();
 const userRepository = require("../repository/userRepository");
 const { validatedEmail, overlappedEmail, validatedPassword } = require("../middleware/checkSignup");
 
-router.post("/auth/user/tutee",
+router.post("/tutee",
     validatedEmail, overlappedEmail, validatedPassword,
     async (req, res) => {
         const tutee = req.body;
@@ -14,7 +14,7 @@ router.post("/auth/user/tutee",
         res.status(500).send();
 });
 
-router.post("/auth/user/tutor",
+router.post("/tutor",
     validatedEmail, overlappedEmail, validatedPassword,
     async (req, res) => {
         const tutor = req.body;

@@ -1,8 +1,10 @@
-const connection = require('../db/connection');
-const bcrypt = require('bcrypt');
+const connection = require("../db/connection");
+const bcrypt = require("bcrypt");
+const tuteeRepository = require("./tuteeRepository");
 
 const query = {
-    insertUser: "INSERT INTO tb_user (`email`, `pw`, `name`, `role`) VALUES (?, ?, ?, ?)", //나중에 status까지 req로 받아서 넣을것
+    insertUser: "INSERT INTO tb_user (`email`, `pw`, `name`, `role`) VALUES (?, ?, ?, ?)",
+    insertOauthUser: "INSERT INTO tb_user (`email, `name`, `role`) VALUES (?, ?, ?)",
     insertUser_tutee: "INSERT INTO tb_tutee(`id`) VALUES (?)",
     insertUser_tutor: "INSERT INTO tb_tutor(`id`) VALUES (?)",
     findUser_email : "SELECT * FROM tb_user WHERE email = ?",
@@ -26,6 +28,17 @@ async function insertUser (user) {
         return row;
     } catch (error) {
         console.log(error);
+    }
+}
+
+async function insertOauthUser (user) {
+    try {
+        const conn = await connection();
+        const [row] = await conn.execute(query.insertUser, [user.email, user.name, user.role]);
+        await conn.execute(query.insertUser_tutee, [row.insertId]);
+        await conn.execute(tuteeRepository.insertTuteeGoogleId)
+    } catch (error) {
+
     }
 }
 
