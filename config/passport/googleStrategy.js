@@ -20,7 +20,7 @@ const {
     GOOGLE_CLIENT_SECRET
 } = process.env;
 
-const googleStrategy = passport.use(new GoogleStrategy({
+const google = new GoogleStrategy({
     clientID: GOOGLE_CLIENT_ID,
     clientSecret: GOOGLE_CLIENT_SECRET,
     callbackURL: "/auth/login/google/callback",
@@ -38,6 +38,6 @@ const googleStrategy = passport.use(new GoogleStrategy({
         } catch (err) {
             console.error(err);
         }
-    }));
+    });
 
-passport.use("google", googleStrategy);
+passport.use("google", google);

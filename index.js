@@ -11,15 +11,13 @@ const signup = require("./router/signup");
 const login = require("./router/login");
 const { reIssueToken } = require("./middleware/authorization");
 const passport = require("passport");
-const expressSession = require('express-session');
+const cookieSession = require("cookie-session");
 
 app.use(cookieParser());
 app.use(express.json());
-app.use(expressSession({
+app.use(cookieSession({
     name: "oAuthLogin",
-    secret: [process.env.COOKIE_SECRET_KEY],
-    resave: false,
-    saveUninitialized: true
+    keys: [process.env.COOKIE_ENCRYPTION_KEY]
 }));
 
 app.set('views', path.join(__dirname, 'views'));
