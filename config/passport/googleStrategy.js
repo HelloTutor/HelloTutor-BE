@@ -3,7 +3,6 @@ const userRepository = require("../../repository/userRepository");
 const passport = require("passport");
 
 passport.serializeUser((user, done) => {
-    console.log("user가 어떤지 보자", user);
     done(null, user.id);
 });
 
