@@ -27,6 +27,20 @@ app.use(passport.initialize());
 app.use(passport.session());
 require("./config/passport/googleStrategy");
 
+app.use(function (req, res, next) {
+    if (req.session && !req.session.regenerate) {
+        req.session.regenerate = (callback) => {
+            callback()
+        }
+    }
+    if (req.session && !req.session.save) {
+        req.session.save = (callback) => {
+            callback()
+        }
+    }
+    next()
+})
+
 app.use("/", main);
 app.use("/auth/user", signup);
 app.use("/auth/login", login);

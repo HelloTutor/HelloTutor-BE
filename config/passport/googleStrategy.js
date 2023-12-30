@@ -30,10 +30,10 @@ const google = new GoogleStrategy({
             const existingUser = await userRepository.findUser_email(profile.emails[0].value);
             console.log("existingUser를 알아보자", existingUser);
             if (existingUser) {
-                done(null, existingUser);
+                return done(null, existingUser);
             } else {
                 const newUser = await userRepository.insertOauthUser(profile);
-                done(null, newUser);
+                return done(null, newUser);
             }
         } catch (err) {
             console.error(err);
