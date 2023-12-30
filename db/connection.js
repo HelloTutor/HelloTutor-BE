@@ -8,16 +8,11 @@ let pool = mysql.createPool({
     database: "HELLOTUTOR"
 });
 
-let mySqlConnection = async function () {
+module.exports = async function () {
     try {
         const connection = await pool.getConnection();
-        console.log("mySql 연동 성공");
         return connection;
     } catch (error) {
-        console.log("msSql 에러", error);
+        throw error;
     }
-}
-
-module.exports = {
-    mySqlConnection
-}
+};

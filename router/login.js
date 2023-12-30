@@ -6,9 +6,9 @@ router.post("/", issueToken);
 
 router.get("/google", passport.authenticate("google"));
 
-router.get('/google/callback', passport.authenticate('google', {
-    successReturnToOrRedirect: '/',
-    failureRedirect: '/login'
+router.get("/google/callback", passport.authenticate("google", {
+    successReturnToOrRedirect: "/",
+    failureRedirect: "/failed"
 }));
 
 module.exports = router;
