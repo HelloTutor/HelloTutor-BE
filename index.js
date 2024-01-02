@@ -9,7 +9,6 @@ const path = require("path")
 const main = require("./router/main");
 const signup = require("./router/signup");
 const login = require("./router/login");
-const { reIssueToken } = require("./middleware/authorization");
 const passport = require("passport");
 const cookieSession = require("cookie-session");
 
@@ -30,16 +29,16 @@ require("./config/passport/googleStrategy");
 app.use(function (req, res, next) {
     if (req.session && !req.session.regenerate) {
         req.session.regenerate = (callback) => {
-            callback()
+            callback();
         }
     }
     if (req.session && !req.session.save) {
         req.session.save = (callback) => {
-            callback()
+            callback();
         }
     }
-    next()
-})
+    next();
+});
 
 app.use("/", main);
 app.use("/auth/user", signup);

@@ -1,33 +1,39 @@
 const connection = require("../db/connection");
+const userRepository = require("./userRepository");
 
 const query = {
-    findGoogleId: "SELECT * FROM tb_tutee WHERE google_id = ?",
-    insertGoogleId: "INSERT INTO tb_tutee(`google_id`) VALUES(?)"
+    insertTutee: "INSERT INTO tb_tutee(`id`) VALUES (?)",
+    findTuteeId: "SELECT * FROM tb_tutee WHERE id = ?",
 }
 
-async function findTuteeGoogleId (profile) {
+async function insertOauthTutee(profile) {
     try {
-        const conn = await connection ();
-        const [[row]] = await conn.execute(query.findGoogleId);
-        console.log("find row를 알아보자", row);
-        return row;
-    } catch (err) {
-        console.log(err);
+        const conn = await connection();
+        const [row] = await conn.execute(userRepository.query.insertOauthUser, [profile.emails[0].value, profile.displayName, 0]);
+        console.log("row를 알아보자", row);
+
+        if (profile.provider === "google") {
+            const google_row = await conn.execute(query.insertGoogleId, [row.insertId, profile.id]);
+            return google_row;
+        }
+    } catch(error) {
+        console.log(error);
     }
 }
 
-async function insertTuteeGoogleId (profile) {
+async function findTuteeId(id) {
     try {
-        const conn = connection();
-        const [row] = await conn.execute(query.insertGoogleId);
-        console.log("insert row를 알아보자", row);
+        const conn = await connection();
+        const [[row]] = await conn.execute(query.findTuteeId, [id]);
+
         return row;
-    } catch (err) {
-        console.log(err);
+    } catch(error) {
+        console.log(error);
     }
 }
 
 module.exports = {
-    findTuteeGoogleId,
-    insertTuteeGoogleId
+    query,
+    insertOauthTutee,
+    findTuteeId
 }

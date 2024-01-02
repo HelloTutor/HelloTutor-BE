@@ -8,15 +8,14 @@ CREATE TABLE `tb_user` (
 	`role` int NOT NULL,
 	`money` int DEFAULT NULL,
 	PRIMARY KEY (`id`)
-)
+);
 
 CREATE TABLE `tb_tutee` (
 	`id` int NOT NULL,
 	`google_id` varchar(50) DEFAULT NULL,
-	`kakao_id` varchar(50) DEFAULT NULL,
 	PRIMARY KEY (`id`),
 	CONSTRAINT `fk_tutee_id` FOREIGN KEY (`id`) REFERENCES `tb_user` (`id`)
-)
+);
 
 CREATE TABLE `tb_tutor` (
 	`id` int NOT NULL,
@@ -28,4 +27,4 @@ CREATE TABLE `tb_tutor` (
 	`status` tinyint(1) DEFAULT '0',
 	PRIMARY KEY (`id`),
 	CONSTRAINT `fk_tutor_id` FOREIGN KEY (`id`) REFERENCES `tb_user` (`id`)
-)
+);

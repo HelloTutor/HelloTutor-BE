@@ -1,5 +1,6 @@
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const userRepository = require("../../repository/userRepository");
+const tuteeRepository = require("../../repository/tuteeRepository");
 const passport = require("passport");
 
 passport.serializeUser((user, done) => {
@@ -29,10 +30,13 @@ const google = new GoogleStrategy({
         try{
             const existingUser = await userRepository.findUser_email(profile.emails[0].value);
             console.log("existingUser를 알아보자", existingUser);
+            console.log("profile을 알아보자", profile);
+            console.log("accessToken도 혹시 주나?", accessToken);
+            console.log("refreshToken도 주는거야?", refreshToken);
             if (existingUser) {
                 return done(null, existingUser);
             } else {
-                const newUser = await userRepository.insertOauthUser(profile);
+                const newUser = await tuteeRepository.insertOauthTutee(profile);
                 return done(null, newUser);
             }
         } catch (err) {

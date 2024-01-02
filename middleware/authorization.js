@@ -5,11 +5,17 @@ const {
 } = process.env;
 const jwt = require("jsonwebtoken");
 const userRepository = require("../repository/userRepository");
+const tuteeRepository = require("../repository/tuteeRepository");
 const bcrypt = require("bcrypt");
 
 async function issueToken (req, res) {
     const { body } = req;
     const row = await userRepository.findUser_email(body.email);
+    const tutee = await tuteeRepository.findTuteeId(row.id);
+
+    if (tutee.google_id) {
+        return res.status(400).json( {message: "해당 이메일은 구글회원입니다. "});
+    }
 
     if (!row) {
         return res.status(400).json( {message: "해당 이메일이 없습니다."});
@@ -41,7 +47,7 @@ function generateRefreshToken(rowInfo) {
         REFRESH_PRIVATE_KEY,
         {
             algorithm: ALGORITHM,
-            expiresIn: "1s"
+            expiresIn: "10m"
         });
 }
 

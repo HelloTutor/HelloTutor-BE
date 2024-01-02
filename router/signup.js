@@ -1,9 +1,9 @@
 const router = require("express").Router();
 const userRepository = require("../repository/userRepository");
-const { validatedEmail, overlappedEmail, validatedPassword } = require("../middleware/checkSignup");
+const { validatedEmail, validatedPassword } = require("../middleware/checkSignup");
 
 router.post("/tutee",
-    validatedEmail, overlappedEmail, validatedPassword,
+    validatedEmail, validatedPassword,
     async (req, res) => {
         const tutee = req.body;
         const result = await userRepository.insertUser(tutee);
@@ -15,7 +15,7 @@ router.post("/tutee",
 });
 
 router.post("/tutor",
-    validatedEmail, overlappedEmail, validatedPassword,
+    validatedEmail, validatedPassword,
     async (req, res) => {
         const tutor = req.body;
         const result = await userRepository.insertUser(tutor);
