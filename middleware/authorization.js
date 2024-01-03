@@ -13,18 +13,16 @@ async function issueToken (req, res) {
     const row = await userRepository.findUser_email(body.email);
     const tutee = await tuteeRepository.findTuteeId(row.id);
 
-    if (tutee.google_id) {
-        return res.status(400).json( {message: "해당 이메일은 구글회원입니다. "});
-    }
-
     if (!row) {
         return res.status(400).json( {message: "해당 이메일이 없습니다."});
     }
 
-    const isPw = bcrypt.compareSync(body.pw, row.pw);
+    if (!tutee.google_id) {
+        const isPw = bcrypt.compareSync(body.pw, row.pw);
 
-    if (!isPw) {
-        return res.status(400).json({ message: "잘못된 비밀번호 입니다."});
+        if (!isPw) {
+            return res.status(400).json({ message: "잘못된 비밀번호 입니다."});
+        }
     }
 
     const accessToken = generateAccessToken({ id: row.id, email: row.email, status: row.status });
@@ -95,5 +93,8 @@ function verifyToken(token, secret_key) {
 
 module.exports = {
     issueToken,
-    reIssueToken
+    reIssueToken,
+    generateAccessToken,
+    generateRefreshToken,
+    verifyToken
 }
