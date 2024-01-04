@@ -1,7 +1,3 @@
-const query = {
-    insertTutor: "INSERT INTO tb_tutor(`id`) VALUES (?)",
-}
+const query = require("../db/query.json");
 
-module.exports = {
-    query
-}
+module.exports = {};
