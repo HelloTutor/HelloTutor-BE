@@ -11,7 +11,7 @@ const {
     ACCESS_PRIVATE_KEY
 } = process.env;
 
-async function findPw(req, res) {
+async function sendMail(req, res) {
     try{
         const { body } = req;
         const row = await userRepository.findUser_email(body.email);
@@ -79,6 +79,6 @@ async function resetPw(req, res) {
 }
 
 module.exports = {
-    findPw,
+    sendMail,
     resetPw
 }
