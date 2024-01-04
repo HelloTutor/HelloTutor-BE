@@ -5,8 +5,8 @@ const { validatedEmail, validatedPassword } = require("../middleware/checkSignup
 router.post("/tutee",
     validatedEmail, validatedPassword,
     async (req, res) => {
-        const tutee = req.body;
-        const result = await userRepository.insertUser(tutee);
+        const { body } = req;
+        const result = await userRepository.insertUser(body);
 
         if (result) {
             res.status(200).json({ message: "회원가입 완료" });

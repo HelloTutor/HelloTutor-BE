@@ -29,18 +29,24 @@ const google = new GoogleStrategy({
     }, async function(accessToken, refreshToken, profile, done) {
         try{
             const existingUser = await userRepository.findUser_email(profile.emails[0].value);
-            console.log("existingUser를 알아보자", existingUser);
-            console.log("profile을 알아보자", profile);
-            console.log("accessToken도 혹시 주나?", accessToken);
-            console.log("refreshToken도 주는거야?", refreshToken);
+
             if (existingUser) {
+                const tutee = await tuteeRepository.findTuteeId(existingUser.id);
+
+                if (!tutee.google_id) {
+                    return done(null, false, { message: "소셜회원이 아닙니다." });
+                }
+
                 return done(null, existingUser);
             } else {
-                const newUser = await tuteeRepository.insertOauthTutee(profile);
+                await tuteeRepository.insertOauthTutee(profile);
+                const newUser = await userRepository.findUser_email(profile.emails[0].value);
+
                 return done(null, newUser);
             }
         } catch (err) {
             console.error(err);
+            return done(err);
         }
     });
 
