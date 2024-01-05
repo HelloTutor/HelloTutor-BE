@@ -13,7 +13,7 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(cookieSession({
     name: "oAuthLogin",
-    keys: [process.env.COOKIE_ENCRYPTION_KEY]
+    keys: [process.env.COOKIE_SECRET_KEY]
 }));
 
 app.use(passport.initialize());

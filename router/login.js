@@ -14,11 +14,14 @@ router.get("/google/callback",passport.authenticate("google", {
 
 router.get("/google/callback/:result", (req, res) => {
     const { params, user } = req;
-
+    console.log(req.params);
+    console.log(req.user);
     if (params.result === "success" && user) {
         const { id, email } = user;
-        const accessToken = generateAccessToken({ id, email });
-        const refreshToken = generateRefreshToken({ id, email });
+        const accessToken = authorization.generateAccessToken({ id, email });
+        const refreshToken = authorization.generateRefreshToken({ id, email });
+
+        console.log(accessToken, refreshToken);
         const { FRONT_HOST } = process.env;
 
         if (FRONT_HOST) {

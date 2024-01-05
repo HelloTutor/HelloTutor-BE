@@ -5,10 +5,12 @@ const passport = require("passport");
 const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET } = process.env;
 
 passport.serializeUser((user, done) => {
+    console.log("user오고있니?",user);
     done(null, user.id);
 });
 
-passport.deserializeUser(async function (id, done) {
+passport.deserializeUser(async (id, done) => {
+    console.log("id오고있니?", id);
     try{
         const user = await userRepository.findUser_id(id);
         done(null, user);
@@ -25,6 +27,8 @@ const google = new GoogleStrategy({
     }, async function(accessToken, refreshToken, profile, done) {
         try{
             const existingUser = await userRepository.findUser_email(profile.emails[0].value);
+            console.log("profile을 보자", profile);
+            console.log("existingUser", existingUser);
 
             if (existingUser) {
                 const tutee = await tuteeRepository.findTuteeId(existingUser.id);
