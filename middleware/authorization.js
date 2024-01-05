@@ -36,7 +36,7 @@ function generateAccessToken(rowInfo) {
         ACCESS_PRIVATE_KEY,
         {
             algorithm: ALGORITHM,
-            expiresIn: "10m"
+            expiresIn: "1h"
         });
 }
 
@@ -45,14 +45,14 @@ function generateRefreshToken(rowInfo) {
         REFRESH_PRIVATE_KEY,
         {
             algorithm: ALGORITHM,
-            expiresIn: "10m"
+            expiresIn: "1d"
         });
 }
 
 async function reIssueToken(req, res, next) {
     const accessToken = verifyToken(req.headers["authorization"], ACCESS_PRIVATE_KEY);
     const refreshToken = verifyToken(req.headers["refresh"], REFRESH_PRIVATE_KEY);
-
+    console.log("token들 잘있나 보자", accessToken, refreshToken);
     if (accessToken === "TokenExpiredError" && refreshToken === "TokenExpiredError") {
 
         return res.redirect("/auth/login");
@@ -65,7 +65,8 @@ async function reIssueToken(req, res, next) {
             status: refreshToken.status
         });
 
-        return res.send( { accessToken: newAccessToken });
+        console.log("newAccessToken", newAccessToken);
+        return res.send({ accessToken: newAccessToken }); //프론트 논의
     }
 
     if (accessToken && refreshToken === "TokenExpiredError") {

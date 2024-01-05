@@ -7,6 +7,8 @@ const port = 3000;
 
 const signup = require("./router/signup");
 const login = require("./router/login");
+const freeboard = require("./router/freeboard");
+
 const passport = require("passport");
 
 app.use(cookieParser());
@@ -36,6 +38,11 @@ app.use(function (req, res, next) {
 
 app.use("/auth/user", signup);
 app.use("/auth/login", login);
+app.use("/board/free", freeboard);
+
+app.delete('/del',(req,res)=>{
+    res.json({"test":"test"});
+})
 
 app.listen(port, () => {
     console.log(port, "번호로 서버를 시작");

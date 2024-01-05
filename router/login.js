@@ -9,17 +9,10 @@ router.post("/", authorization.issueToken);
 router.get("/google", passport.authenticate("google"));
 
 router.get("/google/callback", passport.authenticate("google", {
-    successReturnToOrRedirect: "/",
-    failureRedirect: "/failed"
-    },
-    async function (user, err, res) {
-        if(!err) {
-            const accessToken = authorization.generateAccessToken({ id: user.id, email: user.email, status: user.status });
-            const refreshToken = authorization.generateRefreshToken( { id: user.id, email: user.email, status: user.status });
-
-            res.status(200).send( { accessToken: accessToken, refreshToken: refreshToken });
-        }
-}));
+    successReturnToOrRedirect: "/auth/login/google/callback/success",
+    failureRedirect: "/auth/login/google/callback/success"
+    }
+));
 
 router.post("/findPw", findPw);
 
