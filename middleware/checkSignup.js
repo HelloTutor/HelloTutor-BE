@@ -20,13 +20,14 @@ async function validatedEmail(req, res, next) {
 
 async function validatedPassword(req, res, next) {
     const { body }  = req;
+    console.log("body", body);
     const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d).{8,}$/;
 
     if (!passwordRegex.test(body.pw)) {
         return res.status(400).json({ result: false, message: "유효하지 않은 비밀번호 양식입니다." });
     }
 
-    if (body.pw !== body.checkPW) {
+    if (body.pw !== body.checkPw) {
         return res.status(400).json({ result: false, message: "비밀번호가 일치하지 않습니다." });
     }
 

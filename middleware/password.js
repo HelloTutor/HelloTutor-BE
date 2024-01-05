@@ -18,7 +18,7 @@ async function sendMail(req, res) {
         const tutee = await tuteeRepository.findTuteeId(row.id);
 
         if (tutee.google_id) {
-            return res.status(400).json( {message: "소셜회원은 비밀번호를 변경할 수 없습니다. "});
+            return res.status(400).json({ message: "소셜회원은 비밀번호를 변경할 수 없습니다." });
         }
 
         if (row) {
@@ -65,12 +65,13 @@ async function resetPw(req, res) {
 
         const user = {
             email: decodedToken.email,
-            pw: body.pw
+            pw: body.pw,
+            checkPw: body.checkPw
         }
 
         const row = await userRepository.updateUser_pw(user);
 
-        if (row) {
+        if (row.affectedRows === 1) {
             return res.status(200).json({ message: "비밀번호가 변경 되었습니다." });
         }
     } catch (error) {
