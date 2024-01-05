@@ -1,8 +1,4 @@
-const {
-    ACCESS_PRIVATE_KEY,
-    REFRESH_PRIVATE_KEY,
-    ALGORITHM
-} = process.env;
+const { ACCESS_PRIVATE_KEY, REFRESH_PRIVATE_KEY, ALGORITHM } = process.env;
 const jwt = require("jsonwebtoken");
 const userRepository = require("../repository/userRepository");
 const tuteeRepository = require("../repository/tuteeRepository");
@@ -25,28 +21,36 @@ async function issueToken (req, res) {
         }
     }
 
-    const accessToken = generateAccessToken({ id: row.id, email: row.email, status: row.status });
-    const refreshToken = generateRefreshToken({ id: row.id, email: row.email, status: row.status });
+    const accessToken = generateAccessToken({
+        id: row.id,
+        email: row.email,
+        status: row.status
+    });
+    const refreshToken = generateRefreshToken({
+        id: row.id,
+        email: row.email,
+        status: row.status
+    });
 
-    return res.send( { accessToken: accessToken, refreshToken: refreshToken, message: "로그인 성공" });
+    return res.send({
+        accessToken: accessToken,
+        refreshToken: refreshToken,
+        message: "로그인 성공"
+    });
 }
 
 function generateAccessToken(rowInfo) {
-    return jwt.sign(rowInfo,
-        ACCESS_PRIVATE_KEY,
-        {
-            algorithm: ALGORITHM,
-            expiresIn: "10m"
-        });
+    return jwt.sign(rowInfo,ACCESS_PRIVATE_KEY,{
+        algorithm: ALGORITHM,
+        expiresIn: "10m"
+    });
 }
 
 function generateRefreshToken(rowInfo) {
-    return jwt.sign(rowInfo,
-        REFRESH_PRIVATE_KEY,
-        {
-            algorithm: ALGORITHM,
-            expiresIn: "10m"
-        });
+    return jwt.sign(rowInfo,REFRESH_PRIVATE_KEY,{
+        algorithm: ALGORITHM,
+        expiresIn: "10m"
+    });
 }
 
 async function reIssueToken(req, res, next) {
@@ -65,7 +69,7 @@ async function reIssueToken(req, res, next) {
             status: refreshToken.status
         });
 
-        return res.send( { accessToken: newAccessToken });
+        return res.send({ accessToken: newAccessToken });
     }
 
     if (accessToken && refreshToken === "TokenExpiredError") {
@@ -75,7 +79,7 @@ async function reIssueToken(req, res, next) {
             status: accessToken.status
         });
 
-        return res.send( { refreshToken: newRefreshToken });
+        return res.send({ refreshToken: newRefreshToken });
     }
 
     next();

@@ -2,6 +2,7 @@ const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const userRepository = require("../../repository/userRepository");
 const tuteeRepository = require("../../repository/tuteeRepository");
 const passport = require("passport");
+const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET } = process.env;
 
 passport.serializeUser((user, done) => {
     done(null, user.id);
@@ -15,11 +16,6 @@ passport.deserializeUser(async function (id, done) {
         console.log(error);
     }
 });
-
-const {
-    GOOGLE_CLIENT_ID,
-    GOOGLE_CLIENT_SECRET
-} = process.env;
 
 const google = new GoogleStrategy({
     clientID: GOOGLE_CLIENT_ID,

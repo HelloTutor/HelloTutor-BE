@@ -1,0 +1,15 @@
+{
+    "user": {
+        "findByEmail": "SELECT * FROM tb_user WHERE email = ?",
+        "findById": "SELECT * FROM tb_user WHERE id = ?",
+        "insert": "INSERT INTO tb_user (`email`, `pw`, `name`, `role`) VALUES (?, ?, ?, ?)",
+        "update_pw": "UPDATE tb_user SET `pw`=? WHERE `email` = ?"
+    },
+    "tutee": {
+        "insert": "INSERT INTO tb_tutee (`id`, `google_id`) VALUES (?, ?)",
+        "findById": "SELECT * FROM tb_tutee WHERE id = ?"
+    },
+    "tutor": {
+        "insert": "INSERT INTO tb_tutor(`id`) VALUES (?)"
+    }
+}
