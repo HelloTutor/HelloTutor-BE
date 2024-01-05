@@ -1,12 +1,12 @@
 const router = require("express").Router();
 const userRepository = require("../repository/userRepository");
-const { validatedEmail, overlappedEmail, validatedPassword } = require("../middleware/checkSignup");
+const { validatedEmail, validatedPassword } = require("../middleware/checkSignup");
 
-router.post("/auth/user/tutee",
-    validatedEmail, overlappedEmail, validatedPassword,
+router.post("/tutee",
+    validatedEmail, validatedPassword,
     async (req, res) => {
-        const tutee = req.body;
-        const result = await userRepository.insertUser(tutee);
+        const { body } = req;
+        const result = await userRepository.insertUser(body);
 
         if (result) {
             res.status(200).json({ message: "회원가입 완료" });
@@ -14,8 +14,8 @@ router.post("/auth/user/tutee",
         res.status(500).send();
 });
 
-router.post("/auth/user/tutor",
-    validatedEmail, overlappedEmail, validatedPassword,
+router.post("/tutor",
+    validatedEmail, validatedPassword,
     async (req, res) => {
         const tutor = req.body;
         const result = await userRepository.insertUser(tutor);
