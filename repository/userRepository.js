@@ -2,14 +2,6 @@ const connection = require("../db/connection");
 const bcrypt = require("bcrypt");
 const query = require("../db/query.json");
 
-// const query = {
-//     insertUser: "INSERT INTO tb_user (`email`, `pw`, `name`, `role`) VALUES (?, ?, ?, ?)",
-//     insertOauthUser: "INSERT INTO tb_user (`email`, `name`, `role`) VALUES (?, ?, ?)",
-//     findUser_email: "SELECT * FROM tb_user WHERE email = ?",
-//     findUser_id: "SELECT * FROM tb_user WHERE id = ?",
-//     updateUser_pw: "UPDATE tb_user SET `pw`=? WHERE `email` = ?"
-// }
-
 async function insertUser(user) {
     const bcryptPw = bcrypt.hashSync(user.pw, 11);
 
@@ -58,7 +50,7 @@ async function updateUser_pw(user) {
 
     try {
         const conn = await connection();
-        const row = await conn.execute(query.user.update_pw, [bcryptPw, user.email]);
+        const [row] = await conn.execute(query.user.update_pw, [bcryptPw, user.email]);
 
         return row;
     } catch(error) {

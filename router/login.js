@@ -1,5 +1,7 @@
 const router = require("express").Router();
 const passport = require("passport");
+const { sendMail, resetPw } = require("../middleware/password");
+const { validatedPassword } = require("../middleware/checkSignup");
 const authorization = require("../middleware/authorization");
 
 router.post("/", authorization.issueToken);
@@ -48,5 +50,9 @@ router.get("/google/callback/:result", (req, res) => {
     }
     res.status(500).json({ message: "invalid server error" });
 });
+
+router.post("/findPw", sendMail);
+
+router.post("/resetPw/:accessToken", validatedPassword, resetPw);
 
 module.exports = router;
