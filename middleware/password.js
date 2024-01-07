@@ -42,9 +42,8 @@ async function sendMail(req, res) {
                     console.error(err);
                     return res.status(500).json({ message: "에러발생" });
                 } else {
-                    res.status(200).end();
+                    return res.status(200).json({ message: "비밀번호 이메일 전송 완료" });
                 }
-                transporter.close();
             });
 
             return res.status(200).json({ message: "비밀번호 이메일 전송 완료" });
