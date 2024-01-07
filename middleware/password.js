@@ -1,4 +1,4 @@
-const nodemailer = require("nodemailer");
+const mailer = require("nodemailer");
 const userRepository = require("../repository/userRepository");
 const tuteeRepository = require("../repository/tuteeRepository");
 const authorization = require("./authorization");
@@ -11,20 +11,20 @@ const {
     ACCESS_PRIVATE_KEY
 } = process.env;
 
-async function findPw(req, res) {
+async function sendMail(req, res) {
     try{
         const { body } = req;
         const row = await userRepository.findUser_email(body.email);
-        const tutee = await tuteeRepository.findTuteeId(row.id);
-
-        if (tutee.google_id) {
-            return res.status(400).json( {message: "소셜회원은 비밀번호를 변경할 수 없습니다. "});
-        }
 
         if (row) {
+            const tutee = await tuteeRepository.findTuteeId(row.id);
+
+            if (tutee.google_id) {
+                return res.status(400).json({ message: "소셜회원은 비밀번호를 변경할 수 없습니다." });
+            }
+
             const accessToken = authorization.generateAccessToken({ email: row.email });
-            console.log("email 토큰좀 보자", accessToken);
-            const transporter = nodemailer.createTransport({
+            const transporter = mailer.createTransport({
                 service: EMAIL_SERVICE,
                 auth: {
                     user: NODE_MAILER_ID,
@@ -40,18 +40,17 @@ async function findPw(req, res) {
             }, (err, info) => {
                 if(err) {
                     console.error(err);
-                    return res.status(500).send("에러발생");
+                    return res.status(500).json({ message: "에러발생" });
                 } else {
-                    console.log("info를 알아보자", info);
+                    return res.status(200).json({ message: "비밀번호 이메일 전송 완료" });
                 }
             });
-
-            return res.status(200).json({ message: "비밀번호 이메일 전송 완료 " });
-        } else {
-            return res.status(400).json({ message: "해당 이메일가 일치하는 회원이 없습니다."});
+            return res.status(200).json({ message: "비밀번호 이메일 전송 완료" });
         }
+        return res.status(400).json({ message: "해당 이메일이 일치하는 회원이 없습니다." });
     } catch(error) {
         console.log(error);
+        return res.status(500).json({ message: "에러발생" });
     }
 
 }
@@ -59,18 +58,17 @@ async function findPw(req, res) {
 async function resetPw(req, res) {
     try {
         const { body } = req;
-        console.log("body", body);
         const decodedToken = authorization.verifyToken(req.params.accessToken, ACCESS_PRIVATE_KEY);
-        console.log("decodedToken좀 보자", decodedToken);
 
         const user = {
             email: decodedToken.email,
-            pw: body.pw
+            pw: body.pw,
+            checkPw: body.checkPw
         }
 
         const row = await userRepository.updateUser_pw(user);
 
-        if (row) {
+        if (row.affectedRows === 1) {
             return res.status(200).json({ message: "비밀번호가 변경 되었습니다." });
         }
     } catch (error) {
@@ -79,6 +77,6 @@ async function resetPw(req, res) {
 }
 
 module.exports = {
-    findPw,
+    sendMail,
     resetPw
 }

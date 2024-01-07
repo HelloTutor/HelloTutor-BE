@@ -2,12 +2,15 @@ const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const userRepository = require("../../repository/userRepository");
 const tuteeRepository = require("../../repository/tuteeRepository");
 const passport = require("passport");
+const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET } = process.env;
 
 passport.serializeUser((user, done) => {
+    console.log("user오고있니?",user);
     done(null, user.id);
 });
 
-passport.deserializeUser(async function (id, done) {
+passport.deserializeUser(async (id, done) => {
+    console.log("id오고있니?", id);
     try{
         const user = await userRepository.findUser_id(id);
         done(null, user);
@@ -15,11 +18,6 @@ passport.deserializeUser(async function (id, done) {
         console.log(error);
     }
 });
-
-const {
-    GOOGLE_CLIENT_ID,
-    GOOGLE_CLIENT_SECRET
-} = process.env;
 
 const google = new GoogleStrategy({
     clientID: GOOGLE_CLIENT_ID,
@@ -29,6 +27,11 @@ const google = new GoogleStrategy({
     }, async function(accessToken, refreshToken, profile, done) {
         try{
             const existingUser = await userRepository.findUser_email(profile.emails[0].value);
+<<<<<<< HEAD
+=======
+            console.log("profile을 보자", profile);
+            console.log("existingUser", existingUser);
+>>>>>>> main
 
             if (existingUser) {
                 const tutee = await tuteeRepository.findTuteeId(existingUser.id);

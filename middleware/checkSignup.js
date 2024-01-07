@@ -26,6 +26,10 @@ async function validatedPassword(req, res, next) {
         return res.status(400).json({ result: false, message: "유효하지 않은 비밀번호 양식입니다." });
     }
 
+    if (body.pw !== body.checkPw) {
+        return res.status(400).json({ result: false, message: "비밀번호가 일치하지 않습니다." });
+    }
+
     next();
 }
 
