@@ -1,16 +1,10 @@
 const connection = require("../db/connection");
-
-const query = {
-    insertFreeBoard: "INSERT INTO tb_free_board (`user_id`, `title`, `content`) VALUES (?, ?, ?)",
-    selectFreeBoardPost: "SELECT * FROM tb_free_board AS f, tb_user AS u WHERE f.user_id = u.id AND f.id = ?",
-    updateFreeBoardPost: "UPDATE tb_free_board SET `title` = ?, `content` = ?, updated_at = NOW() WHERE id = ? AND user_id = ?",
-    deleteFreeBoardPost: "DELETE FROM tb_free_board WHERE id = ? AND user_id = ?"
-}
+const query = require("../db/query.json");
 
 async function insertFreeBoard(token, body) {
     try {
         const conn = await connection();
-        const [row] = await conn.execute(query.insertFreeBoard, [token.id, body.title, body.content]);
+        const [row] = await conn.execute(query.freeBoard.insert, [token.id, body.title, body.content]);
 
         return row;
     } catch(error) {
@@ -18,10 +12,25 @@ async function insertFreeBoard(token, body) {
     }
 }
 
-async function selectFreeBoardPost(post_id) { //좋아요, 댓글 기능 구현후 수정할 것
+async function selectFreeBoard(post_id) {
+    const conn = await connection();
+    try {
+        await conn.beginTransaction();
+        await conn.execute(query.freeBoard.updateViews, [post_id]);
+        const [[row]] = await conn.execute(query.freeBoard.select, [post_id]);
+        await conn.commit();
+
+        return row;
+    } catch (error) {
+        await conn.rollback();
+        console.log(error);
+    }
+}
+
+async function updateFreeBoard(token, post_id, body) {
     try {
         const conn = await connection();
-        const [[row]] = await conn.execute(query.selectFreeBoardPost, [post_id]);
+        const [row] = await conn.execute(query.freeBoard.update, [body.title, body.content, post_id, token.id]);
 
         return row;
     } catch(error) {
@@ -29,10 +38,10 @@ async function selectFreeBoardPost(post_id) { //좋아요, 댓글 기능 구현�
     }
 }
 
-async function updateFreeBoardPost(token, post_id, body) {
+async function deleteFreeBoard(token, post_id) {
     try {
         const conn = await connection();
-        const [row] = await conn.execute(query.updateFreeBoardPost, [body.title, body.content, post_id, token.id]);
+        const [row] = await conn.execute(query.freeBoard.delete, [post_id, token.id]);
 
         return row;
     } catch(error) {
@@ -40,10 +49,32 @@ async function updateFreeBoardPost(token, post_id, body) {
     }
 }
 
-async function deleteFreeBoardPost(token, post_id) {
+async function updateFreeBoardViews(views, post_Id) {
     try {
         const conn = await connection();
-        const [row] = await conn.execute(query.deleteFreeBoardPost, [post_id, token.id]);
+        const [row] = await conn.execute(query.freeBoard.updateViews, [views, post_Id]);
+
+        return row;
+    } catch(error) {
+        console.log(error);
+    }
+}
+
+async function selectAllFreeBoard(offset, limit) {
+    try {
+        const conn = await connection();
+        const [row] = await conn.execute(query.freeBoard.selectAll, [offset, limit]);
+
+        return row;
+    } catch(error) {
+        console.log(error);
+    }
+}
+
+async function selectSearchFreeBoard(search, offset, limit) {
+    try {
+        const conn = await connection();
+        const [row] = await conn.execute(query.freeBoard.selectSearch, [search, offset, limit]);
 
         return row;
     } catch(error) {
@@ -53,7 +84,10 @@ async function deleteFreeBoardPost(token, post_id) {
 
 module.exports = {
     insertFreeBoard,
-    selectFreeBoardPost,
-    updateFreeBoardPost,
-    deleteFreeBoardPost
+    selectFreeBoard,
+    updateFreeBoard,
+    deleteFreeBoard,
+    updateFreeBoardViews,
+    selectAllFreeBoard,
+    selectSearchFreeBoard
 }

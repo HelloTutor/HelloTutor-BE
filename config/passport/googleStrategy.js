@@ -27,11 +27,8 @@ const google = new GoogleStrategy({
     }, async function(accessToken, refreshToken, profile, done) {
         try{
             const existingUser = await userRepository.findUser_email(profile.emails[0].value);
-<<<<<<< HEAD
-=======
             console.log("profile을 보자", profile);
             console.log("existingUser", existingUser);
->>>>>>> main
 
             if (existingUser) {
                 const tutee = await tuteeRepository.findTuteeId(existingUser.id);

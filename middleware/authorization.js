@@ -42,21 +42,21 @@ async function issueToken (req, res) {
 function generateAccessToken(rowInfo) {
     return jwt.sign(rowInfo, ACCESS_PRIVATE_KEY, {
         algorithm: ALGORITHM,
-        expiresIn: "10m"
+        expiresIn: "1h"
     });
 }
 
 function generateRefreshToken(rowInfo) {
     return jwt.sign(rowInfo, REFRESH_PRIVATE_KEY, {
         algorithm: ALGORITHM,
-        expiresIn: "10m"
+        expiresIn: "14d"
     });
 }
 
 async function reIssueToken(req, res, next) {
     const accessToken = verifyToken(req.headers["authorization"], ACCESS_PRIVATE_KEY);
     const refreshToken = verifyToken(req.headers["refresh"], REFRESH_PRIVATE_KEY);
-    console.log("token들 잘있나 보자", accessToken, refreshToken);
+
     if (accessToken === "TokenExpiredError" && refreshToken === "TokenExpiredError") {
 
         return res.redirect("/auth/login");

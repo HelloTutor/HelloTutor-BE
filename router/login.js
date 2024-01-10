@@ -1,10 +1,6 @@
 const router = require("express").Router();
 const passport = require("passport");
-<<<<<<< HEAD
-const { findPw, resetPw} = require("../middleware/password");
-=======
 const { sendMail, resetPw } = require("../middleware/password");
->>>>>>> main
 const { validatedPassword } = require("../middleware/checkSignup");
 const authorization = require("../middleware/authorization");
 
@@ -12,17 +8,6 @@ router.post("/", authorization.issueToken);
 
 router.get("/google", passport.authenticate("google"));
 
-<<<<<<< HEAD
-router.get("/google/callback", passport.authenticate("google", {
-    successReturnToOrRedirect: "/auth/login/google/callback/success",
-    failureRedirect: "/auth/login/google/callback/success"
-    }
-));
-
-router.post("/findPw", findPw);
-
-router.post("/resetPw/:accessToken", validatedPassword, resetPw);
-=======
 router.get("/google/callback",passport.authenticate("google", {
     successReturnToOrRedirect: "/auth/login/google/callback/success",
     failureRedirect: "/auth/login/google/callback/failed"
@@ -37,7 +22,6 @@ router.get("/google/callback/:result", (req, res) => {
         const { id, email } = user;
         const accessToken = authorization.generateAccessToken({ id, email });
         const refreshToken = authorization.generateRefreshToken({ id, email });
->>>>>>> main
 
         console.log(accessToken, refreshToken);
         const { FRONT_HOST } = process.env;
