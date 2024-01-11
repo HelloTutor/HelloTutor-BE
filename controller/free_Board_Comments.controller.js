@@ -98,7 +98,7 @@ async function selectAllFreeBoardComments(req, res) {
             page = 1;
         }
 
-        if(!pageSize || (pageSize <= 0)) {
+        if (!pageSize || (pageSize <= 0)) {
             pageSize = "10";
         }
 
