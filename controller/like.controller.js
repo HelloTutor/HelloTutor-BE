@@ -26,6 +26,8 @@ async function freeBoardLike(req, res) {
             if (deleteRow.affectedRows === 1) {
                 return res.status(200).json({ message: "좋아요 삭제 완료" });
             }
+        } else {
+            return res.status(500).json({ message: "좋아요 삭제 권한이 없습니다." });
         }
     } catch(error) {
         console.log(error);
@@ -42,7 +44,7 @@ async function freeBoardCommentsLike(req, res) {
 
         const { postId, commentId } = req.params;
         const selectRow = await freeBoardLikeRepository.selectFreeBoardCommentsLike(decodedToken, commentId);
-        console.log("selectRow를 알아보자", selectRow);
+
         if (selectRow === undefined) {
             const insertRow = await freeBoardLikeRepository.insert(decodedToken, null, commentId);
 
@@ -57,6 +59,8 @@ async function freeBoardCommentsLike(req, res) {
             if (deleteRow.affectedRows === 1) {
                 return res.status(200).json({ message: "좋아요 삭제 완료" });
             }
+        } else {
+            return res.status(500).json({ message: "좋아요 삭제 권한이 없습니다." });
         }
     } catch(error) {
         console.log(error);
