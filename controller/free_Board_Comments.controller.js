@@ -87,8 +87,7 @@ async function selectFreeBoardComments(req, res) {
 async function selectAllFreeBoardComments(req, res) {
     try {
         const { postId } = req.params;
-        let { page } = req.query;
-        let { pageSize } = req.query;
+        let { page, pageSize } = req.query;
 
         if (!page || (page <= 0)) {
             page = 1;
@@ -98,7 +97,7 @@ async function selectAllFreeBoardComments(req, res) {
             pageSize = 10;
         }
 
-        const limit = pageSize;
+        const limit = String(pageSize);
         const offset = String((page - 1) * limit);
 
         const row = await freeBoardCommentsRepository.selectAllFreeBoardComments(postId, offset, limit);

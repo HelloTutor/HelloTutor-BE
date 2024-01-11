@@ -24,6 +24,8 @@ async function selectFreeBoard(post_id) {
     } catch (error) {
         await conn.rollback();
         console.log(error);
+    } finally {
+        conn.release();
     }
 }
 

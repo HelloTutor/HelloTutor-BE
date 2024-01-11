@@ -4,9 +4,7 @@ const { ACCESS_PRIVATE_KEY } = process.env;
 
 async function selectAllFreeBoard(req, res) {
     try {
-        let { page } = req.query;
-        let { pageSize } = req.query;
-        let { search } = req.query;
+        let { page, pageSize, search } = req.query;
 
         if (!page || (page <= 0)) {
             page = 1;
@@ -16,7 +14,7 @@ async function selectAllFreeBoard(req, res) {
             pageSize = 10;
         }
 
-        const limit = pageSize;
+        const limit = String(pageSize);
         const offset = String((page - 1) * limit);
 
         if (search) {
