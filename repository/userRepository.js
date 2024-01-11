@@ -20,6 +20,9 @@ async function insertUser(user) {
         return row;
     } catch(error) {
         console.log(error);
+        throw error;
+    } finally {
+        conn.release();
     }
 }
 
@@ -31,6 +34,9 @@ async function findUser_email(user_email) {
         return row;
     } catch(error) {
         console.log(error);
+        throw error;
+    } finally {
+        conn.release();
     }
 }
 
@@ -42,6 +48,9 @@ async function findUser_id(user_id) {
         return row;
     } catch(error) {
         console.log(error);
+        throw error;
+    } finally {
+        conn.release();
     }
 }
 
@@ -55,6 +64,9 @@ async function updateUser_pw(user) {
         return row;
     } catch(error) {
         console.log(error);
+        throw error;
+    } finally {
+        conn.release();
     }
 }
 
@@ -64,10 +76,13 @@ async function updateUser_pw(user) {
     try {
         const conn = await connection();
         const row = await conn.execute(query.updateUser_pw, [bcryptPw, user.email]);
-        console.log("update Row는 어떻게 생겼을까?", row);
+
         return row;
     } catch(error) {
         console.log(error);
+        throw error;
+    } finally {
+        conn.release();
     }
 }
 

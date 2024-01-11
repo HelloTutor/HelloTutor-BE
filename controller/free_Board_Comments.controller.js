@@ -41,10 +41,12 @@ async function putFreeBoardComments(req, res) {
             if (updateRow.affectedRows === 1) {
                 return res.status(200).json({ message: "댓글 수정 완료" });
             }
+        } else {
+            return res.status(500).json({ message: "댓글 수정 권한이 없습니다." });
         }
     } catch(error) {
         console.log(error);
-        return res.status(500).json({ message: "댓글 수정 권한이 없습니다." });
+        return res.status(500).json({ message: "에러발생" });
     }
 }
 
@@ -64,9 +66,12 @@ async function deleteFreeBoardComments(req, res) {
             if (deleteRow.affectedRows === 1) {
                 return res.status(200).json({ message: "댓글 삭제 완료" });
             }
+        } else {
+            return res.status(500).json({ message: "댓글삭제권한이 없습니다." });
         }
     } catch (error) {
-        console.log(error)
+        console.log(error);
+        return res.status(500).json({ message: "에러발생" });
     }
 }
 
@@ -94,13 +99,12 @@ async function selectAllFreeBoardComments(req, res) {
         }
 
         if(!pageSize || (pageSize <= 0)) {
-            pageSize = 10;
+            pageSize = "10";
         }
 
-        const limit = String(pageSize);
-        const offset = String((page - 1) * limit);
+        const offset = String((page - 1) * pageSize);
 
-        const row = await freeBoardCommentsRepository.selectAllFreeBoardComments(postId, offset, limit);
+        const row = await freeBoardCommentsRepository.selectAllFreeBoardComments(postId, offset, pageSize);
 
         if (row) {
             return res.status(200).json(row);

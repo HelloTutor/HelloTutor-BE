@@ -9,6 +9,9 @@ async function insertFreeBoardComments(token, free_board_id, body) {
         return row;
     } catch(error) {
         console.log(error);
+        throw error;
+    } finally {
+        conn.release();
     }
 }
 
@@ -20,6 +23,9 @@ async function updateFreeBoardComments(token, free_board_id, comment_id, body) {
         return row;
     } catch(error) {
         console.log(error);
+        throw error;
+    } finally {
+        conn.release();
     }
 }
 
@@ -31,6 +37,9 @@ async function selectFreeBoardComments(comment_id, free_board_id) {
         return row;
     } catch(error) {
         console.log(error);
+        throw error;
+    } finally {
+        conn.release();
     }
 }
 
@@ -42,17 +51,23 @@ async function deleteFreeBoardComments(comment_id, free_board_id, token) {
         return row;
     } catch(error) {
         console.log(error);
+        throw error;
+    } finally {
+        conn.release();
     }
 }
 
-async function selectAllFreeBoardComments(free_board_id, offset, limit) {
+async function selectAllFreeBoardComments(free_board_id, offset, pageSize) {
     try {
         const conn = await connection();
-        const [row] = await conn.execute(query.freeBoardComments.selectAll, [free_board_id, offset, limit]);
+        const [row] = await conn.execute(query.freeBoardComments.selectAll, [free_board_id, offset, pageSize]);
 
         return row;
     } catch(error) {
         console.log(error);
+        throw error;
+    } finally {
+        conn.release();
     }
 }
 

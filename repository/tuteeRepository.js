@@ -13,6 +13,9 @@ async function insertOauthTutee(profile) {
         }
     } catch(error) {
         console.log(error);
+        throw error;
+    } finally {
+        conn.release();
     }
 }
 
@@ -24,6 +27,9 @@ async function findTuteeId(id) {
         return row;
     } catch(error) {
         console.log(error);
+        throw error;
+    } finally {
+        conn.release();
     }
 }
 

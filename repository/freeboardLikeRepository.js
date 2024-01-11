@@ -6,9 +6,12 @@ async function insert(token, free_board_id, free_board_comments) {
         const conn = await connection();
         const [row] = await conn.execute(query.like.insert, [token.id, free_board_id, free_board_comments]);
 
-        return row
+        return row;
     } catch(error) {
         console.log(error);
+        throw error;
+    } finally {
+        conn.release();
     }
 };
 
@@ -20,6 +23,9 @@ async function selectFreeBoardLike(free_board_id, token){
         return row;
     } catch(error) {
         console.log(error);
+        throw error;
+    } finally {
+        conn.release();
     }
 }
 
@@ -31,6 +37,9 @@ async function deleteFreeBoardLike(token, free_board_id) {
         return row;
     } catch(error) {
         console.log(error);
+        throw error;
+    } finally {
+        conn.release();
     }
 }
 
@@ -42,6 +51,9 @@ async function selectFreeBoardCommentsLike(token, free_board_comments_id) {
         return row;
     } catch(error) {
         console.log(error);
+        throw error;
+    } finally {
+        conn.release();
     }
 }
 
@@ -53,6 +65,9 @@ async function deleteFreeBoardCommentsLike(token, free_board_comments_id) {
         return row;
     } catch(error) {
         console.log(error);
+        throw error;
+    } finally {
+        conn.release();
     }
 }
 

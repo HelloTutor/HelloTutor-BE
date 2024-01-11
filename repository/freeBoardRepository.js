@@ -9,6 +9,9 @@ async function insertFreeBoard(token, body) {
         return row;
     } catch(error) {
         console.log(error);
+        throw error;
+    } finally {
+        conn.release();
     }
 }
 
@@ -24,6 +27,7 @@ async function selectFreeBoard(post_id) {
     } catch (error) {
         await conn.rollback();
         console.log(error);
+        throw error;
     } finally {
         conn.release();
     }
@@ -37,6 +41,9 @@ async function updateFreeBoard(token, post_id, body) {
         return row;
     } catch(error) {
         console.log(error);
+        throw error;
+    } finally {
+        conn.release();
     }
 }
 
@@ -48,6 +55,9 @@ async function deleteFreeBoard(token, post_id) {
         return row;
     } catch(error) {
         console.log(error);
+        throw error;
+    } finally {
+        conn.release();
     }
 }
 
@@ -59,6 +69,9 @@ async function updateFreeBoardViews(views, post_Id) {
         return row;
     } catch(error) {
         console.log(error);
+        throw error;
+    } finally {
+        conn.release();
     }
 }
 
@@ -70,6 +83,9 @@ async function selectAllFreeBoard(offset, limit) {
         return row;
     } catch(error) {
         console.log(error);
+        throw error;
+    } finally {
+        conn.release();
     }
 }
 
@@ -81,6 +97,9 @@ async function selectSearchFreeBoard(search, offset, limit) {
         return row;
     } catch(error) {
         console.log(error);
+        throw error;
+    } finally {
+        conn.release();
     }
 }
 
