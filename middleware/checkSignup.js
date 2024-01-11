@@ -20,7 +20,6 @@ async function validatedEmail(req, res, next) {
 
 async function validatedPassword(req, res, next) {
     const { body }  = req;
-    console.log("body", body);
     const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d).{8,}$/;
 
     if (!passwordRegex.test(body.pw)) {

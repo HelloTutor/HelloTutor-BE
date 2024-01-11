@@ -45,10 +45,8 @@ async function sendMail(req, res) {
                     return res.status(200).json({ message: "비밀번호 이메일 전송 완료" });
                 }
             });
-
             return res.status(200).json({ message: "비밀번호 이메일 전송 완료" });
         }
-
         return res.status(400).json({ message: "해당 이메일이 일치하는 회원이 없습니다." });
     } catch(error) {
         console.log(error);

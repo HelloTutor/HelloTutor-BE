@@ -40,16 +40,16 @@ async function issueToken (req, res) {
 }
 
 function generateAccessToken(rowInfo) {
-    return jwt.sign(rowInfo,ACCESS_PRIVATE_KEY,{
+    return jwt.sign(rowInfo, ACCESS_PRIVATE_KEY, {
         algorithm: ALGORITHM,
-        expiresIn: "10m"
+        expiresIn: "1h"
     });
 }
 
 function generateRefreshToken(rowInfo) {
-    return jwt.sign(rowInfo,REFRESH_PRIVATE_KEY,{
+    return jwt.sign(rowInfo, REFRESH_PRIVATE_KEY, {
         algorithm: ALGORITHM,
-        expiresIn: "10m"
+        expiresIn: "14d"
     });
 }
 
