@@ -44,10 +44,12 @@ async function insertFreeBoard(req, res) {
             if (row.affectedRows === 1) {
                 return res.status(200).json({ message: "게시판 작성 완료" });
             }
+        } else {
+            return res.status(500).json({ message: "게시글 작성권한이 없습니다." });
         }
     } catch (error) {
         console.log(error);
-        return res.status(500).json({ message: "토큰 기간 만료" });
+        return res.status(500).json({ message: "에러발생" });
     }
 }
 
@@ -67,10 +69,12 @@ async function putFreeBoard(req, res) {
             if (updateRow.affectedRows === 1) {
                 return res.status(200).json({ message: "게시글 수정 완료" });
             }
+        } else {
+            return res.status(500).json({ message: "게시글 수정권한이 없습니다." });
         }
     } catch(error) {
         console.log(error);
-        return res.status(500).json( { message: "수정 권한이 없습니다." });
+        return res.status(500).json({ message: "에러발생" });
     }
 }
 
@@ -89,10 +93,12 @@ async function deleteFreeBoard(req, res) {
             if (deleteRow.affectedRows === 1) {
                 res.status(200).json({ message: "게시글 삭제완료" });
             }
+        } else {
+            res.status(500).json({ message: "게시글 삭제권한이 없습니다." });
         }
     } catch(error) {
         console.log(error);
-        res.status(500).json({ message: "게시글 삭제 권한이 없습니다." });
+        res.status(500).json({ message: "에러발생" });
     }
 }
 
@@ -104,7 +110,6 @@ async function selectFreeBoard(req, res) {
         return res.status(200).json(row);
     } catch(error) {
         console.log(error);
-
         return res.status(500).json({ message: "게시글 가져오기 실패" });
     }
 }

@@ -17,10 +17,12 @@ async function insertFreeBoardComments(req, res) {
             if (row.affectedRows === 1) {
                 return res.status(200).json({ message: "댓글 작성 완료" });
             }
+        } else {
+            return res.status(500).json({ message: "댓글 작성 권한이 없습니다." });
         }
     } catch(error) {
         console.log(error);
-        return res.status(500).json({ message: "댓글 작성 권한이 없습니다." });
+        return res.status(500).json({ message: "에러발생" });
     }
 }
 
