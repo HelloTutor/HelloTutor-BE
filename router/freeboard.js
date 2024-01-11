@@ -6,7 +6,7 @@ const freeBoardComments = require("./freeBoardComments");
 
 router.get("/", freeBoardController.selectAllFreeBoard);
 
-router.post("/", authorization.reIssueToken, freeBoardController.insertFreeBoard);
+router.post("/", authorization.reIssueToken, require('../middleware/boardParser').boardContentParser,freeBoardController.insertFreeBoard);
 
 router.get("/:postId", freeBoardController.selectFreeBoard);
 
