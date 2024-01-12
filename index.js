@@ -8,6 +8,7 @@ const port = 3000;
 const signup = require("./router/signup");
 const login = require("./router/login");
 const freeBoard = require("./router/freeBoard");
+const questionBoard = require("./router/questionBoard");
 
 const passport = require("passport");
 
@@ -39,6 +40,7 @@ app.use(function (req, res, next) {
 app.use("/auth/user", signup);
 app.use("/auth/login", login);
 app.use("/free", freeBoard);
+app.use("/question", questionBoard);
 
 app.listen(port, () => {
     console.log(port, "번호로 서버를 시작");
