@@ -5,7 +5,7 @@ async function insertFreeBoard(token, body) {
     let conn;
     try {
         conn = await connection();
-        const [row] = await conn.execute(query.freeBoard.insert, [token.id, body.title, body.content]);
+        const [row] = await conn.execute(query.freeBoard.insert, [token.id, body.title, body.content,JSON.stringify(body.content_json)]);
 
         return row;
     } catch(error) {
