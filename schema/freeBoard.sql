@@ -5,6 +5,6 @@ CREATE TABLE `tb_free_board` (
 	`content` MEDIUMTEXT NULL,
 	`created_at` dateTime DEFAULT CURRENT_TIMESTAMP,
 	`updated_at` dateTime DEFAULT CURRENT_TIMESTAMP,
-	`views`	INT	NULL,
+	`views`	INT	DEFAULT 0,
 	CONSTRAINT `fk_free_board_user_id` FOREIGN KEY (`user_id`) REFERENCES `tb_user` (`id`)
 );
