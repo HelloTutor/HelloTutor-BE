@@ -2,7 +2,7 @@ const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const userRepository = require("../../repository/userRepository");
 const tuteeRepository = require("../../repository/tuteeRepository");
 const passport = require("passport");
-const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET } = process.env;
+const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, NODE_ENV="dev" } = process.env;
 
 passport.serializeUser((user, done) => {
     console.log("user오고있니?",user);
@@ -22,8 +22,8 @@ passport.deserializeUser(async (id, done) => {
 const google = new GoogleStrategy({
     clientID: GOOGLE_CLIENT_ID,
     clientSecret: GOOGLE_CLIENT_SECRET,
-    callbackURL: "/auth/login/google/callback",
-    scope: ["email","profile"]
+    callbackURL: (NODE_ENV==="prd"?"https://tutor-api.devple.net":"")+"/auth/login/google/callback",
+    scope: ["email","profile"],
     }, async function(accessToken, refreshToken, profile, done) {
         try{
             const existingUser = await userRepository.findUser_email(profile.emails[0].value);
