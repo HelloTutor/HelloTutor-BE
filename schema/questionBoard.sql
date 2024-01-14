@@ -1,7 +1,7 @@
 CREATE TABLE `tb_question_board` (
     `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `user_id` int NOT NULL,
-    `subject` varchar(50) NOT NULL,
+    `subject` enum('korean','english','mathematics','social','science') NOT NULL,
     `title` varchar(50) NOT NULL,
     `content` mediumtext NOT NULL,
     `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
