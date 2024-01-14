@@ -26,7 +26,7 @@ const google = new GoogleStrategy({
     scope: ["email","profile"]
     }, async function(accessToken, refreshToken, profile, done) {
         try{
-            const existingUser = await userRepository.findUser_email(profile.emails[0].value);
+            const existingUser = await userRepository.findUserEmail(profile.emails[0].value);
             console.log("profile을 보자", profile);
             console.log("existingUser", existingUser);
 
@@ -40,7 +40,7 @@ const google = new GoogleStrategy({
                 return done(null, existingUser);
             } else {
                 await tuteeRepository.insertOauthTutee(profile);
-                const newUser = await userRepository.findUser_email(profile.emails[0].value);
+                const newUser = await userRepository.findUserEmail(profile.emails[0].value);
 
                 return done(null, newUser);
             }

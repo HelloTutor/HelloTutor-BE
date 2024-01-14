@@ -14,13 +14,13 @@ async function selectAllFreeBoard(req, res) {
             pageSize = "10";
         }
 
-        const offset = String((page - 1) * limit);
+        const offset = String((page - 1) * pageSize);
 
         if (search) {
             const row = await freeBoardRepository.selectSearchFreeBoard(`${search}%`, offset, pageSize);
             return res.status(200).json(row);
         } else {
-            const row = await freeBoardRepository.selectAllFreeBoard(offset, limit);
+            const row = await freeBoardRepository.selectAllFreeBoard(offset, pageSize);
             return res.status(200).json(row);
         }
 
