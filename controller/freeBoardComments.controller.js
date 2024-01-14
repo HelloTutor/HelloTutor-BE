@@ -105,7 +105,6 @@ async function selectAllFreeBoardComments(req, res) {
         }
 
         const offset = String((page - 1) * pageSize);
-
         const row = await freeBoardCommentsRepository.selectAllFreeBoardComments(postId, offset, pageSize);
 
         if (row) {

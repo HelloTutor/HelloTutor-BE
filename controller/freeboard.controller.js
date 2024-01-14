@@ -88,7 +88,7 @@ async function deleteFreeBoard(req, res) {
         const selectRow = await freeBoardRepository.selectFreeBoard(postId);
 
         if (decodedToken.id === selectRow.user_id) {
-            const deleteRow = await freeBoardRepository.deleteFreeBoard(decodedToken, postId);
+            const deleteRow = await freeBoardRepository.deleteFreeBoard(postId, decodedToken);
 
             if (deleteRow.affectedRows === 1) {
                 res.status(200).json({ message: "게시글 삭제완료" });
