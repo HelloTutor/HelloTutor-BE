@@ -12,7 +12,7 @@ passport.serializeUser((user, done) => {
 passport.deserializeUser(async (id, done) => {
     console.log("id오고있니?", id);
     try{
-        const user = await userRepository.findUser_id(id);
+        const user = await userRepository.findUserId(id);
         done(null, user);
     } catch(error) {
         console.log(error);
@@ -27,8 +27,6 @@ const google = new GoogleStrategy({
     }, async function(accessToken, refreshToken, profile, done) {
         try{
             const existingUser = await userRepository.findUserEmail(profile.emails[0].value);
-            console.log("profile을 보자", profile);
-            console.log("existingUser", existingUser);
 
             if (existingUser) {
                 const tutee = await tuteeRepository.findTuteeId(existingUser.id);

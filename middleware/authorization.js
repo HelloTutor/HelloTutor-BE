@@ -57,8 +57,7 @@ function generateRefreshToken(rowInfo) {
 async function reIssueToken(req, res, next) {
     const accessToken = verifyToken(req.headers["authorization"], ACCESS_PRIVATE_KEY);
     const refreshToken = verifyToken(req.headers["refresh"], REFRESH_PRIVATE_KEY);
-    console.log("accessToken", accessToken);
-    console.log("refreshToken", refreshToken);
+
     if ((accessToken === "TokenExpiredError") && (refreshToken === "TokenExpiredError")) {
 
         return res.redirect("/auth/login");

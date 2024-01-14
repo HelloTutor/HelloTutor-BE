@@ -2,19 +2,20 @@ const connection = require("../db/connection");
 const bcrypt = require("bcrypt");
 const query = require("../db/query.json");
 
-async function insertUser(user) {
-    const bcryptPw = bcrypt.hashSync(user.pw, 11);
+async function insertUser(body) {
+    const bcryptPw = bcrypt.hashSync(body.pw, 11);
     let conn;
     try {
         conn = await connection();
-        const [row] = await conn.execute(query.user.insert, [user.email, bcryptPw, user.name, user.role]);
+        const [row] = await conn.execute(query.user.insert, [body.email, bcryptPw, body.name, body.role]);
 
-        if (user.role === 0) {
+        if (body.role === 0) {
             conn.execute(query.tutee.insert, [row.insertId, null]);
         }
 
-        if (user.role === 1) {
-            conn.execute(query.tutor.insert, [row.insertId]);
+        if (body.role === 1) {
+            const subject = JSON.stringify(body.subject);
+            conn.execute(query.tutor.insert, [row.insertId, subject]);
         }
 
         return row;
@@ -54,26 +55,12 @@ async function findUserId(userId) {
 }
 
 async function updateUserPw(user) {
+    console.log("user확인", user);
     const bcryptPw = bcrypt.hashSync(user.pw, 11);
     let conn;
     try {
         conn = await connection();
         const [row] = await conn.execute(query.user.updatePw, [bcryptPw, user.email]);
-
-        return row;
-    } catch(error) {
-        throw error;
-    } finally {
-        if(conn) conn.release();
-    }
-}
-
-async function updateUserPw(user) {
-    const bcryptPw = bcrypt.hashSync(user.pw, 11);
-    let conn;
-    try {
-        conn = await connection();
-        const row = await conn.execute(query.updateUserPw, [bcryptPw, user.email]);
 
         return row;
     } catch(error) {

@@ -47,7 +47,8 @@ async function updateFreeBoard(token, postId, body) {
     }
 }
 
-async function deleteFreeBoard(token, postId) {
+async function deleteFreeBoard(postId, token) {
+    console.log(postId,token);
     let conn;
     try {
         conn = await connection();
