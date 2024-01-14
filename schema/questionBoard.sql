@@ -7,5 +7,6 @@ CREATE TABLE `tb_question_board` (
     `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
     `updated_at` datetime DEFAULT CURRENT_TIMESTAMP,
     `views` int DEFAULT '0',
-    `status` varchar(50) DEFAULT NULL
+    `status` varchar(50) DEFAULT NULL,
+    CONSTRAINT `fk_question_board_user_id` FOREIGN KEY (`user_id`) REFERENCES `tb_user` (`id`)
 );

@@ -1,7 +1,7 @@
 const router  = require("express").Router({mergeParams: true});
 const authorization = require("../middleware/authorization");
 const likeController = require("../controller/like.controller");
-const freeBoardController = require("../controller/free_board.controller");
+const freeBoardController = require("../controller/freeBoard.controller");
 const freeBoardComments = require("./freeBoardComments");
 
 router.get("/", freeBoardController.selectAllFreeBoard);

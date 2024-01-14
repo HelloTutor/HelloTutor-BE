@@ -10,9 +10,9 @@ async function insertQuestionBoard(req, res) {
         );
 
         if (decodedToken) {
-            const { subject } = req.params;
+            const { checkSubject } = req.params;
             const { body } = req;
-            const row = await questionBoardRepository.insertQuestionBoard(decodedToken, subject, body);
+            const row = await questionBoardRepository.insertQuestionBoard(decodedToken, checkSubject, body);
 
             if (row.affectedRows === 1) {
                 return res.status(200).json({ message: "질문 작성 완료" });
@@ -28,8 +28,8 @@ async function insertQuestionBoard(req, res) {
 
 async function selectQuestionBoard(req, res) {
     try {
-        const { postId, subject } = req.params;
-        const row = await questionBoardRepository.selectQuestionBoard(postId, subject);
+        const { postId, checkSubject } = req.params;
+        const row = await questionBoardRepository.selectQuestionBoard(postId, checkSubject);
 
         return res.status(200).json(row);
     } catch(error) {
@@ -45,12 +45,12 @@ async function putQuestionBoard(req, res) {
             ACCESS_PRIVATE_KEY
         );
 
-        const { postId, subject } = req.params;
-        const selectRow = await questionBoardRepository.selectQuestionBoard(postId, subject);
+        const { postId, checkSubject } = req.params;
+        const selectRow = await questionBoardRepository.selectQuestionBoard(postId, checkSubject);
 
         if (decodedToken.id === selectRow.user_id) {
             const { body } = req;
-            const updateRow = await questionBoardRepository.updateQuestionBoard(body, postId, subject, decodedToken);
+            const updateRow = await questionBoardRepository.updateQuestionBoard(body, postId, checkSubject, decodedToken);
 
             if(updateRow.affectedRows === 1) {
                 res.status(200).json({ message: "질문 수정 완료"});
@@ -71,11 +71,11 @@ async function deleteQuestionBoard(req, res) {
             ACCESS_PRIVATE_KEY
         );
 
-        const { postId, subject } = req.params;
-        const selectRow = await questionBoardRepository.selectQuestionBoard(postId, subject);
+        const { postId, checkSubject } = req.params;
+        const selectRow = await questionBoardRepository.selectQuestionBoard(postId, checkSubject);
 
         if (decodedToken.id === selectRow.user_id) {
-            const deleteRow = await questionBoardRepository.deleteQuestionBoard(postId, subject, decodedToken);
+            const deleteRow = await questionBoardRepository.deleteQuestionBoard(postId, checkSubject, decodedToken);
 
             if (deleteRow.affectedRows === 1) {
                 res.status(200).json({ message: "질문 삭제 완료" });
@@ -91,7 +91,7 @@ async function deleteQuestionBoard(req, res) {
 
 async function selectAllQuestionBoard(req, res) {
     try {
-        const { subject } = req.params;
+        const { checkSubject } = req.params;
         let { page, pageSize, search } = req.query;
 
         if (!page || (page <= 0)) {
@@ -105,10 +105,10 @@ async function selectAllQuestionBoard(req, res) {
         const offset = String((page - 1) * pageSize);
 
         if (search) {
-            const row = await questionBoardRepository.selectSearchQuestionBoard(subject, `${search}%`, offset, pageSize);
+            const row = await questionBoardRepository.selectSearchQuestionBoard(checkSubject, `${search}%`, offset, pageSize);
             return res.status(200).json(row);
         } else {
-            const row = await questionBoardRepository.selectAllQuestionBoard(subject, offset, pageSize);
+            const row = await questionBoardRepository.selectAllQuestionBoard(checkSubject, offset, pageSize);
             return res.status(200).json(row);
         }
 
