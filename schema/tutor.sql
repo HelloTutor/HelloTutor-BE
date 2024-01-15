@@ -6,6 +6,7 @@ CREATE TABLE `tb_tutor` (
 	`service_price` decimal(10,0) DEFAULT NULL,
 	`deal` int DEFAULT '0',
 	`status` tinyint(1) DEFAULT '0',
+	`subject` json NOT NULL,
 	PRIMARY KEY (`id`),
 	CONSTRAINT `fk_tutor_id` FOREIGN KEY (`id`) REFERENCES `tb_user` (`id`)
 );

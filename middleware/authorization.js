@@ -9,7 +9,7 @@ async function issueToken (req, res) {
     const row = await userRepository.findUserEmail(body.email);
 
     if (!row) {
-        return res.status(400).json({ message: "해당 이메일이 없습니다." });
+        return res.status(404).json({ message: "해당 이메일이 없습니다." });
     }
 
     const tutee = await tuteeRepository.findTuteeId(row.id);
@@ -18,7 +18,7 @@ async function issueToken (req, res) {
         const isPw = bcrypt.compareSync(body.pw, row.pw);
 
         if (!isPw) {
-            return res.status(400).json({ message: "잘못된 비밀번호 입니다." });
+            return res.status(401).json({ message: "잘못된 비밀번호 입니다." });
         }
     }
 
@@ -58,37 +58,24 @@ async function reIssueToken(req, res, next) {
     const accessToken = verifyToken(req.headers["authorization"], ACCESS_PRIVATE_KEY);
     const refreshToken = verifyToken(req.headers["refresh"], REFRESH_PRIVATE_KEY);
 
-    if ((accessToken === "TokenExpiredError") && (refreshToken === "TokenExpiredError")) {
+    if ( !req.headers["authorization"] && !req.headers["refresh"] ) {
 
-        return res.redirect("/auth/login");
+        return res.status(403).json({ message: "not authenticate" });
     }
 
-    if ((accessToken === "TokenExpiredError") && refreshToken) {
-        const newAccessToken = generateAccessToken({
-            id: refreshToken.id,
-            email: refreshToken.email,
-            status: refreshToken.status
-        });
+    if ((accessToken === "TokenExpiredError")) {
 
-        return res.status(400).json({ accessToken: newAccessToken });
-    }
+        return res.status(401).json({message:"token expired"});
+    } else {
+        if ((accessToken === "TokenExpiredError")) {
+            const newAccessToken = generateAccessToken({
+                id: refreshToken.id,
+                email: refreshToken.email,
+                status: refreshToken.status
+            });
 
-    if (accessToken && (refreshToken === "TokenExpiredError")) {
-        const newRefreshToken = generateRefreshToken({
-            id: accessToken.id,
-            email: accessToken.email,
-            status: accessToken.status
-        });
-
-        return res.status(400).json({ refreshToken: newRefreshToken });
-    }
-
-    if (accessToken === "JsonWebTokenError") {
-        return res.status(400).json({ message: "accessToken이 존재하지 않습니다. "});
-    }
-
-    if (refreshToken === "JsonWebTokenError") {
-        return res.status(400).json({ message: "refreshToken이 존재하지 않습니다. "});
+            return res.setHeader("Authorization",newAccessToken);
+        }
     }
     next();
 }
