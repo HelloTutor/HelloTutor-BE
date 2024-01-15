@@ -15,11 +15,11 @@ async function insert(token, freeBoardId, freeBoardComments) {
     }
 };
 
-async function selectFreeBoardLike(freeBoardId, token){
+async function selectFreeBoardLike(freeBoardId, user){
     let conn;
     try {
         conn = await connection();
-        const [[row]] = await conn.execute(query.like.selectFreeBoard, [freeBoardId, token.id]);
+        const [[row]] = await conn.execute(query.like.selectFreeBoard, [freeBoardId, user.id]);
 
         return row;
     } catch(error) {
@@ -29,11 +29,11 @@ async function selectFreeBoardLike(freeBoardId, token){
     }
 }
 
-async function deleteFreeBoardLike(token, freeBoardId) {
+async function deleteFreeBoardLike(user, freeBoardId) {
     let conn;
     try {
         conn = await connection();
-        const [row] = await conn.execute(query.like.deleteFreeBoard, [token.id, freeBoardId]);
+        const [row] = await conn.execute(query.like.deleteFreeBoard, [user.id, freeBoardId]);
 
         return row;
     } catch(error) {

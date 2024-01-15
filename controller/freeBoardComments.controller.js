@@ -1,18 +1,11 @@
 const freeBoardCommentsRepository = require("../repository/freeBoardCommentsRepository");
-const authorization = require("../middleware/authorization");
-const { ACCESS_PRIVATE_KEY } = process.env;
 
 async function insertFreeBoardComments(req, res) {
     try {
-        const decodedToken = authorization.verifyToken(
-            req.headers["authorization"],
-            ACCESS_PRIVATE_KEY
-        );
+        const {params:{postId},user,body} = req;
 
-        if (decodedToken) {
-            const { postId } = req.params;
-            const { body } = req;
-            const row = await freeBoardCommentsRepository.insertFreeBoardComments(decodedToken, postId, body);
+        if (user) {
+            const row = await freeBoardCommentsRepository.insertFreeBoardComments(user, postId, body);
 
             if (row.affectedRows === 1) {
                 return res.status(200).json({ message: "댓글 작성 완료" });
@@ -28,17 +21,13 @@ async function insertFreeBoardComments(req, res) {
 
 async function putFreeBoardComments(req, res) {
     try {
-        const decodedToken = authorization.verifyToken(
-            req.headers["authorization"],
-            ACCESS_PRIVATE_KEY
-        );
+        const { params:{ postId, commentId },user} =req;
 
-        const { postId, commentId } = req.params;
         const selectRow = await freeBoardCommentsRepository.selectFreeBoardComments(commentId, postId);
 
-        if (decodedToken.id === selectRow.user_id) {
+        if (user.id === selectRow.user_id) {
             const { body } = req;
-            const updateRow = await freeBoardCommentsRepository.updateFreeBoardComments(decodedToken, postId, commentId, body);
+            const updateRow = await freeBoardCommentsRepository.updateFreeBoardComments(user, postId, commentId, body);
 
             if (updateRow.affectedRows === 1) {
                 return res.status(200).json({ message: "댓글 수정 완료" });
@@ -54,16 +43,12 @@ async function putFreeBoardComments(req, res) {
 
 async function deleteFreeBoardComments(req, res) {
     try {
-        const decodedToken = authorization.verifyToken(
-            req.headers["authorization"],
-            ACCESS_PRIVATE_KEY
-        );
+        const { params:{ postId, commentId },user} = req;
 
-        const { postId, commentId } = req.params;
         const selectRow = await freeBoardCommentsRepository.selectFreeBoardComments(commentId, postId);
 
-        if (decodedToken.id === selectRow.user_id) {
-            const deleteRow = await freeBoardCommentsRepository.deleteFreeBoardComments(commentId, postId, decodedToken);
+        if (user.id === selectRow.user_id) {
+            const deleteRow = await freeBoardCommentsRepository.deleteFreeBoardComments(commentId, postId, user);
 
             if (deleteRow.affectedRows === 1) {
                 return res.status(200).json({ message: "댓글 삭제 완료" });
