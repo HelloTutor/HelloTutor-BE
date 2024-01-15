@@ -72,7 +72,7 @@ async function reIssueToken(req, res, next) {
                 status: refreshToken.status
             });
 
-            return res.setHeader("Authorization",newAccessToken);
+            return res.status(400).json({ Authorization: newAccessToken});
         }
     }
     next();

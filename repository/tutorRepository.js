@@ -5,7 +5,7 @@ async function selectTutor(tutorId) {
     let conn;
     try{
         conn = await connection();
-        const [[row]] = await conn.execute(query.tutorBoard.select, [tutorId]);
+        const [[row]] = await conn.execute(query.tutor.select, [tutorId]);
 
         return row;
     } catch(error) {
@@ -20,7 +20,7 @@ async function selectTutorInfo(tutorId) {
     let conn;
     try {
         conn = await connection();
-        const [[row]] = await conn.execute(query.tutorBoard.selectInfo, [tutorId]);
+        const [[row]] = await conn.execute(query.tutor.selectInfo, [tutorId]);
 
         return row;
     } catch(error) {

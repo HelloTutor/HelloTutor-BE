@@ -10,7 +10,9 @@
         "findById": "SELECT * FROM tb_tutee WHERE id = ?"
     },
     "tutor": {
-        "insert": "INSERT INTO tb_tutor(`id`, `subject`) VALUES (?, ?)"
+        "insert": "INSERT INTO tb_tutor(`id`, `subject`) VALUES (?, ?)",
+        "select": "SELECT  t.id, t.introduce, t.career, t.service_price, t.status, t.subject, t.answer, u.name, COUNT(r.id) AS review_count, truncate(AVG(r.score),1) AS revire_avg FROM tb_tutor AS t LEFT JOIN tb_user AS u ON t.id = u.id LEFT JOIN tb_review AS r ON t.id = r.tutor_id WHERE t.id = ? GROUP BY t.id, t.introduce, t.career, t.service_price, t.status, t.subject, t.answer, u.name",
+        "selectInfo": "SELECT t.detailed_description, t.detailed_career FROM tb_tutor AS t LEFT JOIN tb_user AS u ON t.id = u.id WHERE t.id = ?"
     },
     "freeBoard": {
         "insert": "INSERT INTO tb_free_board (`user_id`, `title`, `content`) VALUES (?, ?, ?)",
@@ -45,7 +47,16 @@
         "deleteFreeBoardComments": "DELETE FROM tb_like WHERE user_id = ? AND free_board_comments_id = ?"
     },
     "tutorBoard": {
-        "select": "SELECT  t.id, t.introduce, t.career, t.service_price, t.status, t.subject, t.answer, u.name FROM tb_tutor AS t LEFT JOIN tb_user AS u ON t.id = u.id WHERE t.id = ?",
-        "selectInfo": "SELECT t.detailed_description, t.detailed_career FROM tb_tutor AS t LEFT JOIN tb_user AS u ON t.id = u.id WHERE t.id = ?"
+    },
+    "favorite": {
+        "select": "SELECT * FROM tb_favorite WHERE user_id = ? AND tutor_id = ?",
+        "insert": "INSERT INTO tb_favorite (`user_id`, `tutor_id`) VALUES (?, ?)",
+        "delete": "DELETE FROM tb_favorite WHERE user_id = ? AND tutor_id = ?"
+    },
+    "review": {
+        "selectAll": "SELECT r.id, r.score, r.content, r.created_at, u.name FROM tb_review AS r LEFT JOIN tb_user AS u ON r.tutee_id = u.id WHERE r.tutor_id = ? ORDER BY r.created_at DESC LIMIT ?, ?",
+        "selectLowScore": "SELECT r.id, r.score, r.content, r.created_at, u.name FROM tb_review AS r LEFT JOIN tb_user AS u ON r.tutee_id = u.id WHERE r.tutor_id = ? ORDER BY r.score ASC, r.created_at DESC LIMIT ?, ?",
+        "selectHighScore": "SELECT r.id, r.score, r.content, r.created_at, u.name FROM tb_review AS r LEFT JOIN tb_user AS u ON r.tutee_id = u.id WHERE r.tutor_id = ? ORDER BY r.score DESC, r.created_at DESC LIMIT ?, ?",
+        "avgCount": "SELECT COUNT(*) AS allCount, truncate(AVG(score),1) AS avg FROM tb_review AS r WHERE tutor_id = ?"
     }
 }

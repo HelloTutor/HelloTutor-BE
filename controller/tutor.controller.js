@@ -1,5 +1,4 @@
 const tutorRepository = require("../repository/tutorRepository");
-const authorization = require("../middleware/authorization");
 
 async function selectTutor(req, res) {
     try {
@@ -22,22 +21,6 @@ async function selectTutorInfo(req, res) {
     } catch(error) {
         console.log(error);
         res.status(404).json({ message: "해당 정보가 없습니다." });
-    }
-}
-
-async function favorite(req, res) {
-    try{
-        const decodedToken = authorization.verifyToken(
-            req.headers["authorization"],
-            ACCESS_PRIVATE_KEY
-        );
-
-        const { tutorId } = req.params;
-
-        
-    } catch(error) {
-        console.log(error);
-        res.status(500).json({ message: "에러발생" });
     }
 }
 
