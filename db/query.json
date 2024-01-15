@@ -37,14 +37,15 @@
         "selectAll": "SELECT q.id , q.user_id, q.subject, q.title, q.created_at, q.views, q.status, u.name FROM tb_question_board AS q LEFT JOIN tb_user AS u ON q.user_id = u.id WHERE q.subject = ? ORDER BY q.created_at DESC LIMIT ?, ?",
         "selectSearch": "SELECT q.id , q.user_id, q.subject, q.title, q.created_at, q.views, q.status, u.name FROM tb_question_board AS q LEFT JOIN tb_user AS u ON q.user_id = u.id WHERE q.subject = ? AND q.title LIKE ? ORDER BY q.created_at DESC LIMIT ?, ?"
     },
-    "questionBoardComments":{
-
-    },
     "like": {
         "insert": "INSERT INTO tb_like(`user_id`, `free_board_id`, `free_board_comments_id`) VALUES (?, ?, ?)",
         "selectFreeBoard": "SELECT * FROM tb_like WHERE free_board_id = ? AND user_id = ?;",
         "deleteFreeBoard": "DELETE FROM tb_like WHERE user_id = ? AND free_board_id = ?",
         "selectFreeBoardComments": "SELECT * FROM tb_like WHERE user_id = ? AND free_board_comments_id = ?",
         "deleteFreeBoardComments": "DELETE FROM tb_like WHERE user_id = ? AND free_board_comments_id = ?"
+    },
+    "tutorBoard": {
+        "select": "SELECT  t.id, t.introduce, t.career, t.service_price, t.status, t.subject, t.answer, u.name FROM tb_tutor AS t LEFT JOIN tb_user AS u ON t.id = u.id WHERE t.id = ?",
+        "selectInfo": "SELECT t.detailed_description, t.detailed_career FROM tb_tutor AS t LEFT JOIN tb_user AS u ON t.id = u.id WHERE t.id = ?"
     }
 }
