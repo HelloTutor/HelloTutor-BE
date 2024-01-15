@@ -59,12 +59,10 @@ async function reIssueToken(req, res, next) {
     const refreshToken = verifyToken(req.headers["refresh"], REFRESH_PRIVATE_KEY);
 
     if ( !req.headers["authorization"] && !req.headers["refresh"] ) {
-
         return res.status(403).json({ message: "not authenticate" });
     }
 
-    if ((accessToken === "TokenExpiredError")) {
-
+    if ((refreshToken === "TokenExpiredError")) {
         return res.status(401).json({message:"token expired"});
     } else {
         if ((accessToken === "TokenExpiredError")) {
