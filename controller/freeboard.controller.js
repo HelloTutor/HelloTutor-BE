@@ -30,7 +30,7 @@ async function selectAllFreeBoard(req, res) {
 
 async function insertFreeBoard(req, res) {
     try {
-        const {user,body} = req;
+        const { user, body } = req;
 
         if (user) {
             const row = await freeBoardRepository.insertFreeBoard(user, body);
@@ -49,7 +49,7 @@ async function insertFreeBoard(req, res) {
 
 async function putFreeBoard(req, res) {
     try {
-        const {params:{ postId },user} = req;
+        const { params: { postId }, user } = req;
         const selectRow = await freeBoardRepository.selectFreeBoard(postId);
 
         if (user.id === selectRow.user_id) {
@@ -70,7 +70,7 @@ async function putFreeBoard(req, res) {
 
 async function deleteFreeBoard(req, res) {
     try{
-        const {params:{ postId },user} = req;
+        const { params: { postId }, user } = req;
         const selectRow = await freeBoardRepository.selectFreeBoard(postId);
 
         if (user.id === selectRow.user_id) {

@@ -63,7 +63,7 @@ async function reIssueToken(req, res, next) {
     }
 
     if ((refreshToken === "TokenExpiredError")) {
-        return res.status(401).json({message:"token expired"});
+        return res.status(401).json({ message:"token expired" });
     } else {
         if ((accessToken === "TokenExpiredError")) {
             const newAccessToken = generateAccessToken({
@@ -72,7 +72,7 @@ async function reIssueToken(req, res, next) {
                 status: refreshToken.status
             });
 
-            res.setHeader("Authorization",newAccessToken);
+            res.setHeader("Authorization", newAccessToken);
         }
     }
     req.user = await userRepository.findUserId(refreshToken.id);

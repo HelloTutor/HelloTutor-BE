@@ -2,7 +2,7 @@ const freeBoardCommentsRepository = require("../repository/freeBoardCommentsRepo
 
 async function insertFreeBoardComments(req, res) {
     try {
-        const {params:{postId},user,body} = req;
+        const { params: { postId }, user, body} = req;
 
         if (user) {
             const row = await freeBoardCommentsRepository.insertFreeBoardComments(user, postId, body);
@@ -21,7 +21,7 @@ async function insertFreeBoardComments(req, res) {
 
 async function putFreeBoardComments(req, res) {
     try {
-        const { params:{ postId, commentId },user} =req;
+        const { params: { postId, commentId }, user} =req;
 
         const selectRow = await freeBoardCommentsRepository.selectFreeBoardComments(commentId, postId);
 
@@ -43,7 +43,7 @@ async function putFreeBoardComments(req, res) {
 
 async function deleteFreeBoardComments(req, res) {
     try {
-        const { params:{ postId, commentId },user} = req;
+        const { params: { postId, commentId }, user} = req;
 
         const selectRow = await freeBoardCommentsRepository.selectFreeBoardComments(commentId, postId);
 
