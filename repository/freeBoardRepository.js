@@ -1,11 +1,11 @@
 const connection = require("../db/connection");
 const query = require("../db/query.json");
 
-async function insertFreeBoard(token, body) {
+async function insertFreeBoard(user, body) {
     let conn;
     try {
         conn = await connection();
-        const [row] = await conn.execute(query.freeBoard.insert, [token.id, body.title, body.content,JSON.stringify(body.content_json)]);
+        const [row] = await conn.execute(query.freeBoard.insert, [user.id, body.title, body.content]);
 
         return row;
     } catch(error) {
@@ -15,13 +15,13 @@ async function insertFreeBoard(token, body) {
     }
 }
 
-async function selectFreeBoard(post_id) {
+async function selectFreeBoard(postId) {
     let conn;
     try {
         conn = await connection();
         await conn.beginTransaction();
-        await conn.execute(query.freeBoard.updateViews, [post_id]);
-        const [[row]] = await conn.execute(query.freeBoard.select, [post_id]);
+        await conn.execute(query.freeBoard.updateViews, [postId]);
+        const [[row]] = await conn.execute(query.freeBoard.select, [postId]);
         await conn.commit();
 
         return row;
@@ -33,11 +33,11 @@ async function selectFreeBoard(post_id) {
     }
 }
 
-async function updateFreeBoard(token, post_id, body) {
+async function updateFreeBoard(user, postId, body) {
     let conn;
     try {
         conn = await connection();
-        const [row] = await conn.execute(query.freeBoard.update, [body.title, body.content, post_id, token.id]);
+        const [row] = await conn.execute(query.freeBoard.update, [body.title, body.content, postId, user.id]);
 
         return row;
     } catch(error) {
@@ -47,11 +47,12 @@ async function updateFreeBoard(token, post_id, body) {
     }
 }
 
-async function deleteFreeBoard(token, post_id) {
+async function deleteFreeBoard(postId, token) {
+    console.log(postId,token);
     let conn;
     try {
         conn = await connection();
-        const [row] = await conn.execute(query.freeBoard.delete, [post_id, token.id]);
+        const [row] = await conn.execute(query.freeBoard.delete, [postId, token.id]);
 
         return row;
     } catch(error) {
@@ -61,11 +62,11 @@ async function deleteFreeBoard(token, post_id) {
     }
 }
 
-async function updateFreeBoardViews(views, post_Id) {
+async function updateFreeBoardViews(views, postId) {
     let conn;
     try {
         conn = await connection();
-        const [row] = await conn.execute(query.freeBoard.updateViews, [views, post_Id]);
+        const [row] = await conn.execute(query.freeBoard.updateViews, [views, postId]);
 
         return row;
     } catch(error) {

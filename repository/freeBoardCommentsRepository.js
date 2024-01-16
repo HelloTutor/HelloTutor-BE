@@ -1,11 +1,11 @@
 const connection = require("../db/connection");
 const query = require("../db/query.json");
 
-async function insertFreeBoardComments(token, free_board_id, body) {
+async function insertFreeBoardComments(user, freeBoardId, body) {
     let conn;
     try {
         conn = await connection();
-        const [row] = await conn.execute(query.freeBoardComments.insert, [token.id, free_board_id, body.content]);
+        const [row] = await conn.execute(query.freeBoardComments.insert, [user.id, freeBoardId, body.content]);
 
         return row;
     } catch(error) {
@@ -15,11 +15,11 @@ async function insertFreeBoardComments(token, free_board_id, body) {
     }
 }
 
-async function updateFreeBoardComments(token, free_board_id, comment_id, body) {
+async function updateFreeBoardComments(user, freeBoardId, commentId, body) {
     let conn;
     try {
         conn = await connection();
-        const [row] = await conn.execute(query.freeBoardComments.update, [body.content, comment_id, free_board_id, token.id]);
+        const [row] = await conn.execute(query.freeBoardComments.update, [body.content, commentId, freeBoardId, user.id]);
 
         return row;
     } catch(error) {
@@ -29,11 +29,11 @@ async function updateFreeBoardComments(token, free_board_id, comment_id, body) {
     }
 }
 
-async function selectFreeBoardComments(comment_id, free_board_id) {
+async function selectFreeBoardComments(commentId, freeBoardId) {
     let conn;
     try {
         conn = await connection();
-        const [[row]] = await conn.execute(query.freeBoardComments.select, [comment_id, free_board_id]);
+        const [[row]] = await conn.execute(query.freeBoardComments.select, [commentId, freeBoardId]);
 
         return row;
     } catch(error) {
@@ -43,11 +43,11 @@ async function selectFreeBoardComments(comment_id, free_board_id) {
     }
 }
 
-async function deleteFreeBoardComments(comment_id, free_board_id, token) {
+async function deleteFreeBoardComments(commentId, freeBoardId, user) {
     let conn;
     try {
         conn = await connection();
-        const [row] = await conn.execute(query.freeBoardComments.delete, [comment_id, free_board_id, token.id]);
+        const [row] = await conn.execute(query.freeBoardComments.delete, [commentId, freeBoardId, user.id]);
 
         return row;
     } catch(error) {
@@ -57,11 +57,11 @@ async function deleteFreeBoardComments(comment_id, free_board_id, token) {
     }
 }
 
-async function selectAllFreeBoardComments(free_board_id, offset, pageSize) {
+async function selectAllFreeBoardComments(freeBoardId, offset, pageSize) {
     let conn;
     try {
         conn = await connection();
-        const [row] = await conn.execute(query.freeBoardComments.selectAll, [free_board_id, offset, pageSize]);
+        const [row] = await conn.execute(query.freeBoardComments.selectAll, [freeBoardId, offset, pageSize]);
 
         return row;
     } catch(error) {

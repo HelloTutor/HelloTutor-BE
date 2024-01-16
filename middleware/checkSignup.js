@@ -2,7 +2,7 @@ const userRepository = require('../repository/userRepository');
 
 async function validatedEmail(req, res, next) {
     const { body } = req;
-    const overlappedEmail = await userRepository.findUser_email(body.email);
+    const overlappedEmail = await userRepository.findUserEmail(body.email);
 
     if (overlappedEmail) {
         return res.status(400).json({ result: false, message: "중복된 이메일 입니다." });

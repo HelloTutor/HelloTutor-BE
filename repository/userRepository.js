@@ -2,19 +2,20 @@ const connection = require("../db/connection");
 const bcrypt = require("bcrypt");
 const query = require("../db/query.json");
 
-async function insertUser(user) {
-    const bcryptPw = bcrypt.hashSync(user.pw, 11);
+async function insertUser(body) {
+    const bcryptPw = bcrypt.hashSync(body.pw, 11);
     let conn;
     try {
         conn = await connection();
-        const [row] = await conn.execute(query.user.insert, [user.email, bcryptPw, user.name, user.role]);
+        const [row] = await conn.execute(query.user.insert, [body.email, bcryptPw, body.name, body.role]);
 
-        if (user.role === 0) {
+        if (body.role === 0) {
             conn.execute(query.tutee.insert, [row.insertId, null]);
         }
 
-        if (user.role === 1) {
-            conn.execute(query.tutor.insert, [row.insertId]);
+        if (body.role === 1) {
+            const subject = JSON.stringify(body.subject);
+            conn.execute(query.tutor.insert, [row.insertId, subject]);
         }
 
         return row;
@@ -25,11 +26,11 @@ async function insertUser(user) {
     }
 }
 
-async function findUser_email(user_email) {
+async function findUserEmail(userEmail) {
     let conn;
     try {
         conn = await connection();
-        const [[row]] = await conn.execute(query.user.findByEmail, [user_email]);
+        const [[row]] = await conn.execute(query.user.findByEmail, [userEmail]);
 
         return row;
     } catch(error) {
@@ -39,11 +40,11 @@ async function findUser_email(user_email) {
     }
 }
 
-async function findUser_id(user_id) {
+async function findUserId(userId) {
     let conn;
     try {
         conn = await connection();
-        const [[row]] = await conn.execute(query.user.findById, [user_id]);
+        const [[row]] = await conn.execute(query.user.findById, [userId]);
 
         return row;
     } catch(error) {
@@ -53,27 +54,13 @@ async function findUser_id(user_id) {
     }
 }
 
-async function updateUser_pw(user) {
+async function updateUserPw(user) {
+    console.log("user확인", user);
     const bcryptPw = bcrypt.hashSync(user.pw, 11);
     let conn;
     try {
         conn = await connection();
-        const [row] = await conn.execute(query.user.update_pw, [bcryptPw, user.email]);
-
-        return row;
-    } catch(error) {
-        throw error;
-    } finally {
-        if(conn) conn.release();
-    }
-}
-
-async function updateUser_pw(user) {
-    const bcryptPw = bcrypt.hashSync(user.pw, 11);
-    let conn;
-    try {
-        conn = await connection();
-        const row = await conn.execute(query.updateUser_pw, [bcryptPw, user.email]);
+        const [row] = await conn.execute(query.user.updatePw, [bcryptPw, user.email]);
 
         return row;
     } catch(error) {
@@ -85,7 +72,7 @@ async function updateUser_pw(user) {
 
 module.exports = {
     insertUser,
-    findUser_email,
-    findUser_id,
-    updateUser_pw
+    findUserEmail,
+    findUserId,
+    updateUserPw
 }
