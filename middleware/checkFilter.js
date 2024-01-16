@@ -1,10 +1,9 @@
 async function checkFilter(req, res, next) {
-    const filter = ["review", "avgScore", "answer"];
+    const filter = ["reviewCount", "reviewAvg", "answerCount"];
     let validFilter = false;
-
+    console.log("req.params.filter", req.params.filter);
     filter.forEach((element) => {
         if (element === req.params.filter) {
-            req.params.checkFilter === element;
             validFilter = true;
         }
     });

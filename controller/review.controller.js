@@ -29,7 +29,7 @@ async function selectAllReview(req, res) {
         const avgCount = await reviewRepository.avgCount(tutorId);
         const review = {
             pageNation: row,
-            avgCount: { allCount: avgCount.allCount, avgCount: avgCount.avg}
+            avgCount: { Count: avgCount.allCount, avg: avgCount.avg}
         }
 
         return res.status(200).json(review);

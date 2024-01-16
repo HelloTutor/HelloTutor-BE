@@ -4,7 +4,6 @@ async function checkSubject(req, res, next) {
 
     subject.forEach((element)=> {
         if (element === req.params.subject) {
-            req.params.checkSubject = element;
             validSubject = true;
         }
     });
