@@ -1,31 +1,25 @@
-const authorization = require("../middleware/authorization");
 const favoriteRepository = require("../repository/favoriteRepository");
-const { ACCESS_PRIVATE_KEY } = process.env;
 
 async function favorite(req, res) {
     try{
-        const decodedToken = authorization.verifyToken(
-            req.headers["authorization"],
-            ACCESS_PRIVATE_KEY
-        );
-        const { tutorId } = req.params;
+        const { params: { tutorId }, user } = req;
 
-        if (decodedToken.id === tutorId) {
+        if (user.id === tutorId) {
             return res.status(400).json({ message: "나에게는 찜할 수 없습니다." });
         }
 
-        const selectRow = await favoriteRepository.selectTutorFavorite(decodedToken, tutorId);
+        const selectRow = await favoriteRepository.selectTutorFavorite(user, tutorId);
 
         if (selectRow === undefined) {
-            const insertRow = await favoriteRepository.insertTutorFavorite(decodedToken, tutorId);
+            const insertRow = await favoriteRepository.insertTutorFavorite(user, tutorId);
 
             if (insertRow.affectedRows === 1) {
                 return res.status(200).json({ message: "찜하기 완료" });
             }
         }
 
-        if (selectRow.user_id === decodedToken.id) {
-            const deleteRow = await favoriteRepository.deleteTutorFavorite(decodedToken, tutorId);
+        if (selectRow.user_id === user.id) {
+            const deleteRow = await favoriteRepository.deleteTutorFavorite(user, tutorId);
 
             if (deleteRow.affectedRows === 1) {
                 return res.status(200).json({ message: "찜하기 취소 완료" });

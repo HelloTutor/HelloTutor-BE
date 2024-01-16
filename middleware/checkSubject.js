@@ -1,5 +1,5 @@
 async function checkSubject(req, res, next) {
-    const subject = ["korean","english","mathematics","social","science"];
+    const subject = ["korean", "english", "mathematics", "social", "science"];
     let validSubject = false;
 
     subject.forEach((element)=> {
