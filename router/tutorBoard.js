@@ -9,13 +9,6 @@ router.get("/all/:filter", checkFilter, tutorBoardController.selectAllFilterSear
 
 router.get("/:subject", checkSubject, tutorBoardController.subjectSearch);
 
-router.get("/:subject/:filter", checkSubject, checkFilter);
-
-
-
-
-
-
-
+router.get("/:subject/:filter", checkSubject, checkFilter, tutorBoardController.subjectSearchFilter);
 
 module.exports = router;

@@ -58,9 +58,9 @@ async function selectAllFilterSearch(req, res) {
                 }
                 break;
             case "answerCount":
-                row = await tutorBoardRepository.selectAllFilterAnswer(offset, pageSize);
+                row = await tutorBoardRepository.selectFilterAnswerCount(offset, pageSize);
                 if(search) {
-                    row = await tutorBoardRepository.selectAllFilterSearch(`%${search}`, offset, pageSize);
+                    row = await tutorBoardRepository.selectFilterAnswerCountSearch(`%${search}%`, offset, pageSize);
                 }
                 break;
         }
@@ -119,21 +119,21 @@ async function subjectSearchFilter(req, res) {
         let row;
         switch(filter) {
             case "reviewCount":
-                row = await tutorBoardRepository.selectFilterReviewCount(offset, pageSize);
+                row = await tutorBoardRepository.subjectReviewCount(JSON.stringify(subject), offset, pageSize);
                 if(search) {
-                    row = await tutorBoardRepository.selectFilterReviewCountSearch(`%${search}%`, offset, pageSize);
+                    row = await tutorBoardRepository.subjectReviewCountSearch(JSON.stringify(subject), `%${search}%`, offset, pageSize);
                 }
                 break;
             case "reviewAvg":
-                row = await tutorBoardRepository.selectFilterReviewAvg(offset, pageSize);
+                row = await tutorBoardRepository.subjectReviewAvg(JSON.stringify(subject), offset, pageSize);
                 if(search) {
-                    row = await tutorBoardRepository.selectFilterReviewAvgSearch(`%${search}%`, offset, pageSize);
+                    row = await tutorBoardRepository.subjectReviewAvgSearch(JSON.stringify(subject), `%${search}%`, offset, pageSize);
                 }
                 break;
             case "answerCount":
-                row = await tutorBoardRepository.selectAllFilterAnswer(offset, pageSize);
+                row = await tutorBoardRepository.subjectAnswerCount(JSON.stringify(subject), offset, pageSize);
                 if(search) {
-                    row = await tutorBoardRepository.selectAllFilterSearch(`%${search}`, offset, pageSize);
+                    row = await tutorBoardRepository.subjectAnswerCountSearch(JSON.stringify(subject), `%${search}`, offset, pageSize);
                 }
                 break;
         }

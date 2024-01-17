@@ -11,7 +11,6 @@ async function checkSubject(req, res, next) {
     if (!validSubject) {
         return res.status(400).json({ message: "잘못된 과목입니다." });
     }
-
     next();
 }
 

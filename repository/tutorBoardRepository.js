@@ -141,39 +141,11 @@ async function subjectSearch(subject, search, offset, pageSize) {
     }
 }
 
-async function selectReview(subject, offset, pageSize) {
+async function subjectReviewCount(subject, offset, pageSize) {
     let conn;
     try {
         conn = await connection();
-        const [row] = await conn.execute(query.tutorBoard.selectReview, [subject, offset, pageSize]);
-
-        return row;
-    } catch(error) {
-        throw error
-    } finally {
-        if(conn) conn.release();
-    }
-}
-
-async function selectReviewSearch(subject, search, offset, pageSize) {
-    let conn;
-    try {
-        conn = await connection();
-        const [row] = await conn.execute(query.tutorBoard.selectReviewSearch, [subject, search, offset, pageSize]);
-
-        return row;
-    } catch(error) {
-        throw error
-    } finally {
-        if(conn) conn.release();
-    }
-}
-
-async function selectAvgScore(subject, offset, pageSize) {
-    let conn;
-    try {
-        conn = await connection();
-        const [row] = await conn.execute(query.tutorBoard.selectAvgScore, [subject, offset, pageSize]);
+        const [row] = await conn.execute(query.tutorBoard.subjectReviewCount, [subject, offset, pageSize]);
 
         return row;
     } catch(error) {
@@ -183,41 +155,71 @@ async function selectAvgScore(subject, offset, pageSize) {
     }
 }
 
-async function selectAvgScoreSearch(subject, offset, pageSize) {
+async function subjectReviewAvg(subject, offset, pageSize) {
     let conn;
     try {
         conn = await connection();
-        const [row] = await conn.execute(query.tutorBoard.selectAvgScoreSearch, [subject, search, offset, pageSize]);
+        const [row] = await conn.execute(query.tutorBoard.subjectReviewAvg, [subject, offset, pageSize]);
 
         return row;
     } catch(error) {
-        throw error
+        throw error;
     } finally {
         if(conn) conn.release();
     }
 }
 
-async function selectAnswer(subject, offset, pageSize) {
+async function subjectAnswerCount(subject, offset, pageSize) {
+    let conn;
     try {
         conn = await connection();
-        const [row] = await conn.execute(query.tutorBoard.selectAnswer, [subject, offset, pageSize]);
+        const [row] = await conn.execute(query.tutorBoard.subjectAnswerCount, [subject, offset, pageSize]);
 
         return row;
     } catch(error) {
-        throw error
+        throw error;
     } finally {
         if(conn) conn.release();
     }
 }
 
-async function selectAnswerSearch(subject, search, offset, pageSize) {
+async function subjectReviewCountSearch(subject, search, offset, pageSize) {
+    let conn;
     try {
         conn = await connection();
-        const [row] = await conn.execute(query.tutorBoard.selectAnswerSearch, [subject, search, offset, pageSize]);
+        const [row] = await conn.execute(query.tutorBoard.subjectAnswerCountSearch, [subject, search, offset, pageSize]);
 
         return row;
     } catch(error) {
-        throw error
+        throw error;
+    } finally {
+        if(conn) conn.release();
+    }
+}
+
+async function subjectReviewAvgSearch(subject, search, offset, pageSize) {
+    let conn;
+    try {
+        conn = await connection();
+        const [row] = await conn.execute(query.tutorBoard.subjectReviewAvgSearch, [subject, search, offset, pageSize]);
+
+        return row;
+    } catch(error) {
+        throw error;
+    } finally {
+        if(conn) conn.release();
+    }
+}
+
+async function subjectAnswerCountSearch(subject, search, offset, pageSize) {
+    let conn;
+    try {
+        conn = await connection();
+        const [row] = await conn.execute(query.tutorBoard.subjectAnswerCountSearch, [subject, search, offset, pageSize]);
+
+        return row;
+    } catch(error) {
+        throw error;
     } finally {
         if(conn) conn.release();
     }
@@ -234,10 +236,10 @@ module.exports = {
     selectFilterAnswerCountSearch,
     subject,
     subjectSearch,
-    selectReview,
-    selectReviewSearch,
-    selectAvgScore,
-    selectAvgScoreSearch,
-    selectAnswer,
-    selectAnswerSearch
+    subjectReviewCount,
+    subjectReviewCountSearch,
+    subjectReviewAvg,
+    subjectReviewAvgSearch,
+    subjectAnswerCount,
+    subjectAnswerCountSearch
 }
