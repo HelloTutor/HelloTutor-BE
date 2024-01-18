@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "set NODE_ENV=dev && nodemon",
-    "start": "set NODE_ENV=prd && node index.js"
+    "start": "NODE_ENV=prd node index.js"
   },
   "keywords": [],
   "author": "",
