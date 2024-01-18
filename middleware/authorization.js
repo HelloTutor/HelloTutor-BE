@@ -5,39 +5,48 @@ const tuteeRepository = require("../repository/tuteeRepository");
 const bcrypt = require("bcrypt");
 
 async function issueToken (req, res) {
-    const { body } = req;
-    const row = await userRepository.findUserEmail(body.email);
+    try {
+        const { body } = req;
+        const row = await userRepository.findUserEmail(body.email);
 
-    if (!row) {
-        return res.status(404).json({ message: "해당 이메일이 없습니다." });
-    }
+        if (row) {
+            if (row.role = 0) {
+                const tutee = await tuteeRepository.findTuteeId(row.id);
 
-    const tutee = await tuteeRepository.findTuteeId(row.id);
+                if (tutee.google_id) {
+                    return res.status(200).json({ message: "해당 이메일은 소셜회원입니다." });
+                }
+            }
 
-    if (!tutee.google_id) {
-        const isPw = bcrypt.compareSync(body.pw, row.pw);
+            const isPw = bcrypt.compareSync(body.pw, row.pw);
 
-        if (!isPw) {
-            return res.status(401).json({ message: "잘못된 비밀번호 입니다." });
+            if (!isPw) {
+                return res.status(401).json({ message: "잘못된 비밀번호 입니다." });
+            }
+
+            const accessToken = generateAccessToken({
+                id: row.id,
+                email: row.email,
+                status: row.status
+            });
+            const refreshToken = generateRefreshToken({
+                id: row.id,
+                email: row.email,
+                status: row.status
+            });
+
+            return res.send({
+                accessToken: accessToken,
+                refreshToken: refreshToken,
+                message: "로그인 성공"
+            });
+        } else {
+            return res.status(404).json({ message: "해당 이메일이 없습니다." });
         }
+    } catch(error) {
+        console.log(error);
+        return res.status(500).json({ message: "에러발생" });
     }
-
-    const accessToken = generateAccessToken({
-        id: row.id,
-        email: row.email,
-        status: row.status
-    });
-    const refreshToken = generateRefreshToken({
-        id: row.id,
-        email: row.email,
-        status: row.status
-    });
-
-    return res.send({
-        accessToken: accessToken,
-        refreshToken: refreshToken,
-        message: "로그인 성공"
-    });
 }
 
 function generateAccessToken(rowInfo) {
