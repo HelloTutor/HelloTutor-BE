@@ -85,6 +85,7 @@ async function reIssueToken(req, res, next) {
         }
     }
     req.user = await userRepository.findUserId(refreshToken.id);
+
     next();
 }
 

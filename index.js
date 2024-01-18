@@ -11,6 +11,7 @@ const freeBoard = require("./router/freeBoard");
 const questionBoard = require("./router/questionBoard");
 const tutorBoard = require("./router/tutorBoard");
 const tutor = require("./router/tutor");
+const myPage = require("./router/myPage");
 
 const passport = require("passport");
 
@@ -45,6 +46,7 @@ app.use("/free", freeBoard);
 app.use("/question", questionBoard);
 app.use("/tutorBoard", tutorBoard);
 app.use("/tutor", tutor);
+app.use("/myPage/:userId", myPage);
 
 app.listen(port, () => {
     console.log(port, "번호로 서버를 시작");
