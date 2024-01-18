@@ -16,8 +16,7 @@ router.get("/google/callback",passport.authenticate("google", {
 
 router.get("/google/callback/:result", (req, res) => {
     const { params, user } = req;
-    console.log(req.params);
-    console.log(req.user);
+
     if (params.result === "success" && user) {
         const { id, email } = user;
         const accessToken = authorization.generateAccessToken({ id, email });

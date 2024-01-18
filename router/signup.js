@@ -17,8 +17,8 @@ router.post("/tutee",
 router.post("/tutor",
     validatedEmail, validatedPassword,
     async (req, res) => {
-        const tutor = req.body;
-        const result = await userRepository.insertUser(tutor);
+        const { body } = req;
+        const result = await userRepository.insertUser(body);
 
         if (result) {
             res.status(200).json({ message: "회원가입 완료" });
