@@ -1,18 +1,11 @@
-const authorization = require("../middleware/authorization");
 const questionBoardRepository = require("../repository/questionBoardRepository");
-const { ACCESS_PRIVATE_KEY } = process.env;
 
 async function insertQuestionBoard(req, res) {
     try{
-        const decodedToken = authorization.verifyToken(
-            req.headers["authorization"],
-            ACCESS_PRIVATE_KEY
-        );
-
-        if (decodedToken) {
+        if (req.user) {
             const { checkSubject } = req.params;
             const { body } = req;
-            const row = await questionBoardRepository.insertQuestionBoard(decodedToken, checkSubject, body);
+            const row = await questionBoardRepository.insertQuestionBoard(req.user, checkSubject, body);
 
             if (row.affectedRows === 1) {
                 return res.status(200).json({ message: "질문 작성 완료" });
@@ -40,17 +33,14 @@ async function selectQuestionBoard(req, res) {
 
 async function putQuestionBoard(req, res) {
     try {
-        const decodedToken = authorization.verifyToken(
-            req.headers["authorization"],
-            ACCESS_PRIVATE_KEY
-        );
+        const { user } = req;
 
         const { postId, checkSubject } = req.params;
         const selectRow = await questionBoardRepository.selectQuestionBoard(postId, checkSubject);
 
-        if (decodedToken.id === selectRow.user_id) {
+        if (user.id === selectRow.user_id) {
             const { body } = req;
-            const updateRow = await questionBoardRepository.updateQuestionBoard(body, postId, checkSubject, decodedToken);
+            const updateRow = await questionBoardRepository.updateQuestionBoard(body, postId, checkSubject, user);
 
             if(updateRow.affectedRows === 1) {
                 res.status(200).json({ message: "질문 수정 완료"});
@@ -66,16 +56,12 @@ async function putQuestionBoard(req, res) {
 
 async function deleteQuestionBoard(req, res) {
     try {
-        const decodedToken = authorization.verifyToken(
-            req.headers["authorization"],
-            ACCESS_PRIVATE_KEY
-        );
+        const { params: { postId,checkSubject }, user } = req;
 
-        const { postId, checkSubject } = req.params;
         const selectRow = await questionBoardRepository.selectQuestionBoard(postId, checkSubject);
 
-        if (decodedToken.id === selectRow.user_id) {
-            const deleteRow = await questionBoardRepository.deleteQuestionBoard(postId, checkSubject, decodedToken);
+        if (user.id === selectRow.user_id) {
+            const deleteRow = await questionBoardRepository.deleteQuestionBoard(postId, checkSubject, user);
 
             if (deleteRow.affectedRows === 1) {
                 res.status(200).json({ message: "질문 삭제 완료" });

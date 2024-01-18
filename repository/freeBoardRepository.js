@@ -1,11 +1,11 @@
 const connection = require("../db/connection");
 const query = require("../db/query.json");
 
-async function insertFreeBoard(token, body) {
+async function insertFreeBoard(user, body) {
     let conn;
     try {
         conn = await connection();
-        const [row] = await conn.execute(query.freeBoard.insert, [token.id, body.title, body.content]);
+        const [row] = await conn.execute(query.freeBoard.insert, [user.id, body.title, body.content]);
 
         return row;
     } catch(error) {
@@ -33,11 +33,11 @@ async function selectFreeBoard(postId) {
     }
 }
 
-async function updateFreeBoard(token, postId, body) {
+async function updateFreeBoard(user, postId, body) {
     let conn;
     try {
         conn = await connection();
-        const [row] = await conn.execute(query.freeBoard.update, [body.title, body.content, postId, token.id]);
+        const [row] = await conn.execute(query.freeBoard.update, [body.title, body.content, postId, user.id]);
 
         return row;
     } catch(error) {
@@ -47,12 +47,14 @@ async function updateFreeBoard(token, postId, body) {
     }
 }
 
-async function deleteFreeBoard(postId, token) {
+
+
+async function deleteFreeBoard(postId, user) {
     console.log(postId,token);
     let conn;
     try {
         conn = await connection();
-        const [row] = await conn.execute(query.freeBoard.delete, [postId, token.id]);
+        const [row] = await conn.execute(query.freeBoard.delete, [postId, user.id]);
 
         return row;
     } catch(error) {

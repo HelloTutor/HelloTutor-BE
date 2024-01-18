@@ -1,11 +1,11 @@
 const connection = require("../db/connection");
 const query = require("../db/query.json");
 
-async function insertFreeBoardComments(token, freeBoardId, body) {
+async function insertFreeBoardComments(user, freeBoardId, body) {
     let conn;
     try {
         conn = await connection();
-        const [row] = await conn.execute(query.freeBoardComments.insert, [token.id, freeBoardId, body.content]);
+        const [row] = await conn.execute(query.freeBoardComments.insert, [user.id, freeBoardId, body.content]);
 
         return row;
     } catch(error) {
@@ -15,11 +15,11 @@ async function insertFreeBoardComments(token, freeBoardId, body) {
     }
 }
 
-async function updateFreeBoardComments(token, freeBoardId, commentId, body) {
+async function updateFreeBoardComments(user, freeBoardId, commentId, body) {
     let conn;
     try {
         conn = await connection();
-        const [row] = await conn.execute(query.freeBoardComments.update, [body.content, commentId, freeBoardId, token.id]);
+        const [row] = await conn.execute(query.freeBoardComments.update, [body.content, commentId, freeBoardId, user.id]);
 
         return row;
     } catch(error) {
@@ -43,11 +43,11 @@ async function selectFreeBoardComments(commentId, freeBoardId) {
     }
 }
 
-async function deleteFreeBoardComments(commentId, freeBoardId, token) {
+async function deleteFreeBoardComments(commentId, freeBoardId, user) {
     let conn;
     try {
         conn = await connection();
-        const [row] = await conn.execute(query.freeBoardComments.delete, [commentId, freeBoardId, token.id]);
+        const [row] = await conn.execute(query.freeBoardComments.delete, [commentId, freeBoardId, user.id]);
 
         return row;
     } catch(error) {

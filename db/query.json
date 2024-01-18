@@ -15,7 +15,7 @@
         "selectInfo": "SELECT t.detailed_description, t.experience FROM tb_tutor AS t LEFT JOIN tb_user AS u ON t.id = u.id WHERE t.id = ?"
     },
     "freeBoard": {
-        "insert": "INSERT INTO tb_free_board (`user_id`, `title`, `content`) VALUES (?, ?, ?)",
+        "insert": "INSERT INTO tb_free_board (`user_id`, `title`, `content`, `content_json`) VALUES (?, ?, ?, ?)",
         "update": "UPDATE tb_free_board SET `title` = ?, `content` = ?, updated_at = NOW() WHERE id = ? AND user_id = ?",
         "updateViews": "UPDATE tb_free_board SET `views` = `views` + 1 WHERE id = ?",
         "delete": "DELETE FROM tb_free_board WHERE id = ? AND user_id = ?",

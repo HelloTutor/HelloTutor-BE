@@ -1,11 +1,11 @@
 const connection = require("../db/connection");
 const query = require("../db/query.json");
 
-async function insertQuestionBoard(token, subject, body) {
+async function insertQuestionBoard(user, subject, body) {
     let conn;
     try {
         conn = await connection();
-        const [row] = await conn.execute(query.questionBoard.insert, [token.id, subject, body.title, body.content]);
+        const [row] = await conn.execute(query.questionBoard.insert, [user.id, subject, body.title, body.content]);
 
         return row;
     } catch(error) {
@@ -33,11 +33,11 @@ async function selectQuestionBoard(postId, subject) {
     }
 }
 
-async function updateQuestionBoard(body, postId, subject, token) {
+async function updateQuestionBoard(body, postId, subject, user) {
     let conn;
     try {
         conn = await connection();
-        const [row] = await conn.execute(query.questionBoard.update, [body.title, body.content, postId, subject, token.id]);
+        const [row] = await conn.execute(query.questionBoard.update, [body.title, body.content, postId, subject, user.id]);
 
         return row;
     } catch(error) {
@@ -47,11 +47,11 @@ async function updateQuestionBoard(body, postId, subject, token) {
     }
 }
 
-async function deleteQuestionBoard(postId, subject, token) {
+async function deleteQuestionBoard(postId, subject, user) {
     let conn;
     try {
         conn = await connection();
-        const [row] = await conn.execute(query.questionBoard.delete, [postId, subject, token.id]);
+        const [row] = await conn.execute(query.questionBoard.delete, [postId, subject, user.id]);
 
         return row;
     } catch(error) {
