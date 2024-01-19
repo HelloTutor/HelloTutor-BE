@@ -1,19 +1,13 @@
-async function checkFilter(req, res, next) {
-    const filter = ["reviewCount", "reviewAvg", "answerCount"];
-    let validFilter = false;
+async function checkSort(req, res, next) {
+    const filter = ["reviewCount", "reviewAvg", "answerCount", "lowScore", "highScore"];
 
-    filter.forEach((element) => {
-        if (element === req.params.filter) {
-            validFilter = true;
-        }
-    });
-
-    if (!validFilter) {
-        return res.status(400).json({ message: "잘못된 필터 입니다." });
+    if(!subject.includes(req.params.subject)){
+        return res.status(400).json({ message: "잘못된 과목입니다." });
     }
+
     next();
 }
 
 module.exports = {
-    checkFilter
+    checkSort
 }
