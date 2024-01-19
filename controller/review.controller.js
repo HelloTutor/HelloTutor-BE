@@ -3,7 +3,7 @@ const reviewRepository = require("../repository/reviewRepository");
 async function selectAllReview(req, res) {
     try {
         const { tutorId } = req.params;
-        let { filter, page, pageSize } = req.query;
+        let { sort, page, pageSize } = req.query;
 
         if (!page || (page <= 0)) {
             page = 1;
@@ -16,11 +16,11 @@ async function selectAllReview(req, res) {
         const offset = String((page - 1) * pageSize);
         let row;
 
-        if ( filter === "lowScore" ) {
+        if ( sort === "lowScore" ) {
             row = await reviewRepository.selectLowScore(tutorId, offset, pageSize);
-        } else if (filter === "highScore" ) {
+        } else if (sort === "highScore" ) {
             row = await reviewRepository.selectHighScore(tutorId, offset, pageSize);
-        } else if (filter === undefined) {
+        } else if (sort === undefined) {
             row = await reviewRepository.selectAllReview(tutorId, offset, pageSize);
         } else {
             return res.status(400).json({ message: "잘못된 요청입니다." });
