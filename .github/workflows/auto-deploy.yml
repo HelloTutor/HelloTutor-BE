@@ -22,9 +22,7 @@ jobs:
 
       - name: Install dependencies
         run: npm install
-      - name: Build
-        run: npm run build
-
+        
       - name: Current timestamp
         id: timestamp
         run: echo "::set-output name=date::$(date +'%Y-%m-%dT%H-%M-%S-%3NZ')"
