@@ -1,4 +1,4 @@
-const router = require("express").Router();
+const router = require("express").Router({mergeParams: true});
 const passport = require("passport");
 const { sendMail, resetPw } = require("../middleware/password");
 const { validatedPassword } = require("../middleware/checkSignup");

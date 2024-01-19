@@ -56,7 +56,7 @@ async function putQuestionBoard(req, res) {
 
 async function deleteQuestionBoard(req, res) {
     try {
-        const {params:{postId,checkSubject},user} = req;
+        const { params: { postId,checkSubject }, user } = req;
 
         const selectRow = await questionBoardRepository.selectQuestionBoard(postId, checkSubject);
 

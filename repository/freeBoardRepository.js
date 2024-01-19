@@ -47,12 +47,14 @@ async function updateFreeBoard(user, postId, body) {
     }
 }
 
-async function deleteFreeBoard(postId, token) {
+
+
+async function deleteFreeBoard(postId, user) {
     console.log(postId,token);
     let conn;
     try {
         conn = await connection();
-        const [row] = await conn.execute(query.freeBoard.delete, [postId, token.id]);
+        const [row] = await conn.execute(query.freeBoard.delete, [postId, user.id]);
 
         return row;
     } catch(error) {
