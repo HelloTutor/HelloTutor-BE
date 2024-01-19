@@ -6,7 +6,7 @@ async function insert(token, freeBoardId, freeBoardComments) {
     try {
         conn = await connection();
         const [row] = await conn.execute(query.like.insert, [token.id, freeBoardId, freeBoardComments]);
-        console.log(row);
+
         return row;
     } catch(error) {
         throw error;
