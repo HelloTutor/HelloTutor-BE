@@ -48,20 +48,23 @@ async function selectAllSortSearch(req, res) {
             case "reviewCount":
                 if(search) {
                     row = await tutorBoardRepository.selectSortReviewCountSearch(`%${search}%`, offset, pageSize);
+                } else {
+                    row = await tutorBoardRepository.selectSortReviewCount(offset, pageSize);
                 }
-                row = await tutorBoardRepository.selectSortReviewCount(offset, pageSize);
                 break;
             case "reviewAvg":
                 if(search) {
                     row = await tutorBoardRepository.selectSortReviewAvgSearch(`%${search}%`, offset, pageSize);
+                } else {
+                    row = await tutorBoardRepository.selectSortReviewAvg(offset, pageSize);
                 }
-                row = await tutorBoardRepository.selectSortReviewAvg(offset, pageSize);
                 break;
             case "answerCount":
                 if(search) {
                     row = await tutorBoardRepository.selectSortAnswerCountSearch(`%${search}%`, offset, pageSize);
+                } else {
+                    row = await tutorBoardRepository.selectSortAnswerCount(offset, pageSize);
                 }
-                row = await tutorBoardRepository.selectSortAnswerCount(offset, pageSize);
                 break;
         }
 
@@ -121,20 +124,23 @@ async function subjectSearchSort(req, res) {
             case "reviewCount":
                 if(search) {
                     row = await tutorBoardRepository.subjectReviewCountSearch(JSON.stringify(subject), `%${search}%`, offset, pageSize);
+                } else {
+                    row = await tutorBoardRepository.subjectReviewCount(JSON.stringify(subject), offset, pageSize);
                 }
-                row = await tutorBoardRepository.subjectReviewCount(JSON.stringify(subject), offset, pageSize);
                 break;
             case "reviewAvg":
                 if(search) {
                     row = await tutorBoardRepository.subjectReviewAvgSearch(JSON.stringify(subject), `%${search}%`, offset, pageSize);
+                } else {
+                    row = await tutorBoardRepository.subjectReviewAvg(JSON.stringify(subject), offset, pageSize);
                 }
-                row = await tutorBoardRepository.subjectReviewAvg(JSON.stringify(subject), offset, pageSize);
                 break;
             case "answerCount":
                 if(search) {
                     row = await tutorBoardRepository.subjectAnswerCountSearch(JSON.stringify(subject), `%${search}`, offset, pageSize);
+                } else {
+                    row = await tutorBoardRepository.subjectAnswerCount(JSON.stringify(subject), offset, pageSize);
                 }
-                row = await tutorBoardRepository.subjectAnswerCount(JSON.stringify(subject), offset, pageSize);
                 break;
         }
 
