@@ -96,7 +96,7 @@ async function selectFreeBoard(req, res) {
         return res.status(200).json(row);
     } catch(error) {
         console.log(error);
-        return res.status(404).json({ message: "게시글 가져오기 실패" });
+        return res.status(500).json({ message: "게시글 가져오기 실패" });
     }
 }
 
