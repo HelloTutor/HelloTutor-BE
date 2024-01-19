@@ -1,0 +1,54 @@
+name: 🤖 Deploy-LIVE
+
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build:
+    runs-on: ubuntu-20.04 # 해당 github actions 스크립트가 작동할 OS 환경 지정
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3 # 프로젝트 코드 checkout
+        with:
+          token: ${{ secrets.GIT_SECRET_TOKEN }}
+          submodules: true
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.18.2'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install
+      - name: Build
+        run: npm run build
+
+      - name: Current timestamp
+        id: timestamp
+        run: echo "::set-output name=date::$(date +'%Y-%m-%dT%H-%M-%S-%3NZ')"
+
+      - name: Generate deployment package
+        run: zip ./deploy.zip -r * .[^.]* -x 'node_modules/*' -x '.git/*'
+
+      - name: Deploy to EB
+        uses: einaregilsson/beanstalk-deploy@v21
+        with:
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY }}
+          aws_secret_key: ${{ secrets.AWS_SECRET_KEY }}
+          region: ap-northeast-2
+          application_name: Hello-Tutor
+          environment_name: Hello-Back
+          version_label: '${{ steps.timestamp.outputs.date }}'
+          deployment_package: deploy.zip
+
+#      - name: action-slack
+#        uses: 8398a7/action-slack@v3
+#        with:
+#          status: ${{ job.status }}
+#          author_name: Github Action LIVE
+#          fields: repo,message,commit,author,action,eventName,ref,workflow,job,took
+#        env:
+#          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+#        if: always()
