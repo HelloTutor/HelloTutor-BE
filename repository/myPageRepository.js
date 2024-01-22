@@ -23,6 +23,7 @@ async function updateMyPageSetting(body, user) {
 
         return row;
     } catch(error) {
+        conn?.rollback();
         throw error;
     } finally {
         if(conn) conn.release();
@@ -37,6 +38,7 @@ async function deleteMyPageSetting(user) {
 
         return row;
     } catch(error) {
+        conn?.rollback();
         throw error;
     } finally {
         if(conn) conn.release();
@@ -58,7 +60,6 @@ async function selectMyPageAllQuestion(user, offset, pageSize) {
 
         return pageNation;
     } catch(error) {
-        await conn.rollback();
         throw error;
     } finally {
         if(conn) conn.release();
@@ -80,7 +81,6 @@ async function selectMyPageAllFavorite(user, offset, pageSize) {
 
         return pageNation;
     } catch(error) {
-        await conn.rollback();
         throw error;
     } finally {
         if(conn) conn.release();
@@ -102,7 +102,6 @@ async function selectMyPageAllFree(user, offset, pageSize) {
 
         return pageNation;
     } catch(error) {
-        await conn.rollback();
         throw error;
     } finally {
         if(conn) conn.release();
@@ -124,7 +123,6 @@ async function selectMyPageAllFreeComment(user, offset, pageSize) {
 
         return pageNation;
     } catch(error) {
-        await conn.rollback();
         throw error;
     } finally {
         if(conn) conn.release();
@@ -161,6 +159,7 @@ async function updateMyPageTutorInfo(user, body) {
 
         return row;
     } catch(error) {
+        conn?.rollback();
         throw error;
     } finally {
         if(conn) conn.release();
