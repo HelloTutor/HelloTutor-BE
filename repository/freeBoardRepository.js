@@ -5,7 +5,7 @@ async function insertFreeBoard(user, body) {
     let conn;
     try {
         conn = await connection();
-        const [row] = await conn.execute(query.freeBoard.insert, [user.id, body.title, body.content]);
+        const [row] = await conn.execute(query.freeBoard.insert, [user.id, body.title, body.content, body.content_json]);
 
         return row;
     } catch(error) {
@@ -37,7 +37,7 @@ async function updateFreeBoard(user, postId, body) {
     let conn;
     try {
         conn = await connection();
-        const [row] = await conn.execute(query.freeBoard.update, [body.title, body.content, postId, user.id]);
+        const [row] = await conn.execute(query.freeBoard.update, [body.title, body.content, body.content_json, postId, user.id]);
 
         return row;
     } catch(error) {

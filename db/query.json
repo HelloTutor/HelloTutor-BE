@@ -16,7 +16,7 @@
     },
     "freeBoard": {
         "insert": "INSERT INTO tb_free_board (`user_id`, `title`, `content`, `content_json`) VALUES (?, ?, ?, ?)",
-        "update": "UPDATE tb_free_board SET `title` = ?, `content` = ?, updated_at = NOW() WHERE id = ? AND user_id = ?",
+        "update": "UPDATE tb_free_board SET `title` = ?, `content` = ?, `content_json` = ?, updated_at = NOW() WHERE id = ? AND user_id = ?",
         "updateViews": "UPDATE tb_free_board SET `views` = `views` + 1 WHERE id = ?",
         "delete": "DELETE FROM tb_free_board WHERE id = ? AND user_id = ?",
         "select": "SELECT f.id, f.user_id, f.title, f.content, f.created_at, f.views , u.name , count(DISTINCT l.user_id) AS like_count, count(DISTINCT c.id) AS comment_count FROM tb_free_board AS f LEFT JOIN tb_user AS u ON f.user_id = u.id LEFT JOIN tb_free_board_comments AS c ON f.id = c.free_board_id LEFT JOIN tb_like AS l ON f.id = l.free_board_id WHERE f.id = ? GROUP BY f.id, f.title, f.content, f.created_at, f.views, u.name",
@@ -33,9 +33,9 @@
         "selectAll": "SELECT f.content, f.created_at, f.user_id, u.name, u.role, count(l.user_id) AS like_count FROM tb_free_board_comments AS f LEFT JOIN tb_user AS u ON f.user_id = u.id LEFT JOIN tb_like AS l ON f.id = l.free_board_comments_id WHERE f.free_board_id = ? GROUP BY f.content, f.created_at, f.user_id, u.name, u.role LIMIT ?, ?"
     },
     "questionBoard": {
-        "insert": "INSERT INTO tb_question_board (`user_id`, `subject`, `title`, `content`) VALUES (?, ?, ?, ?)",
+        "insert": "INSERT INTO tb_question_board (`user_id`, `subject`, `title`, `content`, `content_json`) VALUES (?, ?, ?, ?, ?)",
         "select": "SELECT q.*, u.name FROM tb_question_board AS q LEFT JOIN tb_user AS u ON q.user_id = u.id WHERE q.id = ?",
-        "update": "UPDATE tb_question_board SET `subject` = ?, `title` = ?, `content` = ?, updated_at = NOW() WHERE id = ? AND user_id = ?",
+        "update": "UPDATE tb_question_board SET `subject` = ?, `title` = ?, `content` = ?, `content_json` = ?, updated_at = NOW() WHERE id = ? AND user_id = ?",
         "updateViews": "UPDATE tb_question_board SET `views` = `views` + 1 WHERE id = ?",
         "delete": "DELETE FROM tb_question_board WHERE id = ? AND user_id = ?",
         "selectAll": "SELECT q.id , q.user_id, q.subject, q.title, q.created_at, q.views, q.status, u.name FROM tb_question_board AS q LEFT JOIN tb_user AS u ON q.user_id = u.id ORDER BY q.created_at DESC LIMIT ?, ?",

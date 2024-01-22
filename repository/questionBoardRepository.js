@@ -5,7 +5,7 @@ async function insertQuestionBoard(user, body) {
     let conn;
     try {
         conn = await connection();
-        const [row] = await conn.execute(query.questionBoard.insert, [user.id, body.subject, body.title, body.content]);
+        const [row] = await conn.execute(query.questionBoard.insert, [user.id, body.subject, body.title, body.content, body.content_json]);
 
         return row;
     } catch(error) {
@@ -37,7 +37,7 @@ async function updateQuestionBoard(body, postId, user) {
     let conn;
     try {
         conn = await connection();
-        const [row] = await conn.execute(query.questionBoard.update, [body.subject, body.title, body.content, postId, user.id]);
+        const [row] = await conn.execute(query.questionBoard.update, [body.subject, body.title, body.content, body.content_json, postId, user.id]);
 
         return row;
     } catch(error) {
