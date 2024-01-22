@@ -3,14 +3,16 @@ const authorization = require("../middleware/authorization");
 const { checkSubject } = require("../middleware/checkSubject");
 const questionBoardController = require("../controller/questionBoard.controller");
 
-router.post("/:subject", authorization.reIssueToken, checkSubject, questionBoardController.insertQuestionBoard);
+router.get("/", questionBoardController.selectAllSearchQuestionBoard);
 
-router.get("/:subject", checkSubject, questionBoardController.selectAllQuestionBoard);
+router.post("/", authorization.reIssueToken, checkSubject, questionBoardController.insertQuestionBoard);
 
-router.get("/:subject/:postId", checkSubject, questionBoardController.selectQuestionBoard);
+router.get("/:subject", checkSubject, questionBoardController.selectSubjectSearchQuestionBoard);
 
-router.put("/:subject/:postId", authorization.reIssueToken, checkSubject, questionBoardController.putQuestionBoard);
+router.get("/:postId", questionBoardController.selectQuestionBoard);
 
-router.delete("/:subject/:postId", authorization.reIssueToken, checkSubject, questionBoardController.deleteQuestionBoard);
+router.put("/:postId", authorization.reIssueToken, questionBoardController.putQuestionBoard);
+
+router.delete("/:postId", authorization.reIssueToken, questionBoardController.deleteQuestionBoard);
 
 module.exports = router;

@@ -1,5 +1,5 @@
 const freeBoardLikeRepository = require(
-    "../repository/freeboardLikeRepository");
+    "../repository/freeBoardLikeRepository");
 
 async function freeBoardLike(req, res) {
   try {

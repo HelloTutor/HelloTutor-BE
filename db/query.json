@@ -21,7 +21,9 @@
         "delete": "DELETE FROM tb_free_board WHERE id = ? AND user_id = ?",
         "select": "SELECT f.id, f.user_id, f.title, f.content, f.created_at, f.views , u.name , count(DISTINCT l.user_id) AS like_count, count(DISTINCT c.id) AS comment_count FROM tb_free_board AS f LEFT JOIN tb_user AS u ON f.user_id = u.id LEFT JOIN tb_free_board_comments AS c ON f.id = c.free_board_id LEFT JOIN tb_like AS l ON f.id = l.free_board_id WHERE f.id = ? GROUP BY f.id, f.title, f.content, f.created_at, f.views, u.name",
         "selectAll": "SELECT f.id, f.title, f.content, f.created_at, f.views , u.name , count(DISTINCT l.user_id) AS like_count, count(DISTINCT c.id) AS comment_count  FROM tb_free_board AS f LEFT JOIN tb_user AS u ON f.user_id = u.id LEFT JOIN tb_free_board_comments AS c ON f.id = c.free_board_id LEFT JOIN tb_like AS l ON f.id = l.free_board_id GROUP BY f.id, f.title, f.content, f.created_at, f.views, u.name ORDER BY f.created_at DESC LIMIT ?, ?",
-        "selectSearch": "SELECT f.id, f.title, f.created_at, f.views , u.name , count(DISTINCT l.user_id) AS like_count, count(DISTINCT c.id) AS comment_count FROM tb_free_board AS f LEFT JOIN tb_user AS u ON f.user_id = u.id LEFT JOIN tb_free_board_comments AS c ON f.id = c.free_board_id LEFT JOIN tb_like AS l ON f.id = l.free_board_id WHERE f.title LIKE ? GROUP BY f.id, f.title, f.content, f.created_at, f.views, u.name ORDER BY f.created_at DESC LIMIT ?, ?"
+        "selectSearch": "SELECT f.id, f.title, f.created_at, f.views , u.name , count(DISTINCT l.user_id) AS like_count, count(DISTINCT c.id) AS comment_count FROM tb_free_board AS f LEFT JOIN tb_user AS u ON f.user_id = u.id LEFT JOIN tb_free_board_comments AS c ON f.id = c.free_board_id LEFT JOIN tb_like AS l ON f.id = l.free_board_id WHERE f.title LIKE ? GROUP BY f.id, f.title, f.content, f.created_at, f.views, u.name ORDER BY f.created_at DESC LIMIT ?, ?",
+        "totalCount": "SELECT COUNT(*) AS totalCount FROM tb_free_board",
+        "searchTotalCount": "SELECT COUNT(*) AS totalCount FROM tb_free_board AS f WHERE f.title LIKE ? "
     },
     "freeBoardComments": {
         "insert": "INSERT INTO tb_free_board_comments (`user_id`, `free_board_id`, `content`) VALUES(?, ?, ?)",
@@ -32,12 +34,18 @@
     },
     "questionBoard": {
         "insert": "INSERT INTO tb_question_board (`user_id`, `subject`, `title`, `content`) VALUES (?, ?, ?, ?)",
-        "select": "SELECT q.*, u.name FROM tb_question_board AS q LEFT JOIN tb_user AS u ON q.user_id = u.id WHERE q.id = ? AND q.subject = ?",
-        "update": "UPDATE tb_question_board SET `title` = ?, `content` = ?, updated_at = NOW() WHERE id = ? AND subject = ? AND user_id = ?",
-        "updateViews": "UPDATE tb_question_board SET `views` = `views` + 1 WHERE id = ? AND subject = ?",
-        "delete": "DELETE FROM tb_question_board WHERE id = ? AND subject = ? AND user_id = ?",
-        "selectAll": "SELECT q.id , q.user_id, q.subject, q.title, q.created_at, q.views, q.status, u.name FROM tb_question_board AS q LEFT JOIN tb_user AS u ON q.user_id = u.id WHERE q.subject = ? ORDER BY q.created_at DESC LIMIT ?, ?",
-        "selectSearch": "SELECT q.id , q.user_id, q.subject, q.title, q.created_at, q.views, q.status, u.name FROM tb_question_board AS q LEFT JOIN tb_user AS u ON q.user_id = u.id WHERE q.subject = ? AND q.title LIKE ? ORDER BY q.created_at DESC LIMIT ?, ?"
+        "select": "SELECT q.*, u.name FROM tb_question_board AS q LEFT JOIN tb_user AS u ON q.user_id = u.id WHERE q.id = ?",
+        "update": "UPDATE tb_question_board SET `subject` = ?, `title` = ?, `content` = ?, updated_at = NOW() WHERE id = ? AND user_id = ?",
+        "updateViews": "UPDATE tb_question_board SET `views` = `views` + 1 WHERE id = ?",
+        "delete": "DELETE FROM tb_question_board WHERE id = ? AND user_id = ?",
+        "selectAll": "SELECT q.id , q.user_id, q.subject, q.title, q.created_at, q.views, q.status, u.name FROM tb_question_board AS q LEFT JOIN tb_user AS u ON q.user_id = u.id ORDER BY q.created_at DESC LIMIT ?, ?",
+        "selectAllSearch": "SELECT q.id , q.user_id, q.subject, q.title, q.created_at, q.views, q.status, u.name FROM tb_question_board AS q LEFT JOIN tb_user AS u ON q.user_id = u.id WHERE q.title LIKE ? ORDER BY q.created_at DESC LIMIT ?, ?",
+        "subjectAll": "SELECT q.id , q.user_id, q.subject, q.title, q.created_at, q.views, q.status, u.name FROM tb_question_board AS q LEFT JOIN tb_user AS u ON q.user_id = u.id WHERE q.subject = ? ORDER BY q.created_at DESC LIMIT ?, ?",
+        "subjectAllSearch": "SELECT q.id , q.user_id, q.subject, q.title, q.created_at, q.views, q.status, u.name FROM tb_question_board AS q LEFT JOIN tb_user AS u ON q.user_id = u.id WHERE q.subject = ? AND q.title LIKE ? ORDER BY q.created_at DESC LIMIT ?, ?",
+        "totalCount": "SELECT COUNT(*) AS totalCount FROM tb_question_board",
+        "searchTotalCount": "SELECT COUNT(*) AS totalCount FROM tb_question_board AS q WHERE q.title LIKE ?",
+        "subjectTotalCount": "SELECT COUNT(*) AS totalCount FROM tb_question_board AS q LEFT JOIN tb_user AS u ON q.user_id = u.id WHERE q.subject = ?",
+        "subjectSearchTotalCount": "SELECT COUNT(*) AS totalCount FROM tb_question_board AS q LEFT JOIN tb_user AS u ON q.user_id = u.id WHERE q.subject = ? AND q.title LIKE ?"
     },
     "like": {
         "insert": "INSERT INTO tb_like(`user_id`, `free_board_id`, `free_board_comments_id`) VALUES (?, ?, ?)",
@@ -62,7 +70,13 @@
         "subjectReviewAvg": "SELECT t.id, t.introduce, t.career, t.answer, u.name, COUNT(r.id) AS reviewCount, TRUNCATE(AVG(score),1) AS reviewAvg FROM tb_tutor AS t LEFT JOIN tb_review AS r ON t.id = r.tutor_id LEFT JOIN tb_user AS u ON t.id = u.id WHERE json_contains(t.subject, ?) GROUP BY t.id, t.introduce, t.career, t.answer, u.name ORDER BY reviewAvg LIMIT ?, ?",
         "subjectReviewAvgSearch": "SELECT t.id, t.introduce, t.career, t.answer, u.name, COUNT(r.id) AS reviewCount, TRUNCATE(AVG(score),1) AS reviewAvg FROM tb_tutor AS t LEFT JOIN tb_review AS r ON t.id = r.tutor_id LEFT JOIN tb_user AS u ON t.id = u.id WHERE json_contains(t.subject, ?) AND t.introduce LIKE ? GROUP BY t.id, t.introduce, t.career, t.answer, u.name ORDER BY reviewAvg LIMIT ?, ?",
         "subjectAnswerCount": "SELECT t.id, t.introduce, t.career, t.answer, u.name, COUNT(r.id) AS reviewCount, TRUNCATE(AVG(score),1) AS reviewAvg FROM tb_tutor AS t LEFT JOIN tb_review AS r ON t.id = r.tutor_id LEFT JOIN tb_user AS u ON t.id = u.id WHERE json_contains(t.subject, ?) GROUP BY t.id, t.introduce, t.career, t.answer, u.name ORDER BY t.answer LIMIT ?, ?",
-        "subjectAnswerCountSearch": "SELECT t.id, t.introduce, t.career, t.answer, u.name, COUNT(r.id) AS reviewCount, TRUNCATE(AVG(score),1) AS reviewAvg FROM tb_tutor AS t LEFT JOIN tb_review AS r ON t.id = r.tutor_id LEFT JOIN tb_user AS u ON t.id = u.id WHERE json_contains(t.subject, ?) AND t.introduce LIKE ? GROUP BY t.id, t.introduce, t.career, t.answer, u.name ORDER BY t.answer LIMIT ?, ?"
+        "subjectAnswerCountSearch": "SELECT t.id, t.introduce, t.career, t.answer, u.name, COUNT(r.id) AS reviewCount, TRUNCATE(AVG(score),1) AS reviewAvg FROM tb_tutor AS t LEFT JOIN tb_review AS r ON t.id = r.tutor_id LEFT JOIN tb_user AS u ON t.id = u.id WHERE json_contains(t.subject, ?) AND t.introduce LIKE ? GROUP BY t.id, t.introduce, t.career, t.answer, u.name ORDER BY t.answer LIMIT ?, ?",
+        "totalCount": "FROM tb_tutor AS totalCount LEFT JOIN tb_review AS r ON t.id = r.tutor_id LEFT JOIN tb_user AS u ON t.id = u.id",
+        "searchTotalCount": "SELECT COUNT(*) AS totalCount FROM tb_free_board AS f WHERE f.title LIKE ?",
+        "SortTotalCount": "SELECT Count(*) AS totalCount FROM tb_tutor AS t LEFT JOIN tb_review AS r ON t.id = r.tutor_id LEFT JOIN tb_user AS u ON t.id = u.id",
+        "SortSearchTotalCount": "SELECT Count(*) AS totalCount FROM tb_tutor AS t LEFT JOIN tb_review AS r ON t.id = r.tutor_id LEFT JOIN tb_user AS u ON t.id = u.id WHERE t.introduce LIKE ?",
+        "subjectTotalCount": "SELECT COUNT(*) AS totalCount FROM tb_tutor AS t LEFT JOIN tb_review AS r ON t.id = r.tutor_id LEFT JOIN tb_user AS u ON t.id = u.id WHERE json_contains(t.subject, ?)",
+        "subjectSearchTotalCount": "SELECT COUNT(*) AS totalCount FROM tb_tutor AS t LEFT JOIN tb_review AS r ON t.id = r.tutor_id LEFT JOIN tb_user AS u ON t.id = u.id WHERE json_contains(t.subject, ?) AND t.introduce LIKE ?"
     },
     "favorite": {
         "select": "SELECT * FROM tb_favorite WHERE user_id = ? AND tutor_id = ?",

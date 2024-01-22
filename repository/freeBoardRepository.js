@@ -29,7 +29,7 @@ async function selectFreeBoard(postId) {
         await conn.rollback();
         throw error;
     } finally {
-        conn.release();
+        if(conn) conn.release();
     }
 }
 
@@ -82,10 +82,18 @@ async function selectAllFreeBoard(offset, limit) {
     let conn;
     try {
         conn = await connection();
+        conn.beginTransaction();
+        const [[{ totalCount }]] = await conn.execute(query.freeBoard.selectAllCount);
         const [row] = await conn.execute(query.freeBoard.selectAll, [offset, limit]);
+        await conn.commit();
+        const pageNation = {
+            contents: row,
+            totalCount: totalCount
+        }
 
-        return row;
+        return pageNation;
     } catch(error) {
+        await conn.rollback();
         throw error;
     } finally {
         if(conn) conn.release();
@@ -96,10 +104,18 @@ async function selectSearchFreeBoard(search, offset, limit) {
     let conn;
     try {
         conn = await connection();
+        await conn.beginTransaction();
+        const [[{ totalCount }]] = await conn.execute(query.freeBoard.selectSearchCount, [search]);
         const [row] = await conn.execute(query.freeBoard.selectSearch, [search, offset, limit]);
+        await conn.commit();
+        const pageNation = {
+            contents: row,
+            totalCount: totalCount
+        }
 
-        return row;
+        return pageNation;
     } catch(error) {
+        await conn.rollback();
         throw error;
     } finally {
         if(conn) conn.release();
