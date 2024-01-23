@@ -3,10 +3,11 @@ const authorization = require("../middleware/authorization");
 const likeController = require("../controller/like.controller");
 const freeBoardController = require("../controller/freeBoard.controller");
 const freeBoardComments = require("./freeBoardComments");
+const boardParse = require("../middleware/boardParser");
 
 router.get("/", freeBoardController.selectAllFreeBoard);
 
-router.post("/", authorization.reIssueToken, require('../middleware/boardParser').boardContentParser,freeBoardController.insertFreeBoard);
+router.post("/", authorization.reIssueToken, boardParse.boardContentParser, freeBoardController.insertFreeBoard);
 
 router.get("/:postId", freeBoardController.selectFreeBoard);
 
