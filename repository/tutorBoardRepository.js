@@ -29,11 +29,11 @@ async function selectAllSearch(search, offset, pageSize) {
     }
 }
 
-async function selectFilterReviewCount(offset, pageSize) {
+async function selectSortReviewCount(offset, pageSize) {
     let conn;
     try {
         conn = await connection();
-        const [row] = await conn.execute(query.tutorBoard.selectFilterReviewCount, [offset, pageSize]);
+        const [row] = await conn.execute(query.tutorBoard.selectSortReviewCount, [offset, pageSize]);
 
         return row;
     } catch(error) {
@@ -43,11 +43,11 @@ async function selectFilterReviewCount(offset, pageSize) {
     }
 }
 
-async function selectFilterReviewCountSearch(search, offset, pageSize) {
+async function selectSortReviewCountSearch(search, offset, pageSize) {
     let conn;
     try {
         conn = await connection();
-        const [row] = await conn.execute(query.tutorBoard.selectFilterReviewCountSearch, [search, offset, pageSize]);
+        const [row] = await conn.execute(query.tutorBoard.selectSortReviewCountSearch, [search, offset, pageSize]);
 
         return row;
     } catch(error) {
@@ -57,11 +57,11 @@ async function selectFilterReviewCountSearch(search, offset, pageSize) {
     }
 }
 
-async function selectFilterReviewAvg(offset, pageSize) {
+async function selectSortReviewAvg(offset, pageSize) {
     let conn;
     try {
         conn = await connection();
-        const [row] = await conn.execute(query.tutorBoard.selectFilterReviewAvg, [offset, pageSize]);
+        const [row] = await conn.execute(query.tutorBoard.selectSortReviewAvg, [offset, pageSize]);
 
         return row;
     } catch(error) {
@@ -71,11 +71,11 @@ async function selectFilterReviewAvg(offset, pageSize) {
     }
 }
 
-async function selectFilterReviewAvgSearch(search, offset, pageSize) {
+async function selectSortReviewAvgSearch(search, offset, pageSize) {
     let conn;
     try {
         conn = await connection();
-        const [row] = await conn.execute(query.tutorBoard.selectFilterReviewAvgSearch, [search, offset, pageSize]);
+        const [row] = await conn.execute(query.tutorBoard.selectSortReviewAvgSearch, [search, offset, pageSize]);
 
         return row;
     } catch(error) {
@@ -85,11 +85,11 @@ async function selectFilterReviewAvgSearch(search, offset, pageSize) {
     }
 }
 
-async function selectFilterAnswerCount(offset, pageSize) {
+async function selectSortAnswerCount(offset, pageSize) {
     let conn;
     try {
         conn = await connection();
-        const [row] = await conn.execute(query.tutorBoard.selectFilterAnswerCount, [offset, pageSize]);
+        const [row] = await conn.execute(query.tutorBoard.selectSortAnswerCount, [offset, pageSize]);
 
         return row;
     } catch(error) {
@@ -99,11 +99,11 @@ async function selectFilterAnswerCount(offset, pageSize) {
     }
 }
 
-async function selectFilterAnswerCountSearch(search, offset, pageSize) {
+async function selectSortAnswerCountSearch(search, offset, pageSize) {
     let conn;
     try {
         conn = await connection();
-        const [row] = await conn.execute(query.tutorBoard.selectFilterAnswerCountSearch, [search, offset, pageSize]);
+        const [row] = await conn.execute(query.tutorBoard.selectSortAnswerCountSearch, [search, offset, pageSize]);
 
         return row;
     } catch(error) {
@@ -228,12 +228,12 @@ async function subjectAnswerCountSearch(subject, search, offset, pageSize) {
 module.exports = {
     selectAll,
     selectAllSearch,
-    selectFilterReviewCount,
-    selectFilterReviewCountSearch,
-    selectFilterReviewAvg,
-    selectFilterReviewAvgSearch,
-    selectFilterAnswerCount,
-    selectFilterAnswerCountSearch,
+    selectSortReviewCount,
+    selectSortReviewCountSearch,
+    selectSortReviewAvg,
+    selectSortReviewAvgSearch,
+    selectSortAnswerCount,
+    selectSortAnswerCountSearch,
     subject,
     subjectSearch,
     subjectReviewCount,

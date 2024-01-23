@@ -28,9 +28,9 @@ async function selectAllSearch(req, res) {
     }
 }
 
-async function selectAllFilterSearch(req, res) {
+async function selectAllSortSearch(req, res) {
     try {
-        const { filter } = req.params;
+        const { sort } = req.params;
         let { page, pageSize, search } = req.query;
 
         if (!page || (page <= 0)) {
@@ -44,23 +44,26 @@ async function selectAllFilterSearch(req, res) {
         const offset = String((page - 1) * pageSize);
 
         let row;
-        switch(filter) {
+        switch(sort) {
             case "reviewCount":
-                row = await tutorBoardRepository.selectFilterReviewCount(offset, pageSize);
                 if(search) {
-                    row = await tutorBoardRepository.selectFilterReviewCountSearch(`%${search}%`, offset, pageSize);
+                    row = await tutorBoardRepository.selectSortReviewCountSearch(`%${search}%`, offset, pageSize);
+                } else {
+                    row = await tutorBoardRepository.selectSortReviewCount(offset, pageSize);
                 }
                 break;
             case "reviewAvg":
-                row = await tutorBoardRepository.selectFilterReviewAvg(offset, pageSize);
                 if(search) {
-                    row = await tutorBoardRepository.selectFilterReviewAvgSearch(`%${search}%`, offset, pageSize);
+                    row = await tutorBoardRepository.selectSortReviewAvgSearch(`%${search}%`, offset, pageSize);
+                } else {
+                    row = await tutorBoardRepository.selectSortReviewAvg(offset, pageSize);
                 }
                 break;
             case "answerCount":
-                row = await tutorBoardRepository.selectFilterAnswerCount(offset, pageSize);
                 if(search) {
-                    row = await tutorBoardRepository.selectFilterAnswerCountSearch(`%${search}%`, offset, pageSize);
+                    row = await tutorBoardRepository.selectSortAnswerCountSearch(`%${search}%`, offset, pageSize);
+                } else {
+                    row = await tutorBoardRepository.selectSortAnswerCount(offset, pageSize);
                 }
                 break;
         }
@@ -101,9 +104,9 @@ async function subjectSearch(req, res) {
     }
 }
 
-async function subjectSearchFilter(req, res) {
+async function subjectSearchSort(req, res) {
     try {
-        const { subject, filter } = req.params;
+        const { subject, sort } = req.params;
         let { page, pageSize, search } = req.query;
 
         if (!page || (page <= 0)) {
@@ -117,23 +120,26 @@ async function subjectSearchFilter(req, res) {
         const offset = String((page - 1) * pageSize);
 
         let row;
-        switch(filter) {
+        switch(sort) {
             case "reviewCount":
-                row = await tutorBoardRepository.subjectReviewCount(JSON.stringify(subject), offset, pageSize);
                 if(search) {
                     row = await tutorBoardRepository.subjectReviewCountSearch(JSON.stringify(subject), `%${search}%`, offset, pageSize);
+                } else {
+                    row = await tutorBoardRepository.subjectReviewCount(JSON.stringify(subject), offset, pageSize);
                 }
                 break;
             case "reviewAvg":
-                row = await tutorBoardRepository.subjectReviewAvg(JSON.stringify(subject), offset, pageSize);
                 if(search) {
                     row = await tutorBoardRepository.subjectReviewAvgSearch(JSON.stringify(subject), `%${search}%`, offset, pageSize);
+                } else {
+                    row = await tutorBoardRepository.subjectReviewAvg(JSON.stringify(subject), offset, pageSize);
                 }
                 break;
             case "answerCount":
-                row = await tutorBoardRepository.subjectAnswerCount(JSON.stringify(subject), offset, pageSize);
                 if(search) {
                     row = await tutorBoardRepository.subjectAnswerCountSearch(JSON.stringify(subject), `%${search}`, offset, pageSize);
+                } else {
+                    row = await tutorBoardRepository.subjectAnswerCount(JSON.stringify(subject), offset, pageSize);
                 }
                 break;
         }
@@ -147,7 +153,7 @@ async function subjectSearchFilter(req, res) {
 
 module.exports = {
     selectAllSearch,
-    selectAllFilterSearch,
+    selectAllSortSearch,
     subjectSearch,
-    subjectSearchFilter,
+    subjectSearchSort,
 }

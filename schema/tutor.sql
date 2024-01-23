@@ -8,6 +8,5 @@ CREATE TABLE `tb_tutor` (
 	`subject` json NOT NULL,
 	`answer` int DEFAULT '0',
 	`experience` json DEFAULT NULL,
-	PRIMARY KEY (`id`),
 	CONSTRAINT `fk_tutor_id` FOREIGN KEY (`id`) REFERENCES `tb_user` (`id`) ON DELETE CASCADE
 );

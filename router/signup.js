@@ -10,8 +10,9 @@ router.post("/tutee",
 
         if (result) {
             res.status(200).json({ message: "회원가입 완료" });
+        } else {
+            res.status(500).json({ message: "에러발생" });
         }
-        res.status(500).send();
 });
 
 router.post("/tutor",
@@ -22,6 +23,8 @@ router.post("/tutor",
 
         if (result) {
             res.status(200).json({ message: "회원가입 완료" });
+        } else {
+            res.status(500).json({ message: "에러발생" });
         }
 });
 
