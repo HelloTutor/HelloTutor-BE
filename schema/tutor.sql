@@ -9,4 +9,4 @@ CREATE TABLE `tb_tutor` (
 	`answer` int DEFAULT '0',
 	`experience` json DEFAULT NULL,
 	CONSTRAINT `fk_tutor_id` FOREIGN KEY (`id`) REFERENCES `tb_user` (`id`) ON DELETE CASCADE
-)
+);
