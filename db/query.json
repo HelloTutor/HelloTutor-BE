@@ -80,14 +80,14 @@
         "update": "UPDATE tb_user SET `nickname` = ?, `phone` = ? WHERE id = ?",
         "delete": "DELETE FROM tb_user WHERE id = ?",
         "selectAllQuestion": "SELECT q.id, q.title, q.created_at, q.updated_at, q.views, q.status FROM tb_question_board AS q WHERE q.user_id = ? ORDER BY q.created_at DESC LIMIT ?, ?",
-        "selectAllFavorite": "SELECT t.id, t.introduce, t.answer, t.career, u.name, COUNT(r.id) AS reviewCount, TRUNCATE(AVG(score),1) AS avgScore FROM tb_favorite AS f LEFT JOIN tb_tutor AS t ON f.tutor_id = t.id LEFT JOIN tb_user AS u ON u.id = t.id LEFT JOIN tb_review AS r ON r.tutor_id = t.id WHERE f.user_id = ? GROUP BY t.id DESC LIMIT ?, ?",
+        "selectAllFavorite": "SELECT t.id, t.introduce, t.answer, t.career, u.name, COUNT(r.id) AS reviewCount, TRUNCATE(AVG(score),1) AS avgScore FROM tb_favorite AS f LEFT JOIN tb_tutor AS t ON f.tutor_id = t.id LEFT JOIN tb_user AS u ON u.id = t.id LEFT JOIN tb_review AS r ON r.tutor_id = t.id WHERE f.user_id = ? GROUP BY t.id, t.introduce, t.answer, t.career, u.name ORDER BY MAX(f.created_at) DESC LIMIT ?, ?",
         "selectAllFree": "SELECT f.id, f.title, f.created_at FROM tb_free_board AS f WHERE f.user_id = ? ORDER BY f.created_at DESC LIMIT ?, ?",
         "selectAllFreeComment": "SELECT c.id, c.created_at, f.title FROM tb_free_board_comments AS c LEFT JOIN tb_free_board AS f ON c.free_board_id = f.id WHERE c.user_id = ? ORDER BY c.created_at DESC LIMIT ?, ?",
         "selectTutorInfo": "SELECT t.id, t.introduce, t.detailed_description, t.career, t.service_price, t.subject, t.experience FROM tb_tutor AS t WHERE t.id = ?",
         "updateTutorInfo": "UPDATE tb_tutor SET `introduce` = ?, `detailed_description` = ?, `career` = ?, `service_price` = ?, `subject` = ?, `experience` = ? WHERE id = ?",
         "selectAllQuestionCount": "SELECT COUNT(*) AS totalCount FROM tb_question_board AS q WHERE q.user_id = ?",
         "selectAllFavoriteCount": "SELECT COUNT(*) AS totalCount FROM tb_favorite AS f LEFT JOIN tb_tutor AS t ON f.tutor_id = t.id LEFT JOIN tb_user AS u ON u.id = t.id LEFT JOIN tb_review AS r ON r.tutor_id = t.id WHERE f.user_id = ?",
-        "selectAllFreeCount": "SELECT COUNT(*) AS totalCount tb_free_board AS f WHERE f.user_id = ?",
+        "selectAllFreeCount": "SELECT COUNT(*) AS totalCount FROM tb_free_board AS f WHERE f.user_id = ?",
         "selectAllFreeCommentCount": "SELECT COUNT(*) AS totalCount FROM tb_free_board_comments AS c LEFT JOIN tb_free_board AS f ON c.free_board_id = f.id WHERE c.user_id = ?"
     }
 }
