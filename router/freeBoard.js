@@ -11,7 +11,7 @@ router.post("/", authorization.reIssueToken, boardParser.boardContentParser, fre
 
 router.get("/:postId", freeBoardController.selectFreeBoard);
 
-router.put("/:postId", authorization.reIssueToken, freeBoardController.putFreeBoard);
+router.put("/:postId", authorization.reIssueToken, boardParser.boardContentParser, freeBoardController.putFreeBoard);
 
 router.delete("/:postId", authorization.reIssueToken, freeBoardController.deleteFreeBoard);
 

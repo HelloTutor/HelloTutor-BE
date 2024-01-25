@@ -85,12 +85,12 @@ async function selectAllFreeBoard(offset, limit) {
         const [[{ totalCount }]] = await conn.execute(query.freeBoard.selectAllCount);
         const [row] = await conn.execute(query.freeBoard.selectAll, [offset, limit]);
         await conn.commit();
-        const pageNation = {
+        const pagination = {
             contents: row,
             totalCount: totalCount
         }
 
-        return pageNation;
+        return pagination;
     } catch(error) {
         await conn.rollback();
         throw error;
@@ -107,12 +107,12 @@ async function selectSearchFreeBoard(search, offset, limit) {
         const [[{ totalCount }]] = await conn.execute(query.freeBoard.selectSearchCount, [search]);
         const [row] = await conn.execute(query.freeBoard.selectSearch, [search, offset, limit]);
         await conn.commit();
-        const pageNation = {
+        const pagination = {
             contents: row,
             totalCount: totalCount
         }
 
-        return pageNation;
+        return pagination;
     } catch(error) {
         await conn.rollback();
         throw error;

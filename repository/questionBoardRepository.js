@@ -69,12 +69,12 @@ async function selectAllQuestionBoard(offset, limit){
         const [[{ totalCount }]] = await conn.execute(query.questionBoard.totalCount);
         const [row] = await conn.execute(query.questionBoard.selectAll, [offset, limit]);
         await conn.commit();
-        const pageNation = {
+        const pagination = {
             contents: row,
             totalCount: totalCount
         }
 
-        return pageNation;
+        return pagination;
     } catch(error) {
         await conn.rollback();
         throw error;
@@ -91,12 +91,12 @@ async function selectAllSearchQuestionBoard(search, offset, limit) {
         const [[{ totalCount }]] = await conn.execute(query.questionBoard.searchTotalCount, [search]);
         const[row] = await conn.execute(query.questionBoard.selectAllSearch, [search, offset, limit]);
         await conn.commit();
-        const pageNation = {
+        const pagination = {
             contents: row,
             totalCount: totalCount
         }
 
-        return pageNation;
+        return pagination;
     } catch(error) {
         await conn.rollback();
         throw error;
@@ -113,12 +113,12 @@ async function selectAllSubjectQuestionBoard(subject, offset, limit) {
         const [[{ totalCount }]] = await conn.execute(query.questionBoard.subjectTotalCount, [subject]);
         const [row] = await conn.execute(query.questionBoard.subjectAll, [subject, offset, limit]);
         await conn.commit();
-        const pageNation = {
+        const pagination = {
             contents: row,
             totalCount: totalCount
         }
 
-        return pageNation;
+        return pagination;
     } catch(error) {
         await conn.rollback();
         throw error;
@@ -135,12 +135,12 @@ async function selectAllSubjectSearchQuestionBoard(subject, search, offset, limi
         const [[{ totalCount }]] = await conn.execute(query.questionBoard.subjectSearchTotalCount, [subject, search]);
         const [row] = await conn.execute(query.questionBoard.subjectAllSearch, [subject, search, offset, limit]);
         await conn.commit();
-        const pageNation = {
+        const pagination = {
             contents: row,
             totalCount: totalCount
         }
 
-        return pageNation;
+        return pagination;
     } catch(error) {
         await conn.rollback();
         throw error;
