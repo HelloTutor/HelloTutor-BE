@@ -6,5 +6,5 @@ CREATE TABLE `tb_user` (
 	`nickname` varchar(50) DEFAULT NULL,
 	`phone` varchar(50) DEFAULT NULL,
 	`role` int NOT NULL,
-	`money` int DEFAULT NULL,
+	`money` int DEFAULT NULL
 );

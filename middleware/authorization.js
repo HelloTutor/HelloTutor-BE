@@ -10,7 +10,7 @@ async function issueToken (req, res) {
         const row = await userRepository.findUserEmail(body.email);
 
         if (row) {
-            if (row.role = 0) {
+            if (row.role === 0) {
                 const tutee = await tuteeRepository.findTuteeId(row.id);
 
                 if (tutee.google_id) {
