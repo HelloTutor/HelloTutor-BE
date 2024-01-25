@@ -12,4 +12,6 @@ router.get("/:tutorId/reviews", reviewController.selectAllReview);
 
 router.post("/:tutorId/favorite", authorization.reIssueToken, favoriteController.favorite);
 
+router.post("/:tutorId/payment", authorization.reIssueToken);
+
 module.exports = router;
