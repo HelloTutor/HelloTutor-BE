@@ -8,7 +8,7 @@ router.get("/", questionBoardController.selectAllSearchQuestionBoard);
 
 router.post("/", authorization.reIssueToken, boardParser.boardContentParser, questionBoardController.insertQuestionBoard);
 
-router.get("/:subject", checkSubject, questionBoardController.selectSubjectSearchQuestionBoard);
+router.get("/subject/:subject", checkSubject, questionBoardController.selectSubjectSearchQuestionBoard);
 
 router.get("/:postId", questionBoardController.selectQuestionBoard);
 
