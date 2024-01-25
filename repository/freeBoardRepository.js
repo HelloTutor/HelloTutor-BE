@@ -5,7 +5,7 @@ async function insertFreeBoard(user, body) {
     let conn;
     try {
         conn = await connection();
-        const [row] = await conn.execute(query.freeBoard.insert, [user.id, body.title, body.content]);
+        const [row] = await conn.execute(query.freeBoard.insert, [user.id, body.title, body.content, body.content_json]);
 
         return row;
     } catch(error) {
@@ -29,7 +29,7 @@ async function selectFreeBoard(postId) {
         await conn.rollback();
         throw error;
     } finally {
-        conn.release();
+        if(conn) conn.release();
     }
 }
 
@@ -37,7 +37,7 @@ async function updateFreeBoard(user, postId, body) {
     let conn;
     try {
         conn = await connection();
-        const [row] = await conn.execute(query.freeBoard.update, [body.title, body.content, postId, user.id]);
+        const [row] = await conn.execute(query.freeBoard.update, [body.title, body.content, body.content_json, postId, user.id]);
 
         return row;
     } catch(error) {
@@ -50,7 +50,6 @@ async function updateFreeBoard(user, postId, body) {
 
 
 async function deleteFreeBoard(postId, user) {
-    console.log(postId,token);
     let conn;
     try {
         conn = await connection();
@@ -82,10 +81,18 @@ async function selectAllFreeBoard(offset, limit) {
     let conn;
     try {
         conn = await connection();
+        conn.beginTransaction();
+        const [[{ totalCount }]] = await conn.execute(query.freeBoard.selectAllCount);
         const [row] = await conn.execute(query.freeBoard.selectAll, [offset, limit]);
+        await conn.commit();
+        const pagination = {
+            contents: row,
+            totalCount: totalCount
+        }
 
-        return row;
+        return pagination;
     } catch(error) {
+        await conn.rollback();
         throw error;
     } finally {
         if(conn) conn.release();
@@ -96,10 +103,18 @@ async function selectSearchFreeBoard(search, offset, limit) {
     let conn;
     try {
         conn = await connection();
+        await conn.beginTransaction();
+        const [[{ totalCount }]] = await conn.execute(query.freeBoard.selectSearchCount, [search]);
         const [row] = await conn.execute(query.freeBoard.selectSearch, [search, offset, limit]);
+        await conn.commit();
+        const pagination = {
+            contents: row,
+            totalCount: totalCount
+        }
 
-        return row;
+        return pagination;
     } catch(error) {
+        await conn.rollback();
         throw error;
     } finally {
         if(conn) conn.release();

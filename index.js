@@ -11,9 +11,15 @@ const freeBoard = require("./router/freeBoard");
 const questionBoard = require("./router/questionBoard");
 const tutorBoard = require("./router/tutorBoard");
 const tutor = require("./router/tutor");
+const myPage = require("./router/myPage");
 
 const passport = require("passport");
+const cors = require("cors");
 
+app.use(cors({
+    origin:"*",
+    credentials: true
+}));
 app.use(cookieParser());
 app.use(express.json());
 app.use(cookieSession({
@@ -45,6 +51,7 @@ app.use("/free", freeBoard);
 app.use("/question", questionBoard);
 app.use("/tutorBoard", tutorBoard);
 app.use("/tutor", tutor);
+app.use("/myPage", myPage);
 
 app.listen(port, () => {
     console.log(port, "번호로 서버를 시작");

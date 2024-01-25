@@ -8,5 +8,6 @@ CREATE TABLE `tb_question_board` (
     `updated_at` datetime DEFAULT CURRENT_TIMESTAMP,
     `views` int DEFAULT '0',
     `status` varchar(50) DEFAULT NULL,
+    `content_json` json NOT NULL,
     CONSTRAINT `fk_question_board_user_id` FOREIGN KEY (`user_id`) REFERENCES `tb_user` (`id`)
-);
+)

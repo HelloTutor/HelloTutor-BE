@@ -1,11 +1,11 @@
 const connection = require("../db/connection");
 const query = require("../db/query.json");
 
-async function insertQuestionBoard(user, subject, body) {
+async function insertQuestionBoard(user, body) {
     let conn;
     try {
         conn = await connection();
-        const [row] = await conn.execute(query.questionBoard.insert, [user.id, subject, body.title, body.content]);
+        const [row] = await conn.execute(query.questionBoard.insert, [user.id, body.subject, body.title, body.content, body.content_json]);
 
         return row;
     } catch(error) {
@@ -16,13 +16,13 @@ async function insertQuestionBoard(user, subject, body) {
     }
 }
 
-async function selectQuestionBoard(postId, subject) {
+async function selectQuestionBoard(postId) {
     let conn;
     try {
         conn = await connection();
         await conn.beginTransaction();
-        await conn.execute(query.questionBoard.updateViews, [postId, subject]);
-        const [[row]] = await conn.execute(query.questionBoard.select, [postId, subject]);
+        await conn.execute(query.questionBoard.updateViews, [postId]);
+        const [[row]] = await conn.execute(query.questionBoard.select, [postId]);
         await conn.commit();
 
         return row;
@@ -33,11 +33,11 @@ async function selectQuestionBoard(postId, subject) {
     }
 }
 
-async function updateQuestionBoard(body, postId, subject, user) {
+async function updateQuestionBoard(body, postId, user) {
     let conn;
     try {
         conn = await connection();
-        const [row] = await conn.execute(query.questionBoard.update, [body.title, body.content, postId, subject, user.id]);
+        const [row] = await conn.execute(query.questionBoard.update, [body.subject, body.title, body.content, body.content_json, postId, user.id]);
 
         return row;
     } catch(error) {
@@ -47,11 +47,11 @@ async function updateQuestionBoard(body, postId, subject, user) {
     }
 }
 
-async function deleteQuestionBoard(postId, subject, user) {
+async function deleteQuestionBoard(postId, user) {
     let conn;
     try {
         conn = await connection();
-        const [row] = await conn.execute(query.questionBoard.delete, [postId, subject, user.id]);
+        const [row] = await conn.execute(query.questionBoard.delete, [postId, user.id]);
 
         return row;
     } catch(error) {
@@ -61,38 +61,101 @@ async function deleteQuestionBoard(postId, subject, user) {
     }
 }
 
-async function selectAllQuestionBoard(subject, offset, limit){
+async function selectAllQuestionBoard(offset, limit){
     let conn;
     try {
         conn = await connection();
-        const [row] = await conn.execute(query.questionBoard.selectAll, [subject, offset, limit]);
+        await conn.beginTransaction();
+        const [[{ totalCount }]] = await conn.execute(query.questionBoard.totalCount);
+        const [row] = await conn.execute(query.questionBoard.selectAll, [offset, limit]);
+        await conn.commit();
+        const pagination = {
+            contents: row,
+            totalCount: totalCount
+        }
 
-        return row;
+        return pagination;
     } catch(error) {
+        await conn.rollback();
         throw error;
     } finally {
         if(conn) conn.release();
     }
 }
 
-async function selectSearchQuestionBoard(subject, search, offset, limit) {
+async function selectAllSearchQuestionBoard(search, offset, limit) {
     let conn;
     try{
         conn = await connection();
-        const[row] = await conn.execute(query.questionBoard.selectSearch, [subject, search, offset, limit]);
+        await conn.beginTransaction();
+        const [[{ totalCount }]] = await conn.execute(query.questionBoard.searchTotalCount, [search]);
+        const[row] = await conn.execute(query.questionBoard.selectAllSearch, [search, offset, limit]);
+        await conn.commit();
+        const pagination = {
+            contents: row,
+            totalCount: totalCount
+        }
 
-        return row;
+        return pagination;
     } catch(error) {
+        await conn.rollback();
         throw error;
     } finally {
         if(conn) conn.release();
     }
 }
+
+async function selectAllSubjectQuestionBoard(subject, offset, limit) {
+    let conn;
+    try {
+        conn = await connection();
+        await conn.beginTransaction();
+        const [[{ totalCount }]] = await conn.execute(query.questionBoard.subjectTotalCount, [subject]);
+        const [row] = await conn.execute(query.questionBoard.subjectAll, [subject, offset, limit]);
+        await conn.commit();
+        const pagination = {
+            contents: row,
+            totalCount: totalCount
+        }
+
+        return pagination;
+    } catch(error) {
+        await conn.rollback();
+        throw error;
+    } finally {
+        if(conn) conn.release();
+    }
+}
+
+async function selectAllSubjectSearchQuestionBoard(subject, search, offset, limit) {
+    let conn;
+    try {
+        conn = await connection();
+        await conn.beginTransaction();
+        const [[{ totalCount }]] = await conn.execute(query.questionBoard.subjectSearchTotalCount, [subject, search]);
+        const [row] = await conn.execute(query.questionBoard.subjectAllSearch, [subject, search, offset, limit]);
+        await conn.commit();
+        const pagination = {
+            contents: row,
+            totalCount: totalCount
+        }
+
+        return pagination;
+    } catch(error) {
+        await conn.rollback();
+        throw error;
+    } finally {
+        if(conn) conn.release();
+    }
+}
+
 module.exports = {
     insertQuestionBoard,
     selectQuestionBoard,
     updateQuestionBoard,
     deleteQuestionBoard,
     selectAllQuestionBoard,
-    selectSearchQuestionBoard
+    selectAllSearchQuestionBoard,
+    selectAllSubjectQuestionBoard,
+    selectAllSubjectSearchQuestionBoard
 }

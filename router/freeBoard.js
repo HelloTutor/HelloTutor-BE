@@ -3,14 +3,15 @@ const authorization = require("../middleware/authorization");
 const likeController = require("../controller/like.controller");
 const freeBoardController = require("../controller/freeBoard.controller");
 const freeBoardComments = require("./freeBoardComments");
+const boardParser = require("../middleware/boardParser");
 
 router.get("/", freeBoardController.selectAllFreeBoard);
 
-router.post("/", authorization.reIssueToken, require('../middleware/boardParser').boardContentParser,freeBoardController.insertFreeBoard);
+router.post("/", authorization.reIssueToken, boardParser.boardContentParser, freeBoardController.insertFreeBoard);
 
 router.get("/:postId", freeBoardController.selectFreeBoard);
 
-router.put("/:postId", authorization.reIssueToken, freeBoardController.putFreeBoard);
+router.put("/:postId", authorization.reIssueToken, boardParser.boardContentParser, freeBoardController.putFreeBoard);
 
 router.delete("/:postId", authorization.reIssueToken, freeBoardController.deleteFreeBoard);
 
