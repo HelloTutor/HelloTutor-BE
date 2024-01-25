@@ -106,8 +106,9 @@
         "selectAllFreeCommentCount": "SELECT COUNT(*) AS totalCount FROM tb_free_board_comments AS c LEFT JOIN tb_free_board AS f ON c.free_board_id = f.id WHERE c.user_id = ?"
     },
     "payment": {
-        "insert": "INSERT INTO tb_payment (`tutor_id`, `tutee_id`, `question_board_id`, `amount`) VALUES (?, ?, ?, ?)",
-        "update": "UPDATE tb_payment SET `status` = ?",
-        "select": "SELECT * FROM tb_payment WHERE question_board_id = ? AND status = 'complete'"
+        "insert": "INSERT INTO tb_payment (`tutor_id`, `tutee_id`, `question_board_id`, `amount`, `paymentId`) VALUES (?, ?, ?, ?, ?)",
+        "update": "UPDATE tb_payment SET `status` = 'complete'",
+        "select": "SELECT * FROM tb_payment WHERE ....",
+        "selectPAID": "SELECT * FROM tb_payment WHERE question_board_id = ? AND status = 'complete'"
     }
 }

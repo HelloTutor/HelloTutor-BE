@@ -5,7 +5,7 @@ async function insertPayment(tutorId, user, body) {
     let conn;
     try {
         conn = await connection();
-        const [row] = await conn.execute(query.payment.insert, [tutorId, user.id, body.questionBoardId, body.amount]);
+        const [row] = await conn.execute(query.payment.insert, [tutorId, user.id, body.questionBoardId, body.amount, body.paymentId]);
 
         return row;
     } catch(error) {
@@ -16,11 +16,11 @@ async function insertPayment(tutorId, user, body) {
     }
 }
 
-async function updatePayment(body) {
+async function updatePayment() {
     let conn;
     try {
         conn = await connection();
-        const [row] = await conn.execute(query.payment.update, [body.status]);
+        const [row] = await conn.execute(query.payment.update);
 
         return row;
     } catch(error) {

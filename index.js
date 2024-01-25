@@ -12,6 +12,7 @@ const questionBoard = require("./router/questionBoard");
 const tutorBoard = require("./router/tutorBoard");
 const tutor = require("./router/tutor");
 const myPage = require("./router/myPage");
+const payments = require("./router/payments");
 
 const passport = require("passport");
 const cors = require("cors");
@@ -52,6 +53,7 @@ app.use("/question", questionBoard);
 app.use("/tutorBoard", tutorBoard);
 app.use("/tutor", tutor);
 app.use("/myPage", myPage);
+app.use("/payments/complete", payments);
 
 app.listen(port, () => {
     console.log(port, "번호로 서버를 시작");
