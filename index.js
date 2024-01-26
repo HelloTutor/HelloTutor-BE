@@ -28,6 +28,7 @@ app.use(cookieSession({
     keys: [process.env.COOKIE_SECRET_KEY]
 }));
 
+app.use("/profile", express.static(path.join(__dirname, "/fileUpload/profile")));
 app.use(passport.initialize());
 app.use(passport.session());
 require("./config/passport/googleStrategy");
