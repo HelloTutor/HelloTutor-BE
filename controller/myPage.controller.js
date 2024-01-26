@@ -166,6 +166,7 @@ async function selectMyPageTutorInfo(req, res) {
         return res.status(500).json({ message: "에러발생" });
     }
 }
+
 async function updateMyPageTutorInfo(req, res) {
     try {
         const { user, body } = req;
