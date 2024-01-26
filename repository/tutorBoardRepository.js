@@ -6,7 +6,7 @@ async function selectAll(offset, pageSize) {
     try {
         conn = await connection();
         await conn.beginTransaction();
-        const [[{ totalCount }]] = await conn.execute(query.tutorBoard.allCount);
+        const [[{ totalCount }]] = await conn.execute(query.tutorBoard.totalCount);
         const [row] = await conn.execute(query.tutorBoard.selectAll, [offset, pageSize]);
         await conn.commit();
         const pageNation = {
@@ -30,7 +30,6 @@ async function selectAllSearch(search, offset, pageSize) {
         const [[{ totalCount }]] = await conn.execute(query.tutorBoard.searchAllCount, [search]);
         const [row] = await conn.execute(query.tutorBoard.selectAllSearch, [search, offset, pageSize]);
         await conn.commit();
-
         const pageNation = {
             contents: row,
             totalCount: totalCount
