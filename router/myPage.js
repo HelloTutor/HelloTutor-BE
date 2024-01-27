@@ -2,11 +2,14 @@ const router = require("express").Router();
 const authorization = require("../middleware/authorization");
 const myPageController = require("../controller/myPage.controller");
 
+
 router.use(authorization.reIssueToken);
 
 router.get("/setting", myPageController.selectMyPageSetting);
 
 router.put("/setting", myPageController.updateMyPageSetting);
+
+router.put("/setting/profile")
 
 router.delete("/setting", myPageController.deleteMyPageSetting);
 

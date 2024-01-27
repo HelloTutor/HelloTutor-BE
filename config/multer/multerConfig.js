@@ -1,4 +1,5 @@
 const multer = require("multer");
+const path = require("path");
 
 const upload = multer({
     storage: multer.diskStorage({
@@ -13,20 +14,18 @@ const upload = multer({
         done(null, path.basename(file.originalname, ext));
         },
     }),
-    fileFilter,
+    fileFilter: function (req, file, done) {
+                    const allowedTypes = ["image/png"];
+
+                    if(!allowedTypes.includes(file.mimetype)) {
+                        const error = new Error("허용되지 않는 파일 형식입니다.");
+
+                        return done(error, false);
+                    }
+
+                    done(null, true)
+                },
     limits: { fileSize: 10 * 1024 * 1024 },
 });
-
-const fileFilter = (req, file, done) => {
-    const allowedTypes = ["image/png"];
-
-    if(!allowedTypes.includes(file.mimetype)) {
-        const error = new Error("허용되지 않는 파일 형식입니다.");
-
-        return done(error, false);
-    }
-
-    done(null, true)
-}
 
 module.exports = upload;

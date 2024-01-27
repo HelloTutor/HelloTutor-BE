@@ -3,6 +3,9 @@ const app = express();
 require("dotenv").config();
 const cookieParser = require("cookie-parser");
 const cookieSession = require("cookie-session");
+const passport = require("passport");
+const cors = require("cors");
+const path = require("path");
 const port = 3000;
 
 const signup = require("./router/signup");
@@ -13,9 +16,6 @@ const tutorBoard = require("./router/tutorBoard");
 const tutor = require("./router/tutor");
 const myPage = require("./router/myPage");
 const payments = require("./router/payments");
-
-const passport = require("passport");
-const cors = require("cors");
 
 app.use(cors({
     origin:"*",
