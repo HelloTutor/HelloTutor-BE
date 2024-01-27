@@ -3,7 +3,8 @@
         "findByEmail": "SELECT * FROM tb_user WHERE email = ?",
         "findById": "SELECT * FROM tb_user WHERE id = ?",
         "insert": "INSERT INTO tb_user (`email`, `pw`, `name`, `role`) VALUES (?, ?, ?, ?)",
-        "updatePw": "UPDATE tb_user SET `pw`=? WHERE `email` = ?"
+        "updatePw": "UPDATE tb_user SET `pw` = ? WHERE `email` = ?",
+        "updateProfile": "UPDATE tb_user SET `profile` = ? WHERE `id`= ?"
     },
     "tutee": {
         "insert": "INSERT INTO tb_tutee (`id`, `google_id`) VALUES (?, ?)",
@@ -11,7 +12,7 @@
     },
     "tutor": {
         "insert": "INSERT INTO tb_tutor(`id`, `subject`) VALUES (?, ?)",
-        "select": "SELECT  t.id, t.introduce, t.career, t.service_price, t.status, t.subject, t.answer, u.name, COUNT(r.id) AS reviewCount, truncate(AVG(r.score),1) AS reviewAvg FROM tb_tutor AS t LEFT JOIN tb_user AS u ON t.id = u.id LEFT JOIN tb_review AS r ON t.id = r.tutor_id WHERE t.id = ? GROUP BY t.id, t.introduce, t.career, t.service_price, t.status, t.subject, t.answer, u.name",
+        "select": "SELECT  t.id, t.introduce, t.career, t.service_price, t.status, t.subject, t.answer, u.name, u.profile COUNT(r.id) AS reviewCount, truncate(AVG(r.score),1) AS reviewAvg FROM tb_tutor AS t LEFT JOIN tb_user AS u ON t.id = u.id LEFT JOIN tb_review AS r ON t.id = r.tutor_id WHERE t.id = ? GROUP BY t.id, t.introduce, t.career, t.service_price, t.status, t.subject, t.answer, u.name, u.profile",
         "selectInfo": "SELECT t.detailed_description, t.experience FROM tb_tutor AS t LEFT JOIN tb_user AS u ON t.id = u.id WHERE t.id = ?"
     },
     "freeBoard": {
@@ -19,7 +20,7 @@
         "update": "UPDATE tb_free_board SET `title` = ?, `content` = ?, `content_json` = ?, updated_at = NOW() WHERE id = ? AND user_id = ?",
         "updateViews": "UPDATE tb_free_board SET `views` = `views` + 1 WHERE id = ?",
         "delete": "DELETE FROM tb_free_board WHERE id = ? AND user_id = ?",
-        "select": "SELECT f.id, f.user_id, f.title, f.content_json, f.created_at, f.views , u.name , count(DISTINCT l.user_id) AS like_count, count(DISTINCT c.id) AS comment_count FROM tb_free_board AS f LEFT JOIN tb_user AS u ON f.user_id = u.id LEFT JOIN tb_free_board_comments AS c ON f.id = c.free_board_id LEFT JOIN tb_like AS l ON f.id = l.free_board_id WHERE f.id = ? GROUP BY f.id, f.title, f.content, f.created_at, f.views, u.name",
+        "select": "SELECT f.id, f.user_id, f.title, f.content_json, f.created_at, f.views, u.name, u.profile, count(DISTINCT l.user_id) AS like_count, count(DISTINCT c.id) AS comment_count FROM tb_free_board AS f LEFT JOIN tb_user AS u ON f.user_id = u.id LEFT JOIN tb_free_board_comments AS c ON f.id = c.free_board_id LEFT JOIN tb_like AS l ON f.id = l.free_board_id WHERE f.id = ? GROUP BY f.id, f.title, f.content, f.created_at, f.views, u.name, u.profile",
         "selectAll": "SELECT f.id, f.title, f.created_at, f.views , u.name , count(DISTINCT l.user_id) AS like_count, count(DISTINCT c.id) AS comment_count  FROM tb_free_board AS f LEFT JOIN tb_user AS u ON f.user_id = u.id LEFT JOIN tb_free_board_comments AS c ON f.id = c.free_board_id LEFT JOIN tb_like AS l ON f.id = l.free_board_id GROUP BY f.id, f.title, f.content, f.created_at, f.views, u.name ORDER BY f.created_at DESC LIMIT ?, ?",
         "selectSearch": "SELECT f.id, f.title, f.created_at, f.views , u.name , count(DISTINCT l.user_id) AS like_count, count(DISTINCT c.id) AS comment_count FROM tb_free_board AS f LEFT JOIN tb_user AS u ON f.user_id = u.id LEFT JOIN tb_free_board_comments AS c ON f.id = c.free_board_id LEFT JOIN tb_like AS l ON f.id = l.free_board_id WHERE f.title LIKE ? GROUP BY f.id, f.title, f.content, f.created_at, f.views, u.name ORDER BY f.created_at DESC LIMIT ?, ?",
         "totalCount": "SELECT COUNT(*) AS totalCount FROM tb_free_board",
@@ -29,13 +30,13 @@
         "insert": "INSERT INTO tb_free_board_comments (`user_id`, `free_board_id`, `content`) VALUES(?, ?, ?)",
         "update": "UPDATE tb_free_board_comments SET `content` = ? WHERE id = ? AND free_board_id = ? AND user_id = ?",
         "delete": "DELETE FROM tb_free_board_comments WHERE id = ? AND free_board_id = ? AND user_id = ?",
-        "select": "SELECT f.id, f.content, f.created_at, f.user_id, u.name, u.role, count(l.user_id) AS like_count FROM tb_free_board_comments AS f LEFT JOIN tb_user AS u ON f.user_id = u.id LEFT JOIN tb_like AS l ON f.id = l.free_board_comments_id WHERE f.id = ? AND f.free_board_id = ? GROUP BY f.content, f.created_at, f.user_id, u.name, u.role",
+        "select": "SELECT f.id, f.content, f.created_at, f.user_id, u.name, u.role, u.profile count(l.user_id) AS like_count FROM tb_free_board_comments AS f LEFT JOIN tb_user AS u ON f.user_id = u.id LEFT JOIN tb_like AS l ON f.id = l.free_board_comments_id WHERE f.id = ? AND f.free_board_id = ? GROUP BY f.content, f.created_at, f.user_id, u.name, u.role, u.profile",
         "selectAll": "SELECT f.id, f.content, f.created_at, f.user_id, u.name, u.role, count(l.user_id) AS like_count FROM tb_free_board_comments AS f LEFT JOIN tb_user AS u ON f.user_id = u.id LEFT JOIN tb_like AS l ON f.id = l.free_board_comments_id WHERE f.free_board_id = ? GROUP BY f.content, f.created_at, f.user_id, u.name, u.role LIMIT ?, ?",
         "selectAllCount": "SELECT COUNT(*) AS totalCount FROM tb_free_board_comments AS f LEFT JOIN tb_user AS u ON f.user_id = u.id LEFT JOIN tb_like AS l ON f.id = l.free_board_comments_id WHERE f.free_board_id = ?"
     },
     "questionBoard": {
         "insert": "INSERT INTO tb_question_board (`user_id`, `subject`, `title`, `content`, `content_json`) VALUES (?, ?, ?, ?, ?)",
-        "select": "SELECT q.*, u.name FROM tb_question_board AS q LEFT JOIN tb_user AS u ON q.user_id = u.id WHERE q.id = ?",
+        "select": "SELECT q.*, u.name, u.profile FROM tb_question_board AS q LEFT JOIN tb_user AS u ON q.user_id = u.id WHERE q.id = ?",
         "update": "UPDATE tb_question_board SET `subject` = ?, `title` = ?, `content` = ?, `content_json` = ?, updated_at = NOW() WHERE id = ? AND user_id = ?",
         "updateViews": "UPDATE tb_question_board SET `views` = `views` + 1 WHERE id = ?",
         "delete": "DELETE FROM tb_question_board WHERE id = ? AND user_id = ?",

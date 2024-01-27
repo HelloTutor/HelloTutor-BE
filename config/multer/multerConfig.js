@@ -26,7 +26,7 @@ const fileFilter = (req, file, done) => {
         return done(error, false);
     }
 
-    done(null, true)
+    done(null, true);
 }
 
 const upload = multer({

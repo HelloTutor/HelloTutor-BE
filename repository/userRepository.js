@@ -55,7 +55,6 @@ async function findUserId(userId) {
 }
 
 async function updateUserPw(user) {
-    console.log("user확인", user);
     const bcryptPw = bcrypt.hashSync(user.pw, 11);
     let conn;
     try {
@@ -70,9 +69,25 @@ async function updateUserPw(user) {
     }
 }
 
+async function updateProfile(body, user) {
+    let conn;
+    try {
+        conn = await connection();
+        const [row] = await conn.execute(query.user.updateProfile, [body.profile, user.id]);
+
+        return row;
+    } catch(error) {
+        console.log("db에러");
+        throw error;
+    } finally {
+        if(conn) conn.release();
+    }
+}
+
 module.exports = {
     insertUser,
     findUserEmail,
     findUserId,
-    updateUserPw
+    updateUserPw,
+    updateProfile
 }

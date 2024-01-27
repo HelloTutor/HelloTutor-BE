@@ -1,4 +1,5 @@
 const myPageRepository = require("../repository/myPageRepository");
+const userRepository = require("../repository/userRepository");
 
 async function selectMyPageSetting(req, res) {
     try {
@@ -188,6 +189,23 @@ async function updateMyPageTutorInfo(req, res) {
     }
 }
 
+async function uploadProfile(req, res) {
+    try {
+        const { user, body, file } = req;
+        if(file) {
+            const filePath = "http://localhost:3000/profile/" + file.filename;
+            body.profile = filePath;
+            const row = await userRepository.updateProfile(body, user);
+
+            if(row) {
+                return res.status(200).json({ message: "profile 업로드 완료" });
+            }
+        }
+    } catch(error) {
+        return res.status(500).json({ message: "에러발생" });
+    }
+}
+
 module.exports = {
     selectMyPageSetting,
     updateMyPageSetting,
@@ -197,5 +215,6 @@ module.exports = {
     selectMyPageAllFree,
     selectMyPageAllFreeComment,
     selectMyPageTutorInfo,
-    updateMyPageTutorInfo
+    updateMyPageTutorInfo,
+    uploadProfile
 }

@@ -9,7 +9,7 @@ router.get("/setting", myPageController.selectMyPageSetting);
 
 router.put("/setting", myPageController.updateMyPageSetting);
 
-router.put("/setting/profile", upload.single("profile"));
+router.put("/setting/profile", upload.single("profile"), myPageController.uploadProfile);
 
 router.delete("/setting", myPageController.deleteMyPageSetting);
 
