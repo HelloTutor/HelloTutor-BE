@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const authorization = require("../middleware/authorization");
 const myPageController = require("../controller/myPage.controller");
-
+const upload = require("../config/multer/multerConfig");
 
 router.use(authorization.reIssueToken);
 
@@ -9,7 +9,7 @@ router.get("/setting", myPageController.selectMyPageSetting);
 
 router.put("/setting", myPageController.updateMyPageSetting);
 
-router.put("/setting/profile")
+router.put("/setting/profile", upload.single("profile"));
 
 router.delete("/setting", myPageController.deleteMyPageSetting);
 
