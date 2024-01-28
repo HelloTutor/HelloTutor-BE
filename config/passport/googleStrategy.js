@@ -5,12 +5,10 @@ const passport = require("passport");
 const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, NODE_ENV="dev" } = process.env;
 
 passport.serializeUser((user, done) => {
-    console.log("user오고있니?",user);
     done(null, user.id);
 });
 
 passport.deserializeUser(async (id, done) => {
-    console.log("id오고있니?", id);
     try{
         const user = await userRepository.findUserId(id);
         done(null, user);
@@ -22,7 +20,7 @@ passport.deserializeUser(async (id, done) => {
 const google = new GoogleStrategy({
     clientID: GOOGLE_CLIENT_ID,
     clientSecret: GOOGLE_CLIENT_SECRET,
-    callbackURL: (NODE_ENV==="prd"?"https://tutor-api.devple.net":"")+"/auth/login/google/callback",
+    callbackURL: (NODE_ENV==="prd"?"https://tutor-api.devple.net":"http://localhost:3000")+"/auth/login/google/callback",
     scope: ["email","profile"],
     }, async function(accessToken, refreshToken, profile, done) {
         try{
