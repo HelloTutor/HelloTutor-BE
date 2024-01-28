@@ -193,12 +193,12 @@ async function uploadProfile(req, res) {
     try {
         const { user, body, file } = req;
         if(file) {
-            const filePath = "http://localhost:3000/profile/" + file.filename;
+            const filePath = (NODE_ENV==="prd"?"https://tutor-api.devple.net/profile/":"http://localhost:3000/profile")+file.filename;
             body.profile = filePath;
             const row = await userRepository.updateProfile(body, user);
 
             if(row) {
-                return res.status(200).json({ message: "profile 업로드 완료" });
+                return res.status(200).json({ link: filePath });
             }
         }
     } catch(error) {

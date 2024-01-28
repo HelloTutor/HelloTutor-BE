@@ -29,6 +29,8 @@ app.use(cookieSession({
 }));
 
 app.use("/profile", express.static(path.join(__dirname, "/fileUpload/profile")));
+app.use("/freeBoardImage", express.static(path.join(__dirname, "/fileUpload/board/freeBoard")));
+app.use("/questionBoardImage", express.static(path.join(__dirname, "/fileUpload/board/questionBoard")));
 app.use(passport.initialize());
 app.use(passport.session());
 require("./config/passport/googleStrategy");
