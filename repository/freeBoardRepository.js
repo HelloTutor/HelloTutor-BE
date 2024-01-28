@@ -81,7 +81,7 @@ async function selectAllFreeBoard(offset, limit) {
     let conn;
     try {
         conn = await connection();
-        conn.beginTransaction();
+        await conn.beginTransaction();
         const [[{ totalCount }]] = await conn.execute(query.freeBoard.totalCount);
         const [row] = await conn.execute(query.freeBoard.selectAll, [offset, limit]);
         await conn.commit();
