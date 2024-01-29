@@ -193,7 +193,7 @@ async function uploadProfile(req, res) {
     try {
         const { user, file } = req;
         if(file) {
-            const filePath = (NODE_ENV==="prd"?"https://tutor-api.devple.net/profile/":"http://localhost:3000/profile")+file.filename;
+            const filePath = (NODE_ENV==="prd"?"https://tutor-api.devple.net/profile/":"http://localhost:3000/profile/")+file.filename;
             const row = await userRepository.updateProfile(filePath, user);
 
             if(row) {
