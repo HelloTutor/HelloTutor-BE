@@ -9,7 +9,7 @@ router.get("/", questionBoardController.selectAllSearchQuestionBoard);
 
 router.post("/", authorization.reIssueToken, boardParser.boardContentParser, questionBoardController.insertQuestionBoard);
 
-router.post("/image", upload.array("questionBoardImage"), questionBoardController.uploadImage);
+router.post("/image", authorization.reIssueToken, upload.array("questionBoardImage"), questionBoardController.uploadImage);
 
 router.get("/subject/:subject", checkSubject, questionBoardController.selectSubjectSearchQuestionBoard);
 

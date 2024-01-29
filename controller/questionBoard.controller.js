@@ -135,14 +135,15 @@ async function selectSubjectSearchQuestionBoard(req, res) {
 async function uploadImage(req, res) {
     try {
         const { files } = req;
-        let links = [];
+
         if (files) {
-            files.forEach(file => {
-                const filePath = (NODE_ENV === "prd" ? "https://tutor-api.devple.net/questionBoardImage/" : "http://localhost:3000/questionBoardImage") + file.filename;
-                links.push(filePath);
+            const links = files.map(file => {
+                const filePath = (NODE_ENV === "prd" ? "https://tutor-api.devple.net/questionBoardImage/" : "http://localhost:3000/questionBoardImage/") + file.filename;
+
+                return filePath;
             });
 
-            return res.status(200).json({ filesPath: links });
+            return res.status(200).json({ filePath: links });
         } else {
             return res.status(400).json({ message: "업로드된 파일이 없습니다." });
         }

@@ -69,11 +69,11 @@ async function updateUserPw(user) {
     }
 }
 
-async function updateProfile(body, user) {
+async function updateProfile(filePath, user) {
     let conn;
     try {
         conn = await connection();
-        const [row] = await conn.execute(query.user.updateProfile, [body.profile, user.id]);
+        const [row] = await conn.execute(query.user.updateProfile, [filePath, user.id]);
 
         return row;
     } catch(error) {

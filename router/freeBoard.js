@@ -8,7 +8,7 @@ const upload = require("../config/multer/multerConfig");
 
 router.get("/", freeBoardController.selectAllFreeBoard);
 
-router.post("/image", upload.array("freeBoardImage"), freeBoardController.uploadImage);
+router.post("/image", authorization.reIssueToken, upload.array("freeBoardImage"), freeBoardController.uploadImage);
 
 router.post("/", authorization.reIssueToken, boardParser.boardContentParser, freeBoardController.insertFreeBoard);
 
