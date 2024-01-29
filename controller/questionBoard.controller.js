@@ -1,5 +1,5 @@
 const questionBoardRepository = require("../repository/questionBoardRepository");
-const { NODE_ENV="dev" } = process.env;
+const { NODE_ENV = "dev" } = process.env;
 
 async function insertQuestionBoard(req, res) {
     try{

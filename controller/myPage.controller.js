@@ -1,5 +1,6 @@
 const myPageRepository = require("../repository/myPageRepository");
 const userRepository = require("../repository/userRepository");
+const { NODE_ENV = "dev" } = process.env;
 
 async function selectMyPageSetting(req, res) {
     try {
