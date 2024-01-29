@@ -33,17 +33,10 @@ async function selectFreeBoardComments(commentId, freeBoardId) {
     let conn;
     try {
         conn = await connection();
-        await conn.beginTransaction();
-        const [[{ totalCount }]] = await conn.execute(query.freeBoardComments.selectAll, [freeBoardId]);
         const [[row]] = await conn.execute(query.freeBoardComments.select, [commentId, freeBoardId]);
-        const pagination = {
-            contents: row,
-            totalCount: totalCount
-        }
 
-        return pagination;
+        return row;
     } catch(error) {
-        conn?.rollback();
         throw error;
     } finally {
         if(conn) conn.release();
@@ -68,10 +61,18 @@ async function selectAllFreeBoardComments(freeBoardId, offset, pageSize) {
     let conn;
     try {
         conn = await connection();
+        await conn.beginTransaction();
+        const [[{ totalCount }]] = await conn.execute(query.freeBoardComments.selectAllCount, [freeBoardId]);
         const [row] = await conn.execute(query.freeBoardComments.selectAll, [freeBoardId, offset, pageSize]);
+        await conn.commit();
+        const pagination = {
+            contents: row,
+            totalCount: totalCount
+        }
 
-        return row;
+        return pagination;
     } catch(error) {
+        conn?.rollback();
         throw error;
     } finally {
         if(conn) conn.release();
