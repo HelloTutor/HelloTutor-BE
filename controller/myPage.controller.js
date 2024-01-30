@@ -1,4 +1,6 @@
 const myPageRepository = require("../repository/myPageRepository");
+const userRepository = require("../repository/userRepository");
+const { NODE_ENV = "dev" } = process.env;
 
 async function selectMyPageSetting(req, res) {
     try {
@@ -166,6 +168,7 @@ async function selectMyPageTutorInfo(req, res) {
         return res.status(500).json({ message: "에러발생" });
     }
 }
+
 async function updateMyPageTutorInfo(req, res) {
     try {
         const { user, body } = req;
@@ -187,6 +190,22 @@ async function updateMyPageTutorInfo(req, res) {
     }
 }
 
+async function uploadProfile(req, res) {
+    try {
+        const { user, file } = req;
+        if(file) {
+            const filePath = (NODE_ENV==="prd"?"https://tutor-api.devple.net/profile/":"http://localhost:3000/profile/")+file.filename;
+            const row = await userRepository.updateProfile(filePath, user);
+
+            if(row) {
+                return res.status(200).json({ link: filePath });
+            }
+        }
+    } catch(error) {
+        return res.status(500).json({ message: "에러발생" });
+    }
+}
+
 module.exports = {
     selectMyPageSetting,
     updateMyPageSetting,
@@ -196,5 +215,6 @@ module.exports = {
     selectMyPageAllFree,
     selectMyPageAllFreeComment,
     selectMyPageTutorInfo,
-    updateMyPageTutorInfo
+    updateMyPageTutorInfo,
+    uploadProfile
 }

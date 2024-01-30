@@ -2,3 +2,4 @@
 .env
 /views/
 /middleware/checkLogin.js
+/fileUpload/

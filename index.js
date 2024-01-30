@@ -3,6 +3,9 @@ const app = express();
 require("dotenv").config();
 const cookieParser = require("cookie-parser");
 const cookieSession = require("cookie-session");
+const passport = require("passport");
+const cors = require("cors");
+const path = require("path");
 const port = 3000;
 
 const signup = require("./router/signup");
@@ -12,9 +15,6 @@ const questionBoard = require("./router/questionBoard");
 const tutorBoard = require("./router/tutorBoard");
 const tutor = require("./router/tutor");
 const myPage = require("./router/myPage");
-
-const passport = require("passport");
-const cors = require("cors");
 
 app.use(cors({
     origin:"*",
@@ -27,6 +27,9 @@ app.use(cookieSession({
     keys: [process.env.COOKIE_SECRET_KEY]
 }));
 
+app.use("/profile", express.static(path.join(__dirname, "/fileUpload/profile")));
+app.use("/freeBoardImage", express.static(path.join(__dirname, "/fileUpload/board/freeBoard")));
+app.use("/questionBoardImage", express.static(path.join(__dirname, "/fileUpload/board/questionBoard")));
 app.use(passport.initialize());
 app.use(passport.session());
 require("./config/passport/googleStrategy");
