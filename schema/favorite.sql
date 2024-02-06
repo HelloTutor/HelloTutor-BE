@@ -1,4 +1,4 @@
-    CREATE TABLE `tb_favorite` (
+CREATE TABLE `tb_favorite` (
     `tutor_id` int NOT NULL,
     `user_id` int NOT NULL,
     `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
