@@ -1,18 +1,18 @@
 const router = require("express").Router({mergeParams: true});
-const authorization = require("../middleware/authorization");
+const token = require("../middleware/token");
 const freeBoardCommentsController = require("../controller/freeBoardComments.controller");
 const likeController = require("../controller/like.controller");
 
 router.get("/", freeBoardCommentsController.selectAllFreeBoardComments);
 
-router.post("/", authorization.reIssueToken, freeBoardCommentsController.insertFreeBoardComments);
+router.post("/", token.authorization, freeBoardCommentsController.insertFreeBoardComments);
 
 router.get("/:commentId", freeBoardCommentsController.selectFreeBoardComments);
 
-router.put("/:commentId", authorization.reIssueToken, freeBoardCommentsController.putFreeBoardComments);
+router.put("/:commentId", token.authorization, freeBoardCommentsController.putFreeBoardComments);
 
-router.delete("/:commentId", authorization.reIssueToken, freeBoardCommentsController.deleteFreeBoardComments);
+router.delete("/:commentId", token.authorization, freeBoardCommentsController.deleteFreeBoardComments);
 
-router.post("/:commentId/like", authorization.reIssueToken, likeController.freeBoardCommentsLike);
+router.post("/:commentId/like", token.authorization, likeController.freeBoardCommentsLike);
 
 module.exports = router;

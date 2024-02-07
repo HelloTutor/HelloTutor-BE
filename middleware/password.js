@@ -1,7 +1,7 @@
 const mailer = require("nodemailer");
 const userRepository = require("../repository/userRepository");
 const tuteeRepository = require("../repository/tuteeRepository");
-const authorization = require("./authorization");
+const authorization = require("./token");
 
 const {
     EMAIL_SERVICE,

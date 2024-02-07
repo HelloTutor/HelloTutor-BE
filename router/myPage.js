@@ -1,9 +1,9 @@
 const router = require("express").Router();
-const authorization = require("../middleware/authorization");
+const token = require("../middleware/token");
 const myPageController = require("../controller/myPage.controller");
 const upload = require("../config/multer/multerConfig");
 
-router.use(authorization.reIssueToken);
+router.use(token.authorization);
 
 router.get("/setting", myPageController.selectMyPageSetting);
 

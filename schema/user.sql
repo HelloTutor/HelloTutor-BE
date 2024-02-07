@@ -6,5 +6,6 @@ CREATE TABLE `tb_user` (
 	`nickname` varchar(50) DEFAULT NULL,
 	`phone` varchar(50) DEFAULT NULL,
 	`role` int NOT NULL,
-	`profile` varchar(255) DEFAULT NULL
+	`profile` varchar(255) DEFAULT NULL,
+	`refreshToken` varchar(255) NOT NULL
 );

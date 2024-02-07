@@ -1,10 +1,11 @@
 {
     "user": {
         "findByEmail": "SELECT * FROM tb_user WHERE email = ?",
-        "findById": "SELECT * FROM tb_user WHERE id = ?",
+        "findById": "SELECT t.id, t.email, t.name, t.nickname, t.phone, t.role, t.profile FROM tb_user AS t WHERE id = ?",
         "insert": "INSERT INTO tb_user (`email`, `pw`, `name`, `role`) VALUES (?, ?, ?, ?)",
         "updatePw": "UPDATE tb_user SET `pw` = ? WHERE `email` = ?",
-        "updateProfile": "UPDATE tb_user SET `profile` = ? WHERE `id`= ?"
+        "updateProfile": "UPDATE tb_user SET `profile` = ? WHERE `id`= ?",
+        "updateToken": "UPDATE tb_user SET `refreshToken` = ? WHERE `id` = ?"
     },
     "tutee": {
         "insert": "INSERT INTO tb_tutee (`id`, `google_id`) VALUES (?, ?)",

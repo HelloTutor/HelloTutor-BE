@@ -2,9 +2,9 @@ const router = require("express").Router({mergeParams: true});
 const passport = require("passport");
 const { sendMail, resetPw } = require("../middleware/password");
 const { validatedPassword } = require("../middleware/checkSignup");
-const authorization = require("../middleware/authorization");
+const token = require("../middleware/token");
 
-router.post("/", authorization.issueToken);
+router.post("/", token.issueToken);
 
 router.get("/google", passport.authenticate("google"));
 
@@ -19,8 +19,8 @@ router.get("/google/callback/:result", (req, res) => {
 
     if (params.result === "success" && user) {
         const { id, email } = user;
-        const accessToken = authorization.generateAccessToken({ id, email });
-        const refreshToken = authorization.generateRefreshToken({ id, email });
+        const accessToken = token.generateAccessToken({ id, email });
+        const refreshToken = token.generateRefreshToken({ id, email });
 
         console.log(accessToken, refreshToken);
         const { FRONT_HOST } = process.env;

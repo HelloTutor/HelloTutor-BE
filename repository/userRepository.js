@@ -77,17 +77,30 @@ async function updateProfile(filePath, user) {
 
         return row;
     } catch(error) {
-        console.log("db에러");
         throw error;
     } finally {
         if(conn) conn.release();
     }
 }
 
+async function updateToken(refreshToken, userId) {
+    let conn;
+    try{
+        conn = await connection();
+        const [row] = await conn.execute(query.user.updateToken, [refreshToken, userId]);
+
+        return row;
+    } catch(error) {
+        throw error;
+    } finally {
+        if(conn) conn.release();
+    }
+}
 module.exports = {
     insertUser,
     findUserEmail,
     findUserId,
     updateUserPw,
-    updateProfile
+    updateProfile,
+    updateToken
 }

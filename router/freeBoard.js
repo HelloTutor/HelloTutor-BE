@@ -1,5 +1,5 @@
 const router  = require("express").Router({mergeParams: true});
-const authorization = require("../middleware/authorization");
+const token = require("../middleware/token");
 const likeController = require("../controller/like.controller");
 const freeBoardController = require("../controller/freeBoard.controller");
 const freeBoardComments = require("./freeBoardComments");
@@ -8,17 +8,17 @@ const upload = require("../config/multer/multerConfig");
 
 router.get("/", freeBoardController.selectAllFreeBoard);
 
-router.post("/image", authorization.reIssueToken, upload.array("freeBoardImage"), freeBoardController.uploadImage);
+router.post("/image", token.authorization, upload.array("freeBoardImage"), freeBoardController.uploadImage);
 
-router.post("/", authorization.reIssueToken, boardParser.boardContentParser, freeBoardController.insertFreeBoard);
+router.post("/", token.authorization, boardParser.boardContentParser, freeBoardController.insertFreeBoard);
 
 router.get("/:postId", freeBoardController.selectFreeBoard);
 
-router.put("/:postId", authorization.reIssueToken, boardParser.boardContentParser, freeBoardController.putFreeBoard);
+router.put("/:postId", token.authorization, boardParser.boardContentParser, freeBoardController.putFreeBoard);
 
-router.delete("/:postId", authorization.reIssueToken, freeBoardController.deleteFreeBoard);
+router.delete("/:postId", token.authorization, freeBoardController.deleteFreeBoard);
 
-router.post("/:postId/like", authorization.reIssueToken, likeController.freeBoardLike);
+router.post("/:postId/like", token.authorization, likeController.freeBoardLike);
 
 router.use("/:postId/comments", freeBoardComments);
 

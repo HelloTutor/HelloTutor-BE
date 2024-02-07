@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const userRepository = require("../repository/userRepository");
 const { validatedEmail, validatedPassword } = require("../middleware/checkSignup");
+const token = require("../middleware/token");
 
 router.post("/tutee",
     validatedEmail, validatedPassword,
@@ -27,5 +28,7 @@ router.post("/tutor",
             res.status(500).json({ message: "에러발생" });
         }
 });
+
+router.post("/reissueToken", token.reIssueToken);
 
 module.exports = router;

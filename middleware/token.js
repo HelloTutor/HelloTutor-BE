@@ -4,7 +4,7 @@ const userRepository = require("../repository/userRepository");
 const tuteeRepository = require("../repository/tuteeRepository");
 const bcrypt = require("bcrypt");
 
-async function issueToken (req, res) {
+async function issueToken (req, res, next) {
     try {
         const { body } = req;
         const row = await userRepository.findUserEmail(body.email);
@@ -26,20 +26,22 @@ async function issueToken (req, res) {
 
             const accessToken = generateAccessToken({
                 id: row.id,
-                email: row.email,
                 status: row.status
             });
             const refreshToken = generateRefreshToken({
                 id: row.id,
-                email: row.email,
                 status: row.status
             });
 
-            return res.send({
-                accessToken: accessToken,
-                refreshToken: refreshToken,
-                message: "로그인 성공"
-            });
+            const tokenRow = await userRepository.updateToken(refreshToken, row.id);
+
+            if(tokenRow) {
+                return res.send({
+                    accessToken: accessToken,
+                    refreshToken: refreshToken,
+                    message: "로그인 성공"
+                    });
+            }
         } else {
             return res.status(404).json({ message: "해당 이메일이 없습니다." });
         }
@@ -63,30 +65,46 @@ function generateRefreshToken(rowInfo) {
     });
 }
 
-async function reIssueToken(req, res, next) {
-    const accessToken = verifyToken(req.headers["authorization"], ACCESS_PRIVATE_KEY);
-    const refreshToken = verifyToken(req.headers["refresh"], REFRESH_PRIVATE_KEY);
-
-    if (!req.headers["authorization"] || !req.headers["refresh"]) {
-        return res.status(403).json({ message: "not authenticate" });
-    }
-
-    if ((refreshToken === "TokenExpiredError")) {
-        return res.status(401).json({ message:"token expired" });
-    } else {
-        if ((accessToken === "TokenExpiredError")) {
-            const newAccessToken = generateAccessToken({
-                id: refreshToken.id,
-                email: refreshToken.email,
-                status: refreshToken.status
-            });
-
-            res.setHeader("Authorization", newAccessToken);
+async function authorization(req, res, next) {
+    try {
+        const accessToken = verifyToken(req.headers["authorization"], ACCESS_PRIVATE_KEY);
+        if (accessToken) {
+            req.user = await userRepository.findUserId(accessToken.id);
         }
+    } catch(error) {
+        if (error.name === "TokenExpiredError") {
+            return res.status(401).json({ message: "accessToken expired" });
+        }
+        return res.status(403).json({ message: "토큰이 유효하지 않습니다." });
     }
-    req.user = await userRepository.findUserId(refreshToken.id);
-
     next();
+}
+
+async function reIssueToken(req, res) {
+    try {
+        const accessToken = verifyToken(req.headers["authorization"], ACCESS_PRIVATE_KEY);
+        const refreshToken = verifyToken(req.headers["refresh"], REFRESH_PRIVATE_KEY);
+        const row = await userRepository.findUserId(req.user.id);
+
+        if(req.headers["refresh"] !== row.refreshToken) {
+            return res.status(401).json({ message: "유효하지 않은 토큰입니다." });
+        }
+
+        if ((refreshToken === "TokenExpiredError")) {
+            return res.status(401).json({ message:"refreshToken expired" });
+        } else {
+            if ((accessToken === "TokenExpiredError")) {
+                const newAccessToken = generateAccessToken({
+                    id: refreshToken.id,
+                    status: refreshToken.status
+                });
+
+                res.setHeader("Authorization", newAccessToken);
+            }
+        }
+    } catch(error) {
+        console.log(error);
+    }
 }
 
 function verifyToken(token, secret_key) {
@@ -104,5 +122,6 @@ module.exports = {
     reIssueToken,
     generateAccessToken,
     generateRefreshToken,
-    verifyToken
+    verifyToken,
+    authorization
 }
