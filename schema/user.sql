@@ -7,5 +7,5 @@ CREATE TABLE `tb_user` (
 	`phone` varchar(50) DEFAULT NULL,
 	`role` int NOT NULL,
 	`profile` varchar(255) DEFAULT NULL,
-	`refreshToken` varchar(255) NOT NULL
+	`refreshToken` varchar(255) NULL
 );
