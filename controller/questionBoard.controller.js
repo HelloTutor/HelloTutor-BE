@@ -37,7 +37,6 @@ async function putQuestionBoard(req, res) {
 
         const { postId } = req.params;
         const selectRow = await questionBoardRepository.selectQuestionBoard(postId);
-        conso
 
         if (user.id === selectRow.user_id) {
             const { body } = req;

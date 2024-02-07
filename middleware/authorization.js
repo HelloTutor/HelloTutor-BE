@@ -52,7 +52,7 @@ async function issueToken (req, res) {
 function generateAccessToken(rowInfo) {
     return jwt.sign(rowInfo, ACCESS_PRIVATE_KEY, {
         algorithm: ALGORITHM,
-        expiresIn: "1h"
+        expiresIn: "1d"
     });
 }
 
