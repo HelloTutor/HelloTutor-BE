@@ -5,7 +5,8 @@
         "insert": "INSERT INTO tb_user (`email`, `pw`, `name`, `role`) VALUES (?, ?, ?, ?)",
         "updatePw": "UPDATE tb_user SET `pw` = ? WHERE `email` = ?",
         "updateProfile": "UPDATE tb_user SET `profile` = ? WHERE `id`= ?",
-        "updateToken": "UPDATE tb_user SET `refreshToken` = ? WHERE `id` = ?"
+        "updateToken": "UPDATE tb_user SET `refreshToken` = ? WHERE `id` = ?",
+        "findByToken": "SELECT t.refreshToken From tb_user AS t WHERE id = ?"
     },
     "tutee": {
         "insert": "INSERT INTO tb_tutee (`id`, `google_id`) VALUES (?, ?)",

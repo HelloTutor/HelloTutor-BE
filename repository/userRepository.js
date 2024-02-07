@@ -96,11 +96,27 @@ async function updateToken(refreshToken, userId) {
         if(conn) conn.release();
     }
 }
+
+async function findUserToken(userId) {
+    let conn;
+    try {
+        conn = await connection();
+        const [[row]] = await conn.execute(query.user.findByToken, [userId]);
+
+        return row;
+    } catch(error) {
+        throw error;
+    } finally {
+        if(conn) conn.release();
+    }
+}
+
 module.exports = {
     insertUser,
     findUserEmail,
     findUserId,
     updateUserPw,
     updateProfile,
-    updateToken
+    updateToken,
+    findUserToken
 }

@@ -54,7 +54,7 @@ async function issueToken (req, res, next) {
 function generateAccessToken(rowInfo) {
     return jwt.sign(rowInfo, ACCESS_PRIVATE_KEY, {
         algorithm: ALGORITHM,
-        expiresIn: "1d"
+        expiresIn: "1m"
     });
 }
 
@@ -75,7 +75,7 @@ async function authorization(req, res, next) {
         if (error.name === "TokenExpiredError") {
             return res.status(401).json({ message: "accessToken expired" });
         }
-        return res.status(403).json({ message: "토큰이 유효하지 않습니다." });
+        return res.status(403).json({ message: "Invalid accessToken" });
     }
     next();
 }
@@ -84,15 +84,16 @@ async function reIssueToken(req, res) {
     try {
         const accessToken = verifyToken(req.headers["authorization"], ACCESS_PRIVATE_KEY);
         const refreshToken = verifyToken(req.headers["refresh"], REFRESH_PRIVATE_KEY);
-        const row = await userRepository.findUserId(req.user.id);
-
-        if(req.headers["refresh"] !== row.refreshToken) {
-            return res.status(401).json({ message: "유효하지 않은 토큰입니다." });
-        }
 
         if ((refreshToken === "TokenExpiredError")) {
             return res.status(401).json({ message:"refreshToken expired" });
         } else {
+            const row = await userRepository.findUserToken(refreshToken.id);
+
+            if(req.headers["refresh"] !== row.refreshToken) {
+                return res.status(401).json({ message: "Invalid refreshToken" });
+            }
+
             if ((accessToken === "TokenExpiredError")) {
                 const newAccessToken = generateAccessToken({
                     id: refreshToken.id,
@@ -100,6 +101,7 @@ async function reIssueToken(req, res) {
                 });
 
                 res.setHeader("Authorization", newAccessToken);
+                return res.status(200).json({ message: "accessToken 재발급 완료" });
             }
         }
     } catch(error) {
