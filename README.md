@@ -6,14 +6,16 @@
 > 재능을 나누고 수익도 얻고 싶은, 멘토가 되고 싶은 tutor가
 > 커뮤니티 게시판과 질문게시판으로 원하는 질문과 답을 얻으며 소통
 
-## :pushpin:사용 기술
+## :pushpin: 문서
+- ERD: https://www.erdcloud.com/d/qM68dDtFG7oyzrpL9
+- API문서: https://documenter.getpostman.com/view/28488382/2s9Yyy8ycG
 
-- OS : Window
-- Back-End : JavaScript, Express.js
-- DB : MySql
-- CLOUD : AWS EC2, RDS, S3
-- API문서 : https://documenter.getpostman.com/view/28488382/2s9Yyy8ycG
-  
+## :pushpin:사용 기술
+- OS: Window
+- Back-End: JavaScript, Express.js
+- DB: MySql
+- CLOUD: AWS EC2, RDS
+    
 ## :pushpin: 프로젝트 내용 
 
 ### 1. 회원가입
