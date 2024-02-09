@@ -12,7 +12,8 @@
 - Back-End : JavaScript, Express.js
 - DB : MySql
 - CLOUD : AWS EC2, RDS, S3
-
+- API문서 : https://documenter.getpostman.com/view/28488382/2s9Yyy8ycG
+  
 ## :pushpin: 프로젝트 내용 
 
 ### 1. 회원가입
@@ -48,5 +49,5 @@
  - 튜터정보, 프로필사진
 
 ## :pushpin: 프로젝트 테스트
--jest를 이용한 테스트 코드 작성중
+ - jest를 이용한 테스트 코드 작성중
 
