@@ -14,6 +14,7 @@
 - OS: Window
 - Back-End: JavaScript, Express.js
 - DB: MySql
+- test: jest
 - CLOUD: AWS EC2, RDS
     
 ## :pushpin: 프로젝트 내용 
@@ -49,7 +50,4 @@
 
 **튜터게시판(튜터)**
  - 튜터정보, 프로필사진
-
-## :pushpin: 프로젝트 테스트
- - jest를 이용한 테스트 코드 작성중
 
