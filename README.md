@@ -14,7 +14,7 @@
 - OS: Window
 - Back-End: JavaScript, Express.js
 - DB: MySql
-- test: jest
+- TEST: jest
 - CLOUD: AWS EC2, RDS
     
 ## :pushpin: 프로젝트 내용 
