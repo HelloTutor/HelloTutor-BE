@@ -69,8 +69,8 @@ describe("validatedPassword function", () => {
     });
 
     test("비밀번호가 유효하고 일치하는 경우 next()를 호출", () => {
-        req.body.pw = "validPassword123";
-        req.body.checkPw = "validPassword123";
+        req.body.pw = "validPassword123!";
+        req.body.checkPw = "validPassword123!";
 
         validatedPassword(req, res, next);
 
@@ -91,8 +91,8 @@ describe("validatedPassword function", () => {
     });
 
     test("비밀번호와 확인용 비밀번호가 일치하지 않는경우", () => {
-        req.body.pw = "password123";
-        req.body.checkPw = "password1234";
+        req.body.pw = "password123!";
+        req.body.checkPw = "password1234!";
 
         validatedPassword(req, res, next);
 
