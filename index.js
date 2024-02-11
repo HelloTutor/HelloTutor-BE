@@ -20,8 +20,10 @@ app.use(cors({
     origin:"*",
     credentials: true
 }));
-app.use(cookieParser());
+
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(cookieParser());
 app.use(cookieSession({
     name: "oAuthLogin",
     keys: [process.env.COOKIE_SECRET_KEY]
