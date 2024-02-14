@@ -10,7 +10,7 @@
 
 ## :pushpin: 문서
 
-- 프로젝트 명세서: [프로젝트_명세서.pdf](https://github.com/HelloTutor/HelloTutor-BE/files/14266887/_.pdf) 
+- 프로젝트 명세서(AWS): [프로젝트_명세서.pdf](https://github.com/HelloTutor/HelloTutor-BE/files/14266887/_.pdf) 
 - ERD: https://www.erdcloud.com/d/qM68dDtFG7oyzrpL9
 - API문서: https://documenter.getpostman.com/view/28488382/2s9Yyy8ycG
 
